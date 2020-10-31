@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 import pymongo
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -8,21 +8,26 @@ users = db["users"]
 
 app = Flask(__name__)
 
+
+@app.route('/')
+def index():
+    return render_template("signup.html")
+
+
 @app.route('/signin')
 def signin():
     pass
 
 
-@app.route('/signup')
+@app.route('/signup', methods=['POST'])
 def signup():
     """
         Registers new users into the users collection in db
     """
 
     new_user = {
-        # "username": request.form.get("username"),
-        "name": request.form.get("name"),
-        "full_name": request.form.get("fullname"),
+        "username": request.form.get("username"),
+        "full_name": request.form.get("full_name"),
         "email": request.form.get("email"),
         "contact": request.form.get("contact"),
 
@@ -35,6 +40,8 @@ def signup():
         return "error"
     else:
         users.insert_one(new_user)
+    
+    return "sucess"
 
 
 @app.route('/sell', methods=['POST'])
@@ -62,6 +69,8 @@ def search():
         Gets search query '?q=' for name
         Gets search other query options like sort, price range, category
     """
+    query = request.args.get("q")
+
     pass
 
 if __name__ == '__main__':
