@@ -6,9 +6,16 @@
 
 {% block body %}
 
-    <ul>
+    <ol>
         {% for item in items %}
-            <li> {{item["description"]}} </li>
+
+            <li>
+                <h4>{{ item["title"] }}</h4>
+                Description: {{ item["description"] }} <br>
+                Category: {{ item["category"] }} <br>
+                Age: {{ item["year"] }} <br>
+                Selling Price: <b>{{ item["price"] }}</b> <br>
+            </li>
         {% endfor %}
     </ul>
 

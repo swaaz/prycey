@@ -95,5 +95,10 @@ def search():
     return render_template("search.html", items=results)
 
 
+@app.route('/users')
+def render_users():
+    return render_template("users.html", users=users.find())
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

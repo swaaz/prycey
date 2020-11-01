@@ -3,12 +3,13 @@
 {% block body %}
     <h2>Home page </h2>
 
-    <form action='/search_button' method="POST">
+    <form action='/search' method="POST">
         <input type="text" name="q">
         <input type="submit" value="search">
     </form>
 
-    <a href="signup">signup here</a>
-    <a href="sell">sell here</a>
+    <a href="signup">signup here</a><br>
+    <a href="sell">sell here</a><br>
+    To see all users <a href="users">Click here</a><br>
 
 {% endblock %}
