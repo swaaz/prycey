@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <form action="/signin_button" method="POST">
+        <input type="text" name="email" placeholder="Enter Email"><br>
+        <input type="password" name="password" placeholder="Enter Password"><br>
+        <input type="submit" value="Sign in">
+    </form>
+{% endblock %}

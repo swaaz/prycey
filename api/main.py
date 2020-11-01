@@ -1,7 +1,8 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session, redirect, url_for
 import pymongo
 from flask_cors import CORS
 import json
+from bson import json_util
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 db = myclient["pryceydb"]
@@ -9,21 +10,43 @@ item_stock = db["items"]
 users = db["users"]
 
 app = Flask(__name__)
+app.secret_key = "test"
 CORS(app)
 
-
+@app.route('/index')
 @app.route('/')
 def index():
     return render_template("index.html")
 
 
-@app.route('/signin', methods=['POST'])
+@app.route('/signin')
+def render_signin():
+    return render_template("signin.html")
+
+
+@app.route('/signin_button', methods=['POST'])
 def signin():
-    print(request.data)
-    request_data = request.data
-    request_data = json.loads(request_data.decode('utf-8'))
-    # print(request_data['name'], request_data['password'])
-    return "REturn"
+    # print(request.data)
+    # request_data = request.data
+    # request_data = json.loads(request_data.decode('utf-8'))
+    # # print(request_data['name'], request_data['password'])
+
+    if "user_id" in session:
+        return redirect('/')
+    else:
+        cred = {
+            "email" : request.form.get("email"),
+            "password" : request.form.get("password")
+        }
+        
+        cred_query = users.find(cred, {"_id": 1})
+
+        if cred_query.count() == 1:
+            session["user_id"] = str(cred_query[0]["_id"])
+            print(session["user_id"])
+            return redirect('/')
+        else:
+            return "something failed"
 
 
 @app.route('/signup')
@@ -47,10 +70,12 @@ def signup():
         "password": request.form.get("password")
     }
 
-    print(users.find())
-    if request.form.get("email") in users.find({}, {"email": 1}):
+    email_query = { "email": request.form.get("email")}
+    email_request = users.find(email_query, {"_id": 0, "email": 1})
+
+    if email_request.count() > 0:
         # return message like email already exists
-        return "error"
+        return "error, email already taken"
     else:
         users.insert_one(new_user)
         return "sucess"
@@ -90,8 +115,11 @@ def search():
     """
     new_query = { "title": request.form.get("q")}
 
-    results = item_stock.find(new_query)
-    
+    if request.form.get("q") != '':
+        results = item_stock.find(new_query)
+    else:
+        results = item_stock.find()
+
     return render_template("search.html", items=results)
 
 
