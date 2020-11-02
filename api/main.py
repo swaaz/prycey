@@ -48,6 +48,14 @@ def signin():
         else:
             return "something failed"
 
+@app.route('/signout')
+def signout():
+    if "user_id" in session:
+        session.pop("user_id", None)
+        print("session closed, client signed out")
+    
+    return redirect('/')
+
 
 @app.route('/signup')
 def render_signup():
@@ -83,7 +91,11 @@ def signup():
 
 @app.route('/sell')
 def render_sell():
-    return render_template("sell.html")
+    if "user_id" in session:
+        print(session["user_id"])
+        return render_template("sell.html")
+    else:
+        return redirect("/signin")
 
 
 @app.route('/sell_button', methods=['POST'])
@@ -91,20 +103,23 @@ def sell():
     """
         Store form details
     """
-    new_item = {
-        "seller_id": request.args.get("seller_id"),
-        "title": request.form.get("title"),
-        "description": request.form.get("description"),
-        "category": request.form.get("category"),
-        "price": request.form.get("price"),
-        "year": request.form.get("year")
-        # handle input images
-    }
+    if "user_id" in session:
+        new_item = {
+            "seller_id": session["user_id"],
+            "title": request.form.get("title"),
+            "description": request.form.get("description"),
+            "category": request.form.get("category"),
+            "price": request.form.get("price"),
+            "year": request.form.get("year")
+            # handle input images
+        }
 
-    # pending error check inputs
-    item_stock.insert_one(new_item)
+        # pending error check inputs
+        item_stock.insert_one(new_item)
 
-    return "success"
+        return "success"
+    else:
+        return redirect("/signin")
 
 
 @app.route('/search', methods=["POST"])
@@ -117,6 +132,7 @@ def search():
 
     if request.form.get("q") != '':
         results = item_stock.find(new_query)
+        # also get seller info using seller_id from item["seller_id"]
     else:
         results = item_stock.find()
 
