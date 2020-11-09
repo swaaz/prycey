@@ -18,9 +18,9 @@ function Navbar() {
                    <li><Link to='/Home'>signin</Link></li>
                    <li><Link to='/ss'>signin</Link></li>
                    <li><Link to='/d'>signin</Link></li>
-                   <li className={Styles.navbarButton}>
-                       <Link to='/a'>signin</Link>
-                    </li>
+                   
+                    <Link className={Styles.navbarButton} to='/a'><li> signin </li></Link>
+                    
                 </ul>
             </nav>
         </div>
