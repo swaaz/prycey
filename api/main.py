@@ -68,6 +68,9 @@ def signup():
         Registers new users into the users collection in db
     """
 
+    # request_data = request.data
+    # request_data = json.loads(request_data.decode('utf-8'))
+
     new_user = {
         "username": request.form.get("username"),
         "full_name": request.form.get("full_name"),
@@ -86,7 +89,7 @@ def signup():
         return "error, email already taken"
     else:
         users.insert_one(new_user)
-        return "sucess"
+        return redirect("/signin")
 
 
 @app.route('/sell')
@@ -103,6 +106,9 @@ def sell():
     """
         Store form details
     """
+    # request_data = request.data
+    # request_data = json.loads(request_data.decode('utf-8'))
+
     if "user_id" in session:
         new_item = {
             "seller_id": session["user_id"],
@@ -128,11 +134,15 @@ def search():
         Gets search query '?q=' for name
         Gets search other query options like sort, price range, category
     """
-    new_query = { "title": request.form.get("q")}
+    # request_data = request.data
+    # request_data = json.loads(request_data.decode('utf-8'))
+
+    new_query = { "$lookup": {"title": request.form.get("q")}}
+
+    # k = [256, 512, 1024, 2048]
 
     if request.form.get("q") != '':
         results = item_stock.find(new_query)
-        # also get seller info using seller_id from item["seller_id"]
     else:
         results = item_stock.find()
 
