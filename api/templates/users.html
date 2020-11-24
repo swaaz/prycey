@@ -14,10 +14,10 @@
 
         {% for user in users %} 
             <tr style="border: 1px solid black;">
-                <td style="border: 1px solid black;">{{user["username"]}}</td>
-                <td style="border: 1px solid black;">{{user["full_name"]}}</td>
-                <td style="border: 1px solid black;">{{user["email"]}}</td>
-                <td style="border: 1px solid black;">{{user["contact"]}}</td>
+                <td style="border: 1px solid black;">{{user[1]}}</td>
+                <td style="border: 1px solid black;">{{user[3]}}</td>
+                <td style="border: 1px solid black;">{{user[4]}}</td>
+                <td style="border: 1px solid black;">{{user[5]}}</td>
             </tr>
         {% endfor %}
 

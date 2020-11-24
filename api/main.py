@@ -1,13 +1,10 @@
 from flask import Flask, request, render_template, session, redirect, url_for
-import pymongo
+import sqlite3
 from flask_cors import CORS
 import json
-from bson import json_util
+from database import init_db
 
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-db = myclient["pryceydb"]
-item_stock = db["items"]
-users = db["users"]
+init_db()
 
 app = Flask(__name__)
 app.secret_key = "test"
@@ -39,14 +36,21 @@ def signin():
             "password" : request.form.get("password")
         }
         
-        cred_query = users.find(cred, {"_id": 1})
+        with sqlite3.connect('prycey.db') as conn:
+            c = conn.cursor()
 
-        if cred_query.count() == 1:
-            session["user_id"] = str(cred_query[0]["_id"])
-            print(session["user_id"])
-            return redirect('/')
-        else:
-            return "something failed"
+            cred_query = c.execute("""
+                                    SELECT user_id 
+                                    FROM Users
+                                    WHERE email = (?) AND password = (?);
+                                    """, tuple(cred.values())).fetchone()
+
+            if cred_query is not None:
+                session["user_id"] = str(cred_query[0])
+                print(session["user_id"])
+                return redirect('/')
+            else:
+                return "signin failed, wrong email or password"
 
 @app.route('/signout')
 def signout():
@@ -81,15 +85,30 @@ def signup():
         "password": request.form.get("password")
     }
 
-    email_query = { "email": request.form.get("email")}
-    email_request = users.find(email_query, {"_id": 0, "email": 1})
+    with sqlite3.connect('prycey.db') as conn:
+        c = conn.cursor()
 
-    if email_request.count() > 0:
-        # return message like email already exists
-        return "error, email already taken"
-    else:
-        users.insert_one(new_user)
-        return redirect("/signin")
+        email_query = c.execute("""
+                                SELECT email 
+                                FROM Users 
+                                WHERE email = (?)""", (new_user['email'],)).fetchone()
+        username_query = c.execute("""
+                                    SELECT username 
+                                    FROM Users 
+                                    WHERE username = (?)
+                                    """, (new_user['username'],)).fetchone()
+
+        if email_query is not None:
+            # return message like email already exists
+            return "error, email already in use"
+        else:
+            if username_query is not None:
+                return "error, username already taken"
+            else:
+                c.execute("""INSERT INTO 
+                            Users(username, password, name, email, contact_number) 
+                            VALUES(?,?,?,?,?)""", tuple(new_user.values()))
+                return redirect("/signin")
 
 
 @app.route('/sell')
@@ -121,9 +140,15 @@ def sell():
         }
 
         # pending error check inputs
-        item_stock.insert_one(new_item)
+        with sqlite3.connect("prycey.db") as conn:
+            c = conn.cursor()
 
-        return "success"
+            c.execute("""
+                        INSERT INTO Items(seller_id, title, description, category, price, year)
+                        VALUES(?,?,?,?,?,?);
+                        """, tuple(new_item.values()))
+
+            return "success"
     else:
         return redirect("/signin")
 
@@ -137,21 +162,31 @@ def search():
     # request_data = request.data
     # request_data = json.loads(request_data.decode('utf-8'))
 
-    new_query = { "$lookup": {"title": request.form.get("q")}}
+    new_query = {"title": request.form.get("q")}
 
     # k = [256, 512, 1024, 2048]
 
-    if request.form.get("q") != '':
-        results = item_stock.find(new_query)
-    else:
-        results = item_stock.find()
+    with sqlite3.connect("prycey.db") as conn:
+        c = conn.cursor()
+
+        if request.form.get("q") != '':
+            results = c.execute("""
+                                SELECT * FROM Items;
+                                """).fetchall()
+        else:
+            results = c.execute("""
+                                SELECT * FROM Items WHERE title LIKE (?);
+                                """, tuple(new_query.values())).fetchall()
 
     return render_template("search.html", items=results)
 
 
 @app.route('/users')
 def render_users():
-    return render_template("users.html", users=users.find())
+    with sqlite3.connect("prycey.db") as conn:
+        c = conn.cursor()
+        users = c.execute("""SELECT * FROM Users""").fetchall()
+        return render_template("users.html", users=users)
 
 
 if __name__ == '__main__':
