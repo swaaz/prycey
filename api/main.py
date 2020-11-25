@@ -4,8 +4,8 @@ from flask_cors import CORS
 import json
 from database import init_db
 
-init_db()
 
+init_db()
 app = Flask(__name__)
 app.secret_key = "test"
 CORS(app)
@@ -46,11 +46,12 @@ def signin():
                                     """, tuple(cred.values())).fetchone()
 
             if cred_query is not None:
-                session["user_id"] = str(cred_query[0])
+                session["user_id"] = cred_query[0]
                 print(session["user_id"])
                 return redirect('/')
             else:
                 return "signin failed, wrong email or password"
+
 
 @app.route('/signout')
 def signout():
@@ -106,7 +107,7 @@ def signup():
                 return "error, username already taken"
             else:
                 c.execute("""INSERT INTO 
-                            Users(username, password, name, email, contact_number) 
+                            Users(username, name, email, contact_number, password) 
                             VALUES(?,?,?,?,?)""", tuple(new_user.values()))
                 return redirect("/signin")
 
@@ -187,6 +188,28 @@ def render_users():
         c = conn.cursor()
         users = c.execute("""SELECT * FROM Users""").fetchall()
         return render_template("users.html", users=users)
+
+
+@app.route('/dashboard')
+def render_dashboard():
+    if "user_id" in session:
+        with sqlite3.connect("prycey.db") as conn:
+            c = conn.cursor()
+            details = c.execute("""
+                                    SELECT username, name, email, contact_number
+                                    FROM Users 
+                                    WHERE user_id = (?)
+                                """, (session['user_id'],)).fetchone()
+            user_posts = c.execute("""
+                                    SELECT *
+                                    FROM Items 
+                                    WHERE seller_id = (?)
+                                """, (session['user_id'],)).fetchall()
+            print(details)
+            print(user_posts)
+            return render_template("dashboard.html", details=details, user_posts=user_posts)
+    else:
+        return redirect("/signin")
 
 
 if __name__ == '__main__':
