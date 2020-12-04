@@ -24,10 +24,10 @@ def init_db():
     c.execute(
         """CREATE TABLE IF NOT EXISTS Users(
                 user_id INTEGER PRIMARY KEY,
-                username TEXT,
+                username TEXT UNIQUE,
                 password TEXT,
                 name TEXT,
-                email TEXT,
+                email TEXT UNIQUE,
                 contact_number TEXT,
                 profile_img BLOB)"""
     )

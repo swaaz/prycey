@@ -165,19 +165,21 @@ def search():
 
     new_query = {"title": request.form.get("q")}
 
-    # k = [256, 512, 1024, 2048]
+    print(request.form.get("q"))
 
     with sqlite3.connect("prycey.db") as conn:
         c = conn.cursor()
 
-        if request.form.get("q") != '':
+        if request.form.get("q") == '':
             results = c.execute("""
                                 SELECT * FROM Items;
                                 """).fetchall()
         else:
             results = c.execute("""
                                 SELECT * FROM Items WHERE title LIKE (?);
-                                """, tuple(new_query.values())).fetchall()
+                                """, ('%' + list(new_query.values())[0] + '%', )).fetchall()
+    
+    print(results)
 
     return render_template("search.html", items=results)
 
@@ -210,6 +212,26 @@ def render_dashboard():
             return render_template("dashboard.html", details=details, user_posts=user_posts)
     else:
         return redirect("/signin")
+
+
+@app.route('/product/<int:id>')
+def render_product_page(id):
+    with sqlite3.connect("prycey.db") as conn:
+        c = conn.cursor()
+
+        # product_query = c.execute("""
+        #                             SELECT title, category, description, price, year, added_date, rating FROM Items, UserRating
+        #                             WHERE Items.seller_id=UserRating.user_id AND Items.item_id = (?)
+        #                             """, (id,)).fetchall()
+
+        product_query = c.execute("""
+                                    SELECT title, category, description, price, year, added_date FROM Items, Users
+                                    WHERE Items.seller_id=Users.user_id AND Items.item_id = (?)
+                                    """, (id,)).fetchone()
+
+        print(product_query)
+
+    return render_template("product_page.html", product=product_query)
 
 
 if __name__ == '__main__':
