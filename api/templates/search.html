@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sign up page
+{% endblock %}
+
+{% block body %}
+    <h2>Search Results</h2>
+
+    <ol>
+        {% for item in items %}
+
+            <li>
+
+                <b><a style="color:inherit;text-decoration: none" href="/product/{{ item[0] }}">{{ item[1] }}</b>
+                Category: {{ item[2] }} <br>
+                Selling Price: <b>{{ item[4] }}</b></a> <br><br>
+
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <h3>Users in User Database</h3>
+
+    <table style="border: 1px solid black; text-align: left;border-collapse: collapse;">
+        <tr style="border: 1px solid black;">
+            <th style="border: 1px solid black;">Username</th>
+            <th style="border: 1px solid black;">Fullname</th>
+            <th style="border: 1px solid black;">email</th>
+            <th style="border: 1px solid black;">Contact</th>
+        </tr>
+
+        {% for user in users %} 
+            <tr style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{user[1]}}</td>
+                <td style="border: 1px solid black;">{{user[3]}}</td>
+                <td style="border: 1px solid black;">{{user[4]}}</td>
+                <td style="border: 1px solid black;">{{user[5]}}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

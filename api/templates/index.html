@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h2>Home page </h2>
+
+    <form action='/search' method="POST">
+        <input type="text" name="q">
+        <input type="submit" value="search">
+    </form>
+
+    <a href="signin">Signin here</a><br>
+    <a href="signup">Signup here</a><br>
+    <a href="sell">Sell here</a><br>
+    <a href="dashboard">Your Dashboard</a><br>
+    <a href="signout">Signout here</a><br>
+    
+    To see all users <a href="users">Click here</a><br>
+
+{% endblock %}
