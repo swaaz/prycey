@@ -4,6 +4,7 @@ import Styles from './styles.module.scss'
 import Avatar from '../../assets/avatar/tomas.png';
 import Title from '../../assets/bg/font.png';
 import Filters from './Filters';
+import Items from './Items';
 function Home() {
     return (
         <div className={Styles.home}>
@@ -14,6 +15,7 @@ function Home() {
                 <img className={Styles.avatar} src={Avatar} alt='avatar'/>
             </div>
             <Filters />
+            <Items/>
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Styles from './styles.module.scss';
 import { Link } from "react-router-dom";
+import Search from '../../assets/icons/search.png';
 function Navbar() {
     return (
         <div className={Styles.navbar}>
@@ -10,16 +11,16 @@ function Navbar() {
                     <form>
                     <input type='text' />
                     <button type='submit'>
-                        <img src="https://img.icons8.com/ios/50/000000/search--v3.png"/>
+                        <img src={Search}/>
                     </button>
                     </form>
                 </div>
                 <ul className={Styles.navbarOptions}>
-                   <li><Link to='/Home'>signin</Link></li>
-                   <li><Link to='/ss'>signin</Link></li>
-                   <li><Link to='/d'>signin</Link></li>
+                    <li><Link to='/Home'>signin</Link></li>
+                    <li><Link to='/search'>signin</Link></li>
+                    <li><Link to='/signin'>signin</Link></li>
                    
-                    <Link className={Styles.navbarButton} to='/a'><li> signin </li></Link>
+                    <Link className={Styles.navbarButton} to='/signup'><li> signin </li></Link>
                     
                 </ul>
             </nav>

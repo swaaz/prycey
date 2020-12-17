@@ -9,16 +9,10 @@
         background-image: url('../../assets/bg/bg.png');
         background-repeat: no-repeat; /* Do not repeat the image */
         background-size: cover;
-        background-position: bottom;
+        background-position: 0 42%;
 
         .title{
-            // padding: 150px 0 0 10vw;
-            // font-family: 'Righteous', cursive;
-            // font-size: 11rem;
-            // color: #3D6CB9;
-            // width: 300px;
-            // height: 300px;
-            
+           
             width: 838px;
             height: 234px;
             padding: 128px 0 0 173px;
@@ -27,10 +21,7 @@
         .avatar{
             height: 500px;
         }
-        // img{
-        //     height: 500px;
-        //     padding-left: 10vw;
-        // }
+    
     }
 
     .filters{
@@ -40,8 +31,20 @@
         flex-direction: row;
         justify-content: space-evenly;
 
-        p{
-            padding: 0 10px;
-        }
+       a{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+            img{
+                display: block;
+                margin: auto;
+            }
+            p{
+                color: black;
+                padding-top: 10px;
+            }
+       }
     }
 }

@@ -15,12 +15,15 @@ function Filters() {
                 </Link>
                 <Link to='/'>
                     <img src={electronicsGadgets} alt='electronics' />
+                    <p>Electronics</p>
                 </Link>
                 <Link to='/'>
                     <img src={furniture} alt='firniture' />
+                    <p>Furniture</p>
                 </Link>
                 <Link to='/'>
                     <img src={tools} alt='tools'/>
+                    <p>Tools</p>
                 </Link>
             </div>
     )

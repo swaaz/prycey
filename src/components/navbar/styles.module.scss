@@ -25,9 +25,16 @@
             background-color: $faded_white;
             // margin: 10px 0;
             height: 25px;
-            img{
-                margin: 5px 0 0 0;
-                width: 15px;
+            
+            button{
+                background: transparent;
+                img{
+                    padding: 5px 0 0px 0;
+                    width: 15px;                   
+                }
+            }
+            input{
+                background: transparent;
             }
         }
         .navbarOptions{
