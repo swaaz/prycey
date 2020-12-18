@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, session, redirect, url_for
+from werkzeug.utils import secure_filename
 import sqlite3
 from flask_cors import CORS
 import json
@@ -154,7 +155,7 @@ def sell():
         return redirect("/signin")
 
 
-@app.route('/search', methods=["POST"])
+@app.route('/search/', methods=["POST"])
 def search():
     """
         Gets search query '?q=' for name
