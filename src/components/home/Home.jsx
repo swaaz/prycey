@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {setState, useEffect} from 'react';
 import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss'
 import Avatar from '../../assets/avatar/tomas.png';
 import Title from '../../assets/bg/font.png';
 import Filters from './Filters';
-import Items from './Items';
+import Item from './Item';
+import Photo from '../../assets/products/1.jpg';
 function Home() {
+    const [post, setPost] = setState({});
     return (
         <div className={Styles.home}>
             <Navbar/>
@@ -15,7 +17,11 @@ function Home() {
                 <img className={Styles.avatar} src={Avatar} alt='avatar'/>
             </div>
             <Filters />
-            <Items/>
+            <div className={Styles.cards}>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+               
+                
+            </div>
         </div>
     )
 }
