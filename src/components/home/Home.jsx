@@ -1,4 +1,4 @@
-import React, {setState, useEffect} from 'react';
+import React from 'react';
 import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss'
 import Avatar from '../../assets/avatar/tomas.png';
@@ -7,7 +7,7 @@ import Filters from './Filters';
 import Item from './Item';
 import Photo from '../../assets/products/1.jpg';
 function Home() {
-    const [post, setPost] = setState({});
+    // const [post, setPost] = setState({});
     return (
         <div className={Styles.home}>
             <Navbar/>
@@ -18,6 +18,14 @@ function Home() {
             </div>
             <Filters />
             <div className={Styles.cards}>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
                 <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
                
                 
