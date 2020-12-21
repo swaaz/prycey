@@ -31,7 +31,7 @@ function Home() {
                 <img className={Styles.avatar} src={Avatar} alt='avatar'/>
             </div>
             <Filters />
-            {posts.map(post=><p key={post.id}>{post.title}</p>)}
+            {/* {posts.map(post=><p key={post.id}>{post.title}</p>)} */}
 			
             <div className={Styles.cards}>
                 <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
