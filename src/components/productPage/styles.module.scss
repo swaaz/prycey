@@ -20,6 +20,72 @@
                 width: 80%;
                 letter-spacing: 2px;
             }
+            .priceRow{
+                display: flex;
+                flex-direction: row;
+                margin-top: 100px;
+
+                .priceMrp{
+                    color: $purple;
+                    font-size: 1.5rem;
+                    margin-top: 25px;
+                }
+
+                .priceValue{
+                    font-size: 3.5rem;
+                    font-weight: 300;
+                    margin-left: 10px;
+
+                }
+            }
+
+            .seller{
+                background-color: $purple;
+                padding: 30px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 37%;
+
+                .sellerTag{
+                    color: $accent_blue;
+                }
+                
+                .sellerProfile{
+                    display: flex;
+                    flex-direction: row;
+                    margin-top: 15px;
+
+                    .sellerName{
+                        color: white;
+                        font-size: 1.2rem;
+                        padding-top: 30px;
+                    }
+                    .sellerImage{
+                        border-radius: 50%;
+                        width: 50px;
+                        border: solid 3px $accent_blue;
+                        margin-left: 10px;
+                    }
+                }
+
+
+                .reviewRow{
+                    color: $accent_blue;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    margin-top: 20px;
+
+                    .reviewStar{
+                        padding: 0 10px;
+                    }
+                    .reviewValue{
+                        padding: 0 10px;
+                    }
+
+                }
+            }
         }
         .right{
             .image{
