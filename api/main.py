@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template, session, redirect, url_for
+from flask import Flask, request, render_template, session, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 import sqlite3
 from flask_cors import CORS
 import json
+import datetime
 from database import init_db
 
 
@@ -27,10 +28,10 @@ def signin():
     # print(request.data)
     # request_data = request.data
     # request_data = json.loads(request_data.decode('utf-8'))
-    # # print(request_data['name'], request_data['password'])
+    # print(request_data['name'], request_data['password'])
 
     if "user_id" in session:
-        return redirect('/')
+        return jsonify({"response": "success"})
     else:
         cred = {
             "email" : request.form.get("email"),
@@ -49,9 +50,9 @@ def signin():
             if cred_query is not None:
                 session["user_id"] = cred_query[0]
                 print(session["user_id"])
-                return redirect('/')
+                return jsonify({"response": "success"})
             else:
-                return "signin failed, wrong email or password"
+                return jsonify({"response": "not found"})
 
 
 @app.route('/signout')
@@ -60,7 +61,7 @@ def signout():
         session.pop("user_id", None)
         print("session closed, client signed out")
     
-    return redirect('/')
+    return jsonify({"response": "sign out success"})
 
 
 @app.route('/signup')
@@ -76,6 +77,7 @@ def signup():
 
     # request_data = request.data
     # request_data = json.loads(request_data.decode('utf-8'))
+    # print(request_data['username'], request_data['full_name'], request_data['email'], request_data['contact'], request_data['password'])
 
     new_user = {
         "username": request.form.get("username"),
@@ -90,27 +92,35 @@ def signup():
     with sqlite3.connect('prycey.db') as conn:
         c = conn.cursor()
 
-        email_query = c.execute("""
-                                SELECT email 
-                                FROM Users 
-                                WHERE email = (?)""", (new_user['email'],)).fetchone()
-        username_query = c.execute("""
-                                    SELECT username 
-                                    FROM Users 
-                                    WHERE username = (?)
-                                    """, (new_user['username'],)).fetchone()
+        # email_query = c.execute("""
+        #                         SELECT email 
+        #                         FROM Users 
+        #                         WHERE email = (?)""", (new_user['email'],)).fetchone()
+        # username_query = c.execute("""
+        #                             SELECT user_id 
+        #                             FROM Users 
+        #                             WHERE user_id = (?)
+        #                             """, (new_user['username'],)).fetchone()
 
-        if email_query is not None:
-            # return message like email already exists
-            return "error, email already in use"
-        else:
-            if username_query is not None:
-                return "error, username already taken"
-            else:
-                c.execute("""INSERT INTO 
-                            Users(username, name, email, contact_number, password) 
-                            VALUES(?,?,?,?,?)""", tuple(new_user.values()))
-                return redirect("/signin")
+        # if email_query is not None:
+        #     # return message like email already exists
+        #     return "error, email already in use"
+        # else:
+        #     if username_query is not None:
+        #         return "error, username already taken"
+        #     else:
+        #         c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password) 
+        #                     VALUES(?,?,?,?,?)""", tuple(new_user.values()))
+        #         return redirect("/signin")
+
+        try:
+            c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password) 
+                                VALUES(?,?,?,?,?)""", tuple(new_user.values()))
+        except sqlite3.IntegrityError:
+            return jsonify({"response": "error"})
+
+        # return redirect("/signin")
+        return jsonify({"response": "success"})
 
 
 @app.route('/sell')
@@ -137,7 +147,9 @@ def sell():
             "description": request.form.get("description"),
             "category": request.form.get("category"),
             "price": request.form.get("price"),
-            "year": request.form.get("year")
+            "year": request.form.get("year"),
+            "date_added": str(datetime.date.today()),
+            "im1": "blank"
             # handle input images
         }
 
@@ -146,16 +158,16 @@ def sell():
             c = conn.cursor()
 
             c.execute("""
-                        INSERT INTO Items(seller_id, title, description, category, price, year)
-                        VALUES(?,?,?,?,?,?);
+                        INSERT INTO Items(seller_id, title, description, c_id, price, year, date_added, im1)
+                        VALUES(?,?,?,?,?,?,?,?);
                         """, tuple(new_item.values()))
 
-            return "success"
+            return jsonify({"response": "success"})
     else:
-        return redirect("/signin")
+        return jsonify({"response": "not signed in"})
 
 
-@app.route('/search/', methods=["POST"])
+@app.route('/search', methods=["POST"])
 def search():
     """
         Gets search query '?q=' for name
@@ -171,18 +183,24 @@ def search():
     with sqlite3.connect("prycey.db") as conn:
         c = conn.cursor()
 
-        if request.form.get("q") == '':
-            results = c.execute("""
-                                SELECT * FROM Items;
-                                """).fetchall()
-        else:
-            results = c.execute("""
-                                SELECT * FROM Items WHERE title LIKE (?);
-                                """, ('%' + list(new_query.values())[0] + '%', )).fetchall()
-    
-    print(results)
+        print(type(request.form.get("q")))
+        print(request.form.get("q"))
 
-    return render_template("search.html", items=results)
+        # if request.form.get("q"):
+        #     results = c.execute("""
+        #                         SELECT * FROM Items;
+        #                         """).fetchall()
+        # else:
+        #     results = c.execute("""
+        #                         SELECT * FROM Items WHERE title LIKE (?);
+        #                         """, ('%' + list(new_query.values())[0] + '%', )).fetchall()
+
+        results = results = c.execute("""SELECT * FROM Items;""").fetchall()
+    
+    # print(results)
+
+    # return render_template("search.html", items=results)
+    return jsonify(results)
 
 
 @app.route('/users')
@@ -190,7 +208,8 @@ def render_users():
     with sqlite3.connect("prycey.db") as conn:
         c = conn.cursor()
         users = c.execute("""SELECT * FROM Users""").fetchall()
-        return render_template("users.html", users=users)
+        # return render_template("users.html", users=users)
+        return jsonify(users)
 
 
 @app.route('/dashboard')
@@ -199,9 +218,9 @@ def render_dashboard():
         with sqlite3.connect("prycey.db") as conn:
             c = conn.cursor()
             details = c.execute("""
-                                    SELECT username, name, email, contact_number
+                                    SELECT user_id, name, email, contact_number
                                     FROM Users 
-                                    WHERE user_id = (?)
+                                    WHERE user_id = (?);
                                 """, (session['user_id'],)).fetchone()
             user_posts = c.execute("""
                                     SELECT *
@@ -210,9 +229,12 @@ def render_dashboard():
                                 """, (session['user_id'],)).fetchall()
             print(details)
             print(user_posts)
-            return render_template("dashboard.html", details=details, user_posts=user_posts)
+
+            req = details + tuple(user_posts)
+            # return render_template("dashboard.html", details=details, user_posts=user_posts)
+            return jsonify(req)
     else:
-        return redirect("/signin")
+        return jsonify({"response": "not signed in"})
 
 
 @app.route('/product/<int:id>')
@@ -221,19 +243,103 @@ def render_product_page(id):
         c = conn.cursor()
 
         # product_query = c.execute("""
-        #                             SELECT title, category, description, price, year, added_date, rating FROM Items, UserRating
+        #                             SELECT title, c_id, description, price, year, added_date, rating FROM Items, UserRating
         #                             WHERE Items.seller_id=UserRating.user_id AND Items.item_id = (?)
         #                             """, (id,)).fetchall()
 
         product_query = c.execute("""
-                                    SELECT title, category, description, price, year, added_date FROM Items, Users
+                                    SELECT title, c_id, description, price, year, date_added, im1, im2, im3, im4 FROM Items, Users
                                     WHERE Items.seller_id=Users.user_id AND Items.item_id = (?)
                                     """, (id,)).fetchone()
 
         print(product_query)
 
-    return render_template("product_page.html", product=product_query)
+    # return render_template("product_page.html", product=product_query)
+    return jsonify(product_query)
 
+
+@app.route('/product/<int:id>/edit', methods=['POST'])
+def edit_product(id):
+    """
+        Edits 
+    """
+
+    if "user_id" in session:
+        # request_data = request.data
+        # request_data = json.loads(request_data.decode('utf-8'))
+
+        with sqlite3.connect('prycey.db') as conn:
+            c = conn.cursor()
+
+            new_item = {
+                "title": request.form.get("title"),
+                "description": request.form.get("description"),
+                "category": request.form.get("category"),
+                "price": request.form.get("price"),
+                "year": request.form.get("year"),
+                "im1": "blank",
+                "im2": "",
+                "im3": "",
+                "im4": "",
+            }
+
+            k = c.execute("""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
+            print(k)
+            if k[0] == session["user_id"]:
+                # edit = request_data
+                c.execute("""UPDATE Items
+                            SET 
+                            title = ?,
+                            description = ?,
+                            c_id = ?,
+                            price = ?,
+                            year = ?,
+                            im1 = ?,
+                            im2 = ?,
+                            im3 = ?,
+                            im4 = ?
+
+                            WHERE item_id = ?
+                            """, tuple(list(new_item.values()) + [id]))
+                conn.commit()
+
+                return jsonify({"response": "success edited"})
+            else:
+                return jsonify({"response": "not authorized"})
+    else:
+        return jsonify({"response": "not signed in"})
+            
+
+
+@app.route('/product/<int:id>/delete')
+def delete_product(id):
+    if "user_id" in session:
+        # request_data = request.data
+        # request_data = json.loads(request_data.decode('utf-8'))
+
+        with sqlite3.connect('prycey.db') as conn:
+            c = conn.cursor()
+
+            k = c.execute("""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
+            
+            if k[0] == session["user_id"]:
+                c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
+                conn.commit()
+                return jsonify({"response": "success deleted"})
+
+            else:
+                return jsonify({"response": "not authorized"})
+    else:
+        return jsonify({"response": "not signed in"})
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    t = request.files['file']
+    t.save(t.filename)
+    
+    print(t)
+    return "done"
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
