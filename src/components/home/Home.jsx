@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss'
 import Avatar from '../../assets/avatar/tomas.png';
@@ -8,34 +8,20 @@ import Item from './Item';
 import Photo from '../../assets/products/1.jpg';
 import axios from 'axios';
 
-const initialState = {
-    posts:  {}
-}
-
-const reducer = (state, action ) => {
-    switch(action.type){
-        case 'FETCH_SUCESS':
-            return{
-                post: action.payload
-            }
-        case 'FETCH_ERROR':
-            return{
-                post:{}
-            }
-
-        default: return state
-    }
-}
-
 function Home() {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        axios
-        return () => {
-            cleanup
-        }
-    }, [input])
+		axios
+			.get(`https://jsonplaceholder.typicode.com/posts`)
+			.then(response => {
+                console.log(response.data)
+				setPosts(response.data)
+			})
+			.catch(error => {
+				console.log(error)
+			})
+	}, [])
     return (
         <div className={Styles.home}>
             <Navbar/>
@@ -45,16 +31,18 @@ function Home() {
                 <img className={Styles.avatar} src={Avatar} alt='avatar'/>
             </div>
             <Filters />
+            {posts.map(post=><p key={post.id}>{post.title}</p>)}
+			
             <div className={Styles.cards}>
                 <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+                {/* <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
                 <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
                 <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
                 <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
                 <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
                 <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
                 <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
+                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/> */}
                
                 
             </div>
