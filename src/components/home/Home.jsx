@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useReducer} from 'react';
 import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss'
 import Avatar from '../../assets/avatar/tomas.png';
@@ -6,8 +6,36 @@ import Title from '../../assets/bg/font.png';
 import Filters from './Filters';
 import Item from './Item';
 import Photo from '../../assets/products/1.jpg';
+import axios from 'axios';
+
+const initialState = {
+    posts:  {}
+}
+
+const reducer = (state, action ) => {
+    switch(action.type){
+        case 'FETCH_SUCESS':
+            return{
+                post: action.payload
+            }
+        case 'FETCH_ERROR':
+            return{
+                post:{}
+            }
+
+        default: return state
+    }
+}
+
 function Home() {
-    // const [post, setPost] = setState({});
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        axios
+        return () => {
+            cleanup
+        }
+    }, [input])
     return (
         <div className={Styles.home}>
             <Navbar/>
