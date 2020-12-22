@@ -13,7 +13,7 @@ function Home() {
 
     useEffect(() => {
 		axios
-			.get(`https://jsonplaceholder.typicode.com/posts`)
+			.get(`http://127.0.0.1:5000/search`)
 			.then(response => {
                 console.log(response.data)
 				setPosts(response.data)
@@ -34,17 +34,9 @@ function Home() {
             {/* {posts.map(post=><p key={post.id}>{post.title}</p>)} */}
 			
             <div className={Styles.cards}>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                {/* <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/>
-                <Item Photo={Photo} Title={'HP i3 Laptop'} Price={999}/> */}
-               
-                
+                {
+                    <Item key={posts.item_id['0']} Photo={Photo} Title={posts.title['0']} Price={posts.price['0']}/>
+                }
             </div>
         </div>
     )
