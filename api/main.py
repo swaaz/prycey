@@ -5,22 +5,13 @@ from flask_cors import CORS
 import json
 import datetime
 from database import init_db
+from helper import to_dict
 
 
 init_db()
 app = Flask(__name__)
 app.secret_key = "test"
 CORS(app)
-
-@app.route('/index')
-@app.route('/')
-def index():
-    return render_template("index.html")
-
-
-# @app.route('/signin')
-# def render_signin():
-#     return render_template("signin.html")
 
 
 @app.route('/signin', methods=['POST'])
@@ -61,18 +52,13 @@ def signout():
     return jsonify({"response": "sign out success"})
 
 
-# @app.route('/signup')
-# def render_signup():
-#     return render_template("signup.html")
-
-
 @app.route('/signup', methods=['POST'])
 def signup():
     """
         Registers new users into the users collection in db
     """
     request_data = request.data
-    new_user = json.load(request_data.decode('utf-8'))
+    new_user = json.loads(request_data.decode('utf-8'))[0]
     print(new_user)
 
     with sqlite3.connect('prycey.db') as conn:
@@ -88,33 +74,26 @@ def signup():
         return jsonify({"response": "success"})
 
 
-# @app.route('/sell')
-# def render_sell():
-#     if "user_id" in session:
-#         print(session["user_id"])
-#         return render_template("sell.html")
-#     else:
-#         return redirect("/signin")
-
-
 @app.route('/sell', methods=['POST'])
 def sell():
     """
         Store form details
     """
     request_data = request.data
-    new_item = json.loads(request_data.decode('utf-8'))
-    print(new_item)
+    new_item = json.loads(request_data.decode('utf-8'))[0]
+    # print(new_item)
 
     if "user_id" in session:
 
+        new_prod = (session["user_id"], ) + tuple(new_item.values()) + (str(datetime.date.today()), )
+        print(new_prod)
         with sqlite3.connect("prycey.db") as conn:
             c = conn.cursor()
 
             c.execute("""
-                        INSERT INTO Items(seller_id, title, description, c_id, price, year, date_added, im1)
-                        VALUES(?,?,?,?,?,?,?,?);
-                        """, tuple(new_item.values()))
+                        INSERT INTO Items(seller_id, title, description, c_id, price, year, im1, im2, im3, im4, date_added)
+                        VALUES(?,?,?,?,?,?,?,?,?,?,?);
+                        """, new_prod)
 
             return jsonify({"response": "SUCCESS"})
     else:
@@ -129,6 +108,7 @@ def search():
     """
     request_data = request.data
     query = json.loads(request_data.decode('utf-8'))[0]
+    print(query)
 
     with sqlite3.connect("prycey.db") as conn:
         c = conn.cursor()
@@ -143,8 +123,8 @@ def search():
             results = c.execute("""
                                 SELECT * FROM Items WHERE title LIKE (?);
                                 """, ('%' + query.get("q") + '%', )).fetchall()
-                                
-    return jsonify(results)
+    print(results)
+    return to_dict(results)
 
 
 # @app.route('/users')
