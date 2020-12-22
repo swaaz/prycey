@@ -100,31 +100,40 @@ def sell():
         return jsonify({"response": "NOT_SIGNED_IN"})
 
 
-@app.route('/search', methods=["POST"])
+@app.route('/search', methods=["GET", "POST"])
 def search():
     """
         Gets search query '?q=' for name
         Gets search other query options like sort, price range, category
     """
-    request_data = request.data
-    query = json.loads(request_data.decode('utf-8'))[0]
-    print(query)
-
-    with sqlite3.connect("prycey.db") as conn:
-        c = conn.cursor()
-
-        print(query.get("q"))
-
-        if query.get("q") == "":
+    if request.method =='GET':
+        with sqlite3.connect("prycey.db") as conn:
+            c = conn.cursor()
             results = c.execute("""
-                                SELECT * FROM Items;
-                                """).fetchall()
-        else:
-            results = c.execute("""
-                                SELECT * FROM Items WHERE title LIKE (?);
-                                """, ('%' + query.get("q") + '%', )).fetchall()
-    print(results)
-    return to_dict(results)
+                                    SELECT * FROM Items;
+                                    """).fetchall()
+            return to_dict(results)
+            
+    elif request.method=='POST':
+        request_data = request.data
+        query = json.loads(request_data.decode('utf-8'))[0]
+        print(query)
+
+        with sqlite3.connect("prycey.db") as conn:
+            c = conn.cursor()
+
+            print(query.get("q"))
+
+            if query.get("q") == "":
+                results = c.execute("""
+                                    SELECT * FROM Items;
+                                    """).fetchall()
+            else:
+                results = c.execute("""
+                                    SELECT * FROM Items WHERE title LIKE (?);
+                                    """, ('%' + query.get("q") + '%', )).fetchall()
+        print(results)
+        return jsonify(results)
 
 
 # @app.route('/users')

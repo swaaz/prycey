@@ -4,10 +4,10 @@ import json
 # key = ['item_id', 'title', 'description', 'c_id', 'price', 'year', 'im1', 'im2', 'im3', 'im4', 'seller_id']
 
 def to_dict(k: list):
-    d = {}
+    d = []
 
     for i in range(len(k)):
-        d[i] = {
+        d.append({
             "item_id": k[i][0],
             "title": k[i][1],
             "description": k[i][2],
@@ -19,10 +19,10 @@ def to_dict(k: list):
             "im3": k[i][8],
             "im4": k[i][9],
             "seller_id": k[i][10]
-        }
+        })
     
-        print(d[i].keys())
-        print(d[i].values())
+        # print(d[i].keys())
+        # print(d[i].values())
 
     return json.dumps(d)
 

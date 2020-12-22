@@ -35,9 +35,10 @@ function Home() {
 			
             <div className={Styles.cards}>
                 {
-                    <Item key={posts.item_id['0']} Photo={Photo} Title={posts.title['0']} Price={posts.price['0']}/>
+                    posts.map( (value) => <Item key={value.item_id}  Photo={Photo} Title={value.title} Price={value.price}/>)
                 }
             </div>
+            
         </div>
     )
 }
