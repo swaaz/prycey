@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss';
 import Product from '../../assets/products/1.jpg';
+import Call  from '../../assets/icons/call.png';
 function ProductPage() {
     return (
         <div className={Styles.ProductPage}>
@@ -36,9 +37,11 @@ function ProductPage() {
                             <p> | </p>
                             <p className={Styles.reviewValue}>222 Reviews</p>
                         </div>
-                        {/* <div className={Styles.contactSeller}>
-
-                        </div> */}
+                        
+                        <div className={Styles.contactSeller}>
+                            <img className={Styles.contactIcon} src={Call} alt='call' />
+                            <p className={Styles.contactText}>Contact Seller</p>
+                        </div>
                     </div>
                 </div>
                 <div className={Styles.right}>
