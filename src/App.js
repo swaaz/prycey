@@ -1,4 +1,4 @@
-import styles from "./App.module.scss"
+import Styles from "./App.module.scss"
 import Home from "./components/home/Home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Signup from "./components/signup/Signup";
@@ -8,9 +8,9 @@ import ProductPage from "./components/productPage/ProductPage";
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div className="Styles.App">
         <Switch>
-          <Route path='/product' component={ProductPage} />
+          <Route path='/product/:productid' component={ProductPage} />
           <Route path='/search' component={Search} />
           <Route path='/signin' component={Signin} />
           <Route path='/signup' component={Signup} />

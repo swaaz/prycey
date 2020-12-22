@@ -185,7 +185,7 @@ def render_product_page(id):
 
         print(product_query)
 
-    return jsonify(product_query)
+    return to_dict(product_query)
 
 
 @app.route('/product/<int:id>/edit', methods=['POST'])

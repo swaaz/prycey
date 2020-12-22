@@ -1,15 +1,28 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss';
 import Product from '../../assets/products/1.jpg';
 import Call  from '../../assets/icons/call.png';
-function ProductPage() {
+import axios from 'axios';
+function ProductPage({match}) {
+
+    const [values, setValues] = useState({})
+    useEffect(() => {
+        axios
+        .get(`http://127.0.0.1:5000/product/${match.params.productid}`)
+        .then( data =>{
+            console.log(data)
+        })
+        .catch( error => {
+            console.log(error)
+        })
+    }, [])
     return (
         <div className={Styles.ProductPage}>
             <Navbar />
             <div className={Styles.body}>
                 <div className={Styles.left}>
-                    <h2 className={Styles.productTitle}>Product Title</h2>
+                    <h2 className={Styles.productTitle}>Product Title = {match.params.productid}</h2>
                     <p className={Styles.productDescription}>
                         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloremque, ex officiis veniam eligendi consectetur hic explicabo exercitationem nemo. Voluptate magni reiciendis neque amet provident soluta ea aliquam quo! Pariatur, consequatur.
                     </p>

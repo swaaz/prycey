@@ -7,6 +7,8 @@ import Filters from './Filters';
 import Item from './Item';
 import Photo from '../../assets/products/1.jpg';
 import axios from 'axios';
+import { Link } from "react-router-dom";
+
 
 function Home() {
     const [posts, setPosts] = useState([]);
@@ -35,7 +37,13 @@ function Home() {
 			
             <div className={Styles.cards}>
                 {
-                    posts.map( (value) => <Item key={value.item_id}  Photo={Photo} Title={value.title} Price={value.price}/>)
+                    posts.map( (value) => {
+                        return(
+                            <Link key={value.item_id} to={`/product/${value.item_id}`}>
+                            <Item key={value.item_id}  Photo={Photo} Title={value.title} Price={value.price}/>
+                        </Link>
+                        )
+                    })
                 }
             </div>
             
