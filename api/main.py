@@ -18,26 +18,23 @@ def index():
     return render_template("index.html")
 
 
-@app.route('/signin')
-def render_signin():
-    return render_template("signin.html")
+# @app.route('/signin')
+# def render_signin():
+#     return render_template("signin.html")
 
 
-@app.route('/signin_button', methods=['POST'])
+@app.route('/signin', methods=['POST'])
 def signin():
     # print(request.data)
-    # request_data = request.data
-    # request_data = json.loads(request_data.decode('utf-8'))
+    request_data = request.data
+    # print(request_data)
+    cred = json.loads(request_data.decode('utf-8'))[0]
+    # print(cred)
     # print(request_data['name'], request_data['password'])
 
     if "user_id" in session:
         return jsonify({"response": "success"})
-    else:
-        cred = {
-            "email" : request.form.get("email"),
-            "password" : request.form.get("password")
-        }
-        
+    else:        
         with sqlite3.connect('prycey.db') as conn:
             c = conn.cursor()
 
@@ -49,7 +46,7 @@ def signin():
 
             if cred_query is not None:
                 session["user_id"] = cred_query[0]
-                print(session["user_id"])
+                # print(session["user_id"])
                 return jsonify({"response": "success"})
             else:
                 return jsonify({"response": "not found"})
@@ -64,54 +61,22 @@ def signout():
     return jsonify({"response": "sign out success"})
 
 
-@app.route('/signup')
-def render_signup():
-    return render_template("signup.html")
+# @app.route('/signup')
+# def render_signup():
+#     return render_template("signup.html")
 
 
-@app.route('/signup_button', methods=['POST'])
+@app.route('/signup', methods=['POST'])
 def signup():
     """
         Registers new users into the users collection in db
     """
-
-    # request_data = request.data
-    # request_data = json.loads(request_data.decode('utf-8'))
-    # print(request_data['username'], request_data['full_name'], request_data['email'], request_data['contact'], request_data['password'])
-
-    new_user = {
-        "username": request.form.get("username"),
-        "full_name": request.form.get("full_name"),
-        "email": request.form.get("email"),
-        "contact": request.form.get("contact"),
-
-        # Pending Encrypt the password before storing in db
-        "password": request.form.get("password")
-    }
+    request_data = request.data
+    new_user = json.load(request_data.decode('utf-8'))
+    print(new_user)
 
     with sqlite3.connect('prycey.db') as conn:
         c = conn.cursor()
-
-        # email_query = c.execute("""
-        #                         SELECT email 
-        #                         FROM Users 
-        #                         WHERE email = (?)""", (new_user['email'],)).fetchone()
-        # username_query = c.execute("""
-        #                             SELECT user_id 
-        #                             FROM Users 
-        #                             WHERE user_id = (?)
-        #                             """, (new_user['username'],)).fetchone()
-
-        # if email_query is not None:
-        #     # return message like email already exists
-        #     return "error, email already in use"
-        # else:
-        #     if username_query is not None:
-        #         return "error, username already taken"
-        #     else:
-        #         c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password) 
-        #                     VALUES(?,?,?,?,?)""", tuple(new_user.values()))
-        #         return redirect("/signin")
 
         try:
             c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password) 
@@ -123,37 +88,26 @@ def signup():
         return jsonify({"response": "success"})
 
 
-@app.route('/sell')
-def render_sell():
-    if "user_id" in session:
-        print(session["user_id"])
-        return render_template("sell.html")
-    else:
-        return redirect("/signin")
+# @app.route('/sell')
+# def render_sell():
+#     if "user_id" in session:
+#         print(session["user_id"])
+#         return render_template("sell.html")
+#     else:
+#         return redirect("/signin")
 
 
-@app.route('/sell_button', methods=['POST'])
+@app.route('/sell', methods=['POST'])
 def sell():
     """
         Store form details
     """
-    # request_data = request.data
-    # request_data = json.loads(request_data.decode('utf-8'))
+    request_data = request.data
+    new_item = json.loads(request_data.decode('utf-8'))
+    print(new_item)
 
     if "user_id" in session:
-        new_item = {
-            "seller_id": session["user_id"],
-            "title": request.form.get("title"),
-            "description": request.form.get("description"),
-            "category": request.form.get("category"),
-            "price": request.form.get("price"),
-            "year": request.form.get("year"),
-            "date_added": str(datetime.date.today()),
-            "im1": "blank"
-            # handle input images
-        }
 
-        # pending error check inputs
         with sqlite3.connect("prycey.db") as conn:
             c = conn.cursor()
 
@@ -162,9 +116,9 @@ def sell():
                         VALUES(?,?,?,?,?,?,?,?);
                         """, tuple(new_item.values()))
 
-            return jsonify({"response": "success"})
+            return jsonify({"response": "SUCCESS"})
     else:
-        return jsonify({"response": "not signed in"})
+        return jsonify({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/search', methods=["POST"])
@@ -173,43 +127,32 @@ def search():
         Gets search query '?q=' for name
         Gets search other query options like sort, price range, category
     """
-    # request_data = request.data
-    # request_data = json.loads(request_data.decode('utf-8'))
-
-    new_query = {"title": request.form.get("q")}
-
-    print(request.form.get("q"))
+    request_data = request.data
+    query = json.loads(request_data.decode('utf-8'))[0]
 
     with sqlite3.connect("prycey.db") as conn:
         c = conn.cursor()
 
-        print(type(request.form.get("q")))
-        print(request.form.get("q"))
+        print(query.get("q"))
 
-        # if request.form.get("q"):
-        #     results = c.execute("""
-        #                         SELECT * FROM Items;
-        #                         """).fetchall()
-        # else:
-        #     results = c.execute("""
-        #                         SELECT * FROM Items WHERE title LIKE (?);
-        #                         """, ('%' + list(new_query.values())[0] + '%', )).fetchall()
-
-        results = results = c.execute("""SELECT * FROM Items;""").fetchall()
-    
-    # print(results)
-
-    # return render_template("search.html", items=results)
+        if query.get("q") == "":
+            results = c.execute("""
+                                SELECT * FROM Items;
+                                """).fetchall()
+        else:
+            results = c.execute("""
+                                SELECT * FROM Items WHERE title LIKE (?);
+                                """, ('%' + query.get("q") + '%', )).fetchall()
+                                
     return jsonify(results)
 
 
-@app.route('/users')
-def render_users():
-    with sqlite3.connect("prycey.db") as conn:
-        c = conn.cursor()
-        users = c.execute("""SELECT * FROM Users""").fetchall()
-        # return render_template("users.html", users=users)
-        return jsonify(users)
+# @app.route('/users')
+# def render_users():
+#     with sqlite3.connect("prycey.db") as conn:
+#         c = conn.cursor()
+#         users = c.execute("""SELECT * FROM Users""").fetchall()
+#         return jsonify(users)
 
 
 @app.route('/dashboard')
@@ -231,10 +174,9 @@ def render_dashboard():
             print(user_posts)
 
             req = details + tuple(user_posts)
-            # return render_template("dashboard.html", details=details, user_posts=user_posts)
             return jsonify(req)
     else:
-        return jsonify({"response": "not signed in"})
+        return jsonify({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/product/<int:id>')
@@ -254,7 +196,6 @@ def render_product_page(id):
 
         print(product_query)
 
-    # return render_template("product_page.html", product=product_query)
     return jsonify(product_query)
 
 
@@ -265,23 +206,12 @@ def edit_product(id):
     """
 
     if "user_id" in session:
-        # request_data = request.data
-        # request_data = json.loads(request_data.decode('utf-8'))
+        request_data = request.data
+        new_item = json.loads(request_data.decode('utf-8'))[0]
+        print(new_item)
 
         with sqlite3.connect('prycey.db') as conn:
             c = conn.cursor()
-
-            new_item = {
-                "title": request.form.get("title"),
-                "description": request.form.get("description"),
-                "category": request.form.get("category"),
-                "price": request.form.get("price"),
-                "year": request.form.get("year"),
-                "im1": "blank",
-                "im2": "",
-                "im3": "",
-                "im4": "",
-            }
 
             k = c.execute("""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
             print(k)
@@ -303,20 +233,16 @@ def edit_product(id):
                             """, tuple(list(new_item.values()) + [id]))
                 conn.commit()
 
-                return jsonify({"response": "success edited"})
+                return jsonify({"response": "SUCCESS_EDIT"})
             else:
-                return jsonify({"response": "not authorized"})
+                return jsonify({"response": "NOT_AUTHORIZED"})
     else:
-        return jsonify({"response": "not signed in"})
+        return jsonify({"response": "NOT_SIGNED_IN"})
             
-
 
 @app.route('/product/<int:id>/delete')
 def delete_product(id):
     if "user_id" in session:
-        # request_data = request.data
-        # request_data = json.loads(request_data.decode('utf-8'))
-
         with sqlite3.connect('prycey.db') as conn:
             c = conn.cursor()
 
@@ -325,12 +251,12 @@ def delete_product(id):
             if k[0] == session["user_id"]:
                 c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
                 conn.commit()
-                return jsonify({"response": "success deleted"})
+                return jsonify({"response": "SUCCESS_DELETE"})
 
             else:
-                return jsonify({"response": "not authorized"})
+                return jsonify({"response": "NOT_AUTHORIZED"})
     else:
-        return jsonify({"response": "not signed in"})
+        return jsonify({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/upload', methods=['POST'])
@@ -340,6 +266,3 @@ def upload():
     
     print(t)
     return "done"
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
