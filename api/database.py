@@ -49,7 +49,7 @@ def init_db():
     # Create USER_RATING Table
     c.execute(
         """CREATE TABLE IF NOT EXISTS User_Rating(
-                user_id INTEGER PRIMARY KEY,
+                user_id TEXT PRIMARY KEY,
                 rating REAL DEFAULT 0.0,
                 no_of_ratings INTEGER DEFAULT 0,
                 FOREIGN KEY(user_id) REFERENCES Users(user_id)
@@ -84,7 +84,13 @@ def init_db():
                 ON DELETE CASCADE;""")
     conn.commit()
 
-
+    c.execute("""
+            CREATE TRIGGER add_rating AFTER INSERT ON Users
+            BEGIN
+                INSERT INTO User_Rating(user_id) VALUES(new.user_id);
+            END;
+        """)
+    conn.commit()
     c.close()
     conn.close()
 
