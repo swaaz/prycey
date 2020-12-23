@@ -72,17 +72,17 @@ def init_db():
     conn.commit()
  
     # Execute this only once
-    # c.execute("""
-    #             ALTER TABLE Items ADD COLUMN c_id INTEGER
-    #             REFERENCES Category(cat_id) 
-    #             ON DELETE CASCADE;""")    
-    # conn.commit()
+    c.execute("""
+                ALTER TABLE Items ADD COLUMN c_id INTEGER
+                REFERENCES Category(cat_id) 
+                ON DELETE CASCADE;""")    
+    conn.commit()
 
-    # c.execute("""
-    #             ALTER TABLE Items ADD COLUMN seller_id INTEGER
-    #             REFERENCES Users(user_id) 
-    #             ON DELETE CASCADE;""")
-    # conn.commit()
+    c.execute("""
+                ALTER TABLE Items ADD COLUMN seller_id INTEGER
+                REFERENCES Users(user_id) 
+                ON DELETE CASCADE;""")
+    conn.commit()
 
 
     c.close()

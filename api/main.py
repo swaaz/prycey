@@ -4,11 +4,12 @@ import sqlite3
 from flask_cors import CORS
 import json
 import datetime
-from database import init_db
+# from database import init_db
 from helper import to_dict
 
+db = 'prycey.db'
 
-init_db()
+# init_db()
 app = Flask(__name__)
 app.secret_key = "test"
 CORS(app)
@@ -24,10 +25,11 @@ def signin():
     # print(request_data['name'], request_data['password'])
 
     if "user_id" in session:
-        return jsonify({"response": "success"})
+        return json.dumps([{"response": "SUCCESS"}])
     else:        
-        with sqlite3.connect('prycey.db') as conn:
+        with sqlite3.connect(db) as conn:
             c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
             cred_query = c.execute("""
                                     SELECT user_id 
@@ -38,18 +40,18 @@ def signin():
             if cred_query is not None:
                 session["user_id"] = cred_query[0]
                 # print(session["user_id"])
-                return jsonify({"response": "SUCCESS"})
+                return json.dumps([{"response": "SUCCESS"}])
             else:
-                return jsonify({"response": "NO_CRED_FOUND"})
+                return json.dumps([{"response": "NO_CRED_FOUND"}])
 
 
 @app.route('/signout')
 def signout():
     if "user_id" in session:
         session.pop("user_id", None)
-        print("session closed, client signed out")
+        print("Session closed, Client Signed out")
     
-    return jsonify({"response": "SIGN_OUT_SUCCESS"})
+    return json.dumps([{"response": "SIGN_OUT_SUCCESS"}])
 
 
 @app.route('/signup', methods=['POST'])
@@ -61,17 +63,18 @@ def signup():
     new_user = json.loads(request_data.decode('utf-8'))[0]
     print(new_user)
 
-    with sqlite3.connect('prycey.db') as conn:
+    with sqlite3.connect(db) as conn:
         c = conn.cursor()
+        c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
         try:
             c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password) 
                                 VALUES(?,?,?,?,?)""", tuple(new_user.values()))
         except sqlite3.IntegrityError:
-            return jsonify({"response": "ERROR"})
+            return json.dumps([{"response": "ERROR"}])
 
         # return redirect("/signin")
-        return jsonify({"response": "SUCCESS"})
+        return json.dumps([{"response": "SUCCESS"}])
 
 
 @app.route('/sell', methods=['POST'])
@@ -87,17 +90,18 @@ def sell():
 
         new_prod = (session["user_id"], ) + tuple(new_item.values()) + (str(datetime.date.today()), )
         print(new_prod)
-        with sqlite3.connect("prycey.db") as conn:
+        with sqlite3.connect(db) as conn:
             c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
             c.execute("""
                         INSERT INTO Items(seller_id, title, description, c_id, price, year, im1, im2, im3, im4, date_added)
                         VALUES(?,?,?,?,?,?,?,?,?,?,?);
                         """, new_prod)
 
-            return jsonify({"response": "SUCCESS"})
+            return json.dumps([{"response": "SUCCESS"}])
     else:
-        return jsonify({"response": "NOT_SIGNED_IN"})
+        return json.dumps([{"response": "NOT_SIGNED_IN"}])
 
 
 @app.route('/search', methods=["GET", "POST"])
@@ -107,8 +111,9 @@ def search():
         Gets search other query options like sort, price range, category
     """
     if request.method =='GET':
-        with sqlite3.connect("prycey.db") as conn:
+        with sqlite3.connect(db) as conn:
             c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
             results = c.execute("""
                                     SELECT * FROM Items;
                                     """).fetchall()
@@ -119,8 +124,9 @@ def search():
         query = json.loads(request_data.decode('utf-8'))[0]
         print(query)
 
-        with sqlite3.connect("prycey.db") as conn:
+        with sqlite3.connect(db) as conn:
             c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
             print(query.get("q"))
 
@@ -138,7 +144,7 @@ def search():
 
 # @app.route('/users')
 # def render_users():
-#     with sqlite3.connect("prycey.db") as conn:
+#     with sqlite3.connect(db) as conn:
 #         c = conn.cursor()
 #         users = c.execute("""SELECT * FROM Users""").fetchall()
 #         return jsonify(users)
@@ -147,8 +153,9 @@ def search():
 @app.route('/dashboard')
 def render_dashboard():
     if "user_id" in session:
-        with sqlite3.connect("prycey.db") as conn:
+        with sqlite3.connect(db) as conn:
             c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
             details = c.execute("""
                                     SELECT user_id, name, email, contact_number
                                     FROM Users 
@@ -173,14 +180,14 @@ def render_dashboard():
             # req = details + to_dict(user_posts)
             return json.dumps(req)
     else:
-        return jsonify({"response": "NOT_SIGNED_IN"})
+        return json.dumps([{"response": "NOT_SIGNED_IN"}])
 
 
 @app.route('/product/<int:id>')
 def render_product_page(id):
-    with sqlite3.connect("prycey.db") as conn:
+    with sqlite3.connect(db) as conn:
         c = conn.cursor()
-
+        c.execute("PRAGMA FOREIGN_KEYS=ON;")
         # product_query = c.execute("""
         #                             SELECT title, c_id, description, price, year, added_date, rating FROM Items, UserRating
         #                             WHERE Items.seller_id=UserRating.user_id AND Items.item_id = (?)
@@ -207,8 +214,9 @@ def edit_product(id):
         new_item = json.loads(request_data.decode('utf-8'))[0]
         print(new_item)
 
-        with sqlite3.connect('prycey.db') as conn:
+        with sqlite3.connect(db) as conn:
             c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
             k = c.execute("""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
             print(k)
@@ -229,30 +237,31 @@ def edit_product(id):
                             """, tuple(list(new_item.values()) + [id]))
                 conn.commit()
 
-                return jsonify({"response": "SUCCESS_EDIT"})
+                return json.dumps([{"response": "SUCCESS_EDIT"}])
             else:
-                return jsonify({"response": "NOT_AUTHORIZED"})
+                return json.dumps([{"response": "NOT_AUTHORIZED"}])
     else:
-        return jsonify({"response": "NOT_SIGNED_IN"})
+        return json.dumps([{"response": "NOT_SIGNED_IN"}])
             
 
 @app.route('/product/<int:id>/delete')
 def delete_product(id):
     if "user_id" in session:
-        with sqlite3.connect('prycey.db') as conn:
+        with sqlite3.connect(db) as conn:
             c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
             k = c.execute("""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
             
             if k[0] == session["user_id"]:
                 c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
                 conn.commit()
-                return jsonify({"response": "SUCCESS_DELETE"})
+                return json.dumps([{"response": "SUCCESS_DELETE"}])
 
             else:
-                return jsonify({"response": "NOT_AUTHORIZED"})
+                return json.dumps([{"response": "NOT_AUTHORIZED"}])
     else:
-        return jsonify({"response": "NOT_SIGNED_IN"})
+        return json.dumps([{"response": "NOT_SIGNED_IN"}])
 
 
 # @app.route('/upload', methods=['POST'])
