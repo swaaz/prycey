@@ -38,9 +38,9 @@ def signin():
             if cred_query is not None:
                 session["user_id"] = cred_query[0]
                 # print(session["user_id"])
-                return jsonify({"response": "success"})
+                return jsonify({"response": "SUCCESS"})
             else:
-                return jsonify({"response": "not found"})
+                return jsonify({"response": "NO_CRED_FOUND"})
 
 
 @app.route('/signout')
@@ -49,7 +49,7 @@ def signout():
         session.pop("user_id", None)
         print("session closed, client signed out")
     
-    return jsonify({"response": "sign out success"})
+    return jsonify({"response": "SIGN_OUT_SUCCESS"})
 
 
 @app.route('/signup', methods=['POST'])
@@ -68,10 +68,10 @@ def signup():
             c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password) 
                                 VALUES(?,?,?,?,?)""", tuple(new_user.values()))
         except sqlite3.IntegrityError:
-            return jsonify({"response": "error"})
+            return jsonify({"response": "ERROR"})
 
         # return redirect("/signin")
-        return jsonify({"response": "success"})
+        return jsonify({"response": "SUCCESS"})
 
 
 @app.route('/sell', methods=['POST'])
@@ -112,7 +112,7 @@ def search():
             results = c.execute("""
                                     SELECT * FROM Items;
                                     """).fetchall()
-            return to_dict(results)
+            return json.dumps(to_dict(results))
             
     elif request.method=='POST':
         request_data = request.data
@@ -133,7 +133,7 @@ def search():
                                     SELECT * FROM Items WHERE title LIKE (?);
                                     """, ('%' + query.get("q") + '%', )).fetchall()
         print(results)
-        return jsonify(results)
+        return json.dumps(to_dict(results))
 
 
 # @app.route('/users')
@@ -161,9 +161,17 @@ def render_dashboard():
                                 """, (session['user_id'],)).fetchall()
             print(details)
             print(user_posts)
+            user_posts = to_dict(user_posts)
+            req = [{
+                    "user_id": details[0],
+                    "name": details[1],
+                    "email": details[2],
+                    "contact": details[3],
+                    "posts": user_posts
+                }]
 
-            req = details + tuple(user_posts)
-            return jsonify(req)
+            # req = details + to_dict(user_posts)
+            return json.dumps(req)
     else:
         return jsonify({"response": "NOT_SIGNED_IN"})
 
@@ -179,13 +187,13 @@ def render_product_page(id):
         #                             """, (id,)).fetchall()
 
         product_query = c.execute("""
-                                    SELECT title, c_id, description, price, year, date_added, im1, im2, im3, im4 FROM Items, Users
+                                    SELECT * FROM Items, Users
                                     WHERE Items.seller_id=Users.user_id AND Items.item_id = (?)
-                                    """, (id,)).fetchone()
+                                    """, (id,)).fetchall()
 
         print(product_query)
 
-    return to_dict(product_query)
+    return json.dumps(to_dict(product_query))
 
 
 @app.route('/product/<int:id>/edit', methods=['POST'])
@@ -205,7 +213,6 @@ def edit_product(id):
             k = c.execute("""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
             print(k)
             if k[0] == session["user_id"]:
-                # edit = request_data
                 c.execute("""UPDATE Items
                             SET 
                             title = ?,
@@ -248,10 +255,10 @@ def delete_product(id):
         return jsonify({"response": "NOT_SIGNED_IN"})
 
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    t = request.files['file']
-    t.save(t.filename)
+# @app.route('/upload', methods=['POST'])
+# def upload():
+#     t = request.files['file']
+#     t.save(t.filename)
     
-    print(t)
-    return "done"
+#     print(t)
+#     return "done"
