@@ -9,13 +9,14 @@ import { Link } from "react-router-dom";
 
 
 function Search({match}) {
-        const [ values, setValues] = useState([])
+        const [ values, setValues] = useState([]);
+        const [category, setCategory] = useState();
         useEffect(() => {
        axios
        .get(`http://127.0.0.1:5000/product/category/${match.params.category}`)
        .then((values) => {
-           console.log(values.data)
-           setValues(values.data)
+           if(values.data[0] != null) setCategory(values.data[0]['category'])
+           setValues(values.data);
        })
        .catch((error) => {
            console.log(error)
@@ -29,7 +30,7 @@ function Search({match}) {
                 <div className={Styles.searchResult}>
                     <p className={Styles.searchValue}>
                         <span>Search Results : </span>
-                        {/* {values[0].category} */}
+                        '{category? category: 'no data'}'
                     </p>
                 </div>
                 <div className={Styles.cards}>
