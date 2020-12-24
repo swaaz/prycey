@@ -94,10 +94,13 @@ def sell():
             c = conn.cursor()
             c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
-            c.execute("""
-                        INSERT INTO Items(seller_id, title, description, c_id, price, year, im1, im2, im3, im4, date_added)
-                        VALUES(?,?,?,?,?,?,?,?,?,?,?);
-                        """, new_prod)
+            try:
+                c.execute("""
+                            INSERT INTO Items(seller_id, title, description, c_id, price, year, im1, im2, im3, im4, date_added)
+                            VALUES(?,?,?,?,?,?,?,?,?,?,?);
+                            """, new_prod)
+            except sqlite3.IntegrityError:
+                return json.dumps([{"response": "CATEGORY_NOT_FOUND"}])
 
             return json.dumps([{"response": "SUCCESS"}])
     else:
@@ -194,13 +197,18 @@ def render_product_page(id):
         #                             """, (id,)).fetchall()
 
         product_query = c.execute("""
-                                    SELECT * FROM Items, Users
-                                    WHERE Items.seller_id=Users.user_id AND Items.item_id = (?)
+                                    SELECT Items.*, rating, no_of_ratings FROM Items, User_Rating
+                                    WHERE Items.seller_id=User_Rating.user_id AND Items.item_id = (?)
                                     """, (id,)).fetchall()
 
-        print(product_query)
+        # print(product_query)
+        pq = [{
+            "post": to_dict(product_query),
+            "rating": product_query[0][-2],
+            "no_of_rating": product_query[0][-1]
+        }]
 
-    return json.dumps(to_dict(product_query))
+    return json.dumps(pq)
 
 
 @app.route('/product/<int:id>/edit', methods=['POST'])
@@ -271,3 +279,20 @@ def delete_product(id):
     
 #     print(t)
 #     return "done"
+
+@app.route('/rating/<string:uid>/<float:nr>')
+def rate(uid, nr):
+    if "user_id" in session:
+        with sqlite3.connect(db) as conn:
+            c = conn.cursor()
+
+            c.execute("""UPDATE User_Rating 
+                        SET rating=((rating * no_of_rating + ?)/(no_of_rating + 1)),
+                        no_of_ratings=(no_of_ratings + 1)
+                        WHERE user_id=?;
+                        """, (nr, uid, ))
+            conn.commit()
+
+            return json.dumps([{"response": "RATING_UPDATED"}])
+    else:
+        return json.dumps([{"response": "USER_NOT_SIGNED_IN"}])
