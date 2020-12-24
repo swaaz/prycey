@@ -50,7 +50,7 @@ def init_db():
     c.execute(
         """CREATE TABLE IF NOT EXISTS User_Rating(
                 user_id TEXT PRIMARY KEY,
-                rating REAL DEFAULT 0.0,
+                rating REAL DEFAULT 0.0 CHECK(rating <= 5),
                 no_of_ratings INTEGER DEFAULT 0,
                 FOREIGN KEY(user_id) REFERENCES Users(user_id)
                 ON DELETE CASCADE);"""
