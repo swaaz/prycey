@@ -114,34 +114,36 @@ def search():
         Gets search query '?q=' for name
         Gets search other query options like sort, price range, category
     """
-    if request.method == 'GET':
-        with sqlite3.connect(db) as conn:
-            c = conn.cursor()
-            c.execute("PRAGMA FOREIGN_KEYS=ON;")
-            results = c.execute("""
-                                    SELECT * FROM Items;
-                                    """).fetchall()
-            return json.dumps(to_dict(results))
+    # if request.method == 'GET':
+    #     with sqlite3.connect(db) as conn:
+    #         c = conn.cursor()
+    #         c.execute("PRAGMA FOREIGN_KEYS=ON;")
+    #         results = c.execute("""
+    #                                 SELECT * FROM Items;
+    #                                 """).fetchall()
+    #         return json.dumps(to_dict(results))
 
-    elif request.method == 'POST':
-        request_data = request.data
-        query = json.loads(request_data.decode('utf-8'))[0]
+    if request.method == 'GET':
+        # request_data = request.data
+        # query = json.loads(request_data.decode('utf-8'))[0]
+        query = request.args.get('q')
+
         print(query)
 
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
             c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
-            print(query.get("q"))
+            # print(query)
 
-            if query.get("q") == "":
+            if query == "":
                 results = c.execute("""
                                     SELECT * FROM Items;
                                     """).fetchall()
             else:
                 results = c.execute("""
                                     SELECT * FROM Items WHERE title LIKE (?);
-                                    """, ('%' + query.get("q") + '%', )).fetchall()
+                                    """, ('%' + query + '%', )).fetchall()
         print(results)
         return json.dumps(to_dict(results))
 
