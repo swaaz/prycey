@@ -1,4 +1,3 @@
-import Styles from "./App.module.scss"
 import Home from "./components/home/Home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Signup from "./components/signup/Signup";
@@ -10,6 +9,7 @@ function App() {
     <Router>
       <div className="Styles.App">
         <Switch>
+          <Route path='/product/category/:id' component={Search} />
           <Route path='/product/:productid' component={ProductPage} />
           <Route path='/search' component={Search} />
           <Route path='/signin' component={Signin} />

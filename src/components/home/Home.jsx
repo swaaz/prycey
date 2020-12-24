@@ -23,25 +23,24 @@ function Home() {
 			.catch(error => {
 				console.log(error)
 			})
-	}, [])
+    }, [])
+    
     return (
         <div className={Styles.home}>
             <Navbar/>
             <div className={Styles.hero}>
-                {/* <p className={Styles.title}>Prycey</p> */}
                 <img className={Styles.title} src={Title} alt='title'/>
                 <img className={Styles.avatar} src={Avatar} alt='avatar'/>
-            </div>
+            </div>  
             <Filters />
-            {/* {posts.map(post=><p key={post.id}>{post.title}</p>)} */}
 			
             <div className={Styles.cards}>
                 {
                     posts.map( (value) => {
                         return(
                             <Link key={value.item_id} to={`/product/${value.item_id}`}>
-                            <Item key={value.item_id}  Photo={Photo} Title={value.title} Price={value.price}/>
-                        </Link>
+                                <Item key={value.item_id}  Photo={Photo} Title={value.title} Price={value.price}/>
+                            </Link>
                         )
                     })
                 }

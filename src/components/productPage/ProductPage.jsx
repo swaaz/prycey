@@ -6,19 +6,19 @@ import Call  from '../../assets/icons/call.png';
 import axios from 'axios';
 function ProductPage({match}) {
 
-    const [values, setValues] = useState({'title' : '111', 'price' : '111', 'description' : '111' })
+    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '' })
     useEffect(() => {
         axios
-        // .get(`http://127.0.0.1:5000/product/${match.params.productid}`)
-        .get('https://jsonplaceholder.typicode.com/posts/1')
+        .get(`http://127.0.0.1:5000/product/${match.params.productid}`)
+        // .get('https://jsonplaceholder.typicode.com/posts/1')
         .then( data =>{
             console.log(data.data.title, data.data.id, data.data.title)
 
             setValues({
                 ...values,
                     ['title'] : data.data.title,
-                    ['desciption'] : data.data.id,
-                    ['price'] : data.data.body
+                    ['description'] : data.data.description,
+                    ['price'] : data.data.price
                 
             })
         })
@@ -32,7 +32,7 @@ function ProductPage({match}) {
             <Navbar />
             <div className={Styles.body}>
                 <div className={Styles.left}>
-                    <h2 className={Styles.productTitle}>{values.title}Product Title = {match.params.productid}</h2>
+                    <h2 className={Styles.productTitle}>{values.title}</h2>
                     <p className={Styles.productDescription}>
                         {values.description}
                     </p>

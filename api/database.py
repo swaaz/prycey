@@ -18,7 +18,7 @@ def init_db():
                 price REAL NOT NULL,
                 year INTEGER NOT NULL,
                 date_added TEXT NOT NULL,
-                im1 BLOB NOT NULL, 
+                im1 BLOB NOT NULL,
                 im2 BLOB,
                 im3 BLOB,
                 im4 BLOB);"""
@@ -74,13 +74,13 @@ def init_db():
     # Execute this only once
     c.execute("""
                 ALTER TABLE Items ADD COLUMN c_id INTEGER
-                REFERENCES Category(cat_id) 
-                ON DELETE CASCADE;""")    
+                REFERENCES Category(cat_id)
+                ON DELETE CASCADE;""")
     conn.commit()
 
     c.execute("""
                 ALTER TABLE Items ADD COLUMN seller_id INTEGER
-                REFERENCES Users(user_id) 
+                REFERENCES Users(user_id)
                 ON DELETE CASCADE;""")
     conn.commit()
 

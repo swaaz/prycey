@@ -1,5 +1,5 @@
 node_modules/
-venv
-api/prycey.db
+# venv
+# api/prycey.db
 api/__pycache__
 api/__pycache__/main.cpython-38.pyc

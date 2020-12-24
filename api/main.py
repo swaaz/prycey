@@ -26,7 +26,7 @@ def signin():
 
     if "user_id" in session:
         return json.dumps([{"response": "SUCCESS"}])
-    else:        
+    else:
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
             c.execute("PRAGMA FOREIGN_KEYS=ON;")
@@ -50,7 +50,7 @@ def signout():
     if "user_id" in session:
         session.pop("user_id", None)
         print("Session closed, Client Signed out")
-    
+
     return json.dumps([{"response": "SIGN_OUT_SUCCESS"}])
 
 
@@ -88,7 +88,8 @@ def sell():
 
     if "user_id" in session:
 
-        new_prod = (session["user_id"], ) + tuple(new_item.values()) + (str(datetime.date.today()), )
+        new_prod = (session["user_id"], ) + \
+            tuple(new_item.values()) + (str(datetime.date.today()), )
         print(new_prod)
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
@@ -113,7 +114,7 @@ def search():
         Gets search query '?q=' for name
         Gets search other query options like sort, price range, category
     """
-    if request.method =='GET':
+    if request.method == 'GET':
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
             c.execute("PRAGMA FOREIGN_KEYS=ON;")
@@ -121,8 +122,8 @@ def search():
                                     SELECT * FROM Items;
                                     """).fetchall()
             return json.dumps(to_dict(results))
-            
-    elif request.method=='POST':
+
+    elif request.method == 'POST':
         request_data = request.data
         query = json.loads(request_data.decode('utf-8'))[0]
         print(query)
@@ -173,12 +174,12 @@ def render_dashboard():
             print(user_posts)
             user_posts = to_dict(user_posts)
             req = [{
-                    "user_id": details[0],
-                    "name": details[1],
-                    "email": details[2],
-                    "contact": details[3],
-                    "posts": user_posts
-                }]
+                "user_id": details[0],
+                "name": details[1],
+                "email": details[2],
+                "contact": details[3],
+                "posts": user_posts
+            }]
 
             # req = details + to_dict(user_posts)
             return json.dumps(req)
@@ -202,13 +203,12 @@ def render_product_page(id):
                                     """, (id,)).fetchall()
 
         # print(product_query)
-        pq = [{
-            "post": to_dict(product_query),
-            "rating": product_query[0][-2],
-            "no_of_rating": product_query[0][-1]
-        }]
+        k = to_dict(product_query)[0]
+        k["rating"] = product_query[0][-2]
+        k["no_of_rating"] = product_query[0][-1]
+        # print(k)
 
-    return json.dumps(pq)
+    return json.dumps(k)
 
 
 @app.route('/product/<int:id>/edit', methods=['POST'])
@@ -226,7 +226,8 @@ def edit_product(id):
             c = conn.cursor()
             c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
-            k = c.execute("""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
+            k = c.execute(
+                """SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
             print(k)
             if k[0] == session["user_id"]:
                 c.execute("""UPDATE Items
@@ -250,7 +251,7 @@ def edit_product(id):
                 return json.dumps([{"response": "NOT_AUTHORIZED"}])
     else:
         return json.dumps([{"response": "NOT_SIGNED_IN"}])
-            
+
 
 @app.route('/product/<int:id>/delete')
 def delete_product(id):
@@ -259,8 +260,9 @@ def delete_product(id):
             c = conn.cursor()
             c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
-            k = c.execute("""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
-            
+            k = c.execute(
+                """SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
+
             if k[0] == session["user_id"]:
                 c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
                 conn.commit()
@@ -272,11 +274,28 @@ def delete_product(id):
         return json.dumps([{"response": "NOT_SIGNED_IN"}])
 
 
+@app.route('/product/category/<int:cid>')
+def prod_cat(cid):
+    with sqlite3.connect(db) as conn:
+        c = conn.cursor()
+        c.execute("PRAGMA FOREIGN_KEYS=ON;")
+
+        query = c.execute("""SELECT Items.*, cat_name FROM Items, Category WHERE Items.c_id=Category.cat_id and c_id=?""", (cid,)).fetchall()
+        # cat = c.execute("""SELECT cat_name FROM Category WHERE cat_id=?""", (cid,))
+
+        # print(query)
+        q = to_dict(query)
+        for k in q:
+            k["category"] = query[0][-1]
+
+        return json.dumps(q)
+
+
 # @app.route('/upload', methods=['POST'])
 # def upload():
 #     t = request.files['file']
 #     t.save(t.filename)
-    
+
 #     print(t)
 #     return "done"
 
