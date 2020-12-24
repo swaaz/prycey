@@ -280,7 +280,8 @@ def prod_cat(cid):
         c = conn.cursor()
         c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
-        query = c.execute("""SELECT Items.*, cat_name FROM Items, Category WHERE Items.c_id=Category.cat_id and c_id=?""", (cid,)).fetchall()
+        query = c.execute(
+            """SELECT Items.*, cat_name FROM Items, Category WHERE Items.c_id=Category.cat_id and c_id=?""", (cid,)).fetchall()
         # cat = c.execute("""SELECT cat_name FROM Category WHERE cat_id=?""", (cid,))
 
         # print(query)
@@ -304,6 +305,7 @@ def rate(uid, nr):
     if "user_id" in session:
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
             c.execute("""UPDATE User_Rating 
                         SET rating=((rating * no_of_rating + ?)/(no_of_rating + 1)),

@@ -9,7 +9,7 @@ function App() {
     <Router>
       <div className="Styles.App">
         <Switch>
-          <Route path='/product/category/:id' component={Search} />
+          <Route path='/product/category/:category' component={Search} />
           <Route path='/product/:productid' component={ProductPage} />
           <Route path='/search' component={Search} />
           <Route path='/signin' component={Signin} />

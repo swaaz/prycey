@@ -8,11 +8,11 @@ import { Link } from "react-router-dom";
 
 
 
-function Search() {
+function Search({match}) {
         const [ values, setValues] = useState([])
         useEffect(() => {
        axios
-       .get('http://127.0.0.1:5000/product/category/1')
+       .get(`http://127.0.0.1:5000/product/category/${match.params.category}`)
        .then((values) => {
            console.log(values.data)
            setValues(values.data)
@@ -29,7 +29,7 @@ function Search() {
                 <div className={Styles.searchResult}>
                     <p className={Styles.searchValue}>
                         <span>Search Results : </span>
-                        {values[0].category}
+                        {/* {values[0].category} */}
                     </p>
                 </div>
                 <div className={Styles.cards}>
