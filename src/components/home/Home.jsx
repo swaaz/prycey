@@ -15,7 +15,7 @@ function Home() {
 
     useEffect(() => {
 		axios
-			.get(`http://127.0.0.1:5000/search`)
+			.get(`http://127.0.0.1:5000/search?q=`)
 			.then(response => {
                 console.log(response.data)
 				setPosts(response.data)
