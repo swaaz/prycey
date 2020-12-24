@@ -10,12 +10,12 @@ function Filters() {
     return (
         <div className={Styles.filters}>
                 <Link to='/product/category/1'>
-                    <img src={books} alt='books' />
-                    <p>Books</p>
-                </Link>
-                <Link to='/product/category/2'>
                     <img src={electronicsGadgets} alt='electronics' />
                     <p>Electronics</p>
+                </Link>
+                <Link to='/product/category/2'>
+                    <img src={books} alt='books' />
+                    <p>Books</p>
                 </Link>
                 <Link to='/product/category/3'>
                     <img src={furniture} alt='furniture' />
