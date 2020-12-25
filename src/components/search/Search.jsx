@@ -43,11 +43,7 @@ function Search({match}) {
                             );
                         })
                     }
-                    {/* <Card Photo={Product} Title='Dell XP15 Laptop' Price='400.00'/>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='400.00'/>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='400.00'/>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='990.00'/>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='400.00'/> */}
+                    
                 </div>
             </div>
         </div>

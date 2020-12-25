@@ -4,21 +4,24 @@ import Styles from './styles.module.scss';
 import Product from '../../assets/products/1.jpg';
 import Call  from '../../assets/icons/call.png';
 import axios from 'axios';
+import Star from '../../assets/icons/star.png';
 function ProductPage({match}) {
-
-    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '' })
-    useEffect(() => {
+    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '' })
+     useEffect(() => {
         axios
         .get(`http://127.0.0.1:5000/product/${match.params.productid}`)
         // .get('https://jsonplaceholder.typicode.com/posts/1')
         .then( data =>{
-            console.log(data.data.title, data.data.id, data.data.title)
 
             setValues({
                 ...values,
                     ['title'] : data.data.title,
                     ['description'] : data.data.description,
-                    ['price'] : data.data.price
+                    ['price'] : data.data.price,
+                    ['rating'] : data.data.rating,
+                    ['review'] : data.data.no_of_rating,
+                    ['sellerName'] : data.data.seller_name
+
                 
             })
         })
@@ -51,15 +54,27 @@ function ProductPage({match}) {
 
                         <div className={Styles.sellerProfile}>
                             <p className={Styles.sellerName}>
-                                Nirmal George Mathew
+                                {values.sellerName}
                             </p>
                             <img className={Styles.sellerImage} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='product' />
                         </div>
                         
                         <div className={Styles.reviewRow}>
-                            <p className={Styles.reviewStar}>*****</p>
+                            <p className={Styles.ratingNumber}>
+                                {values.rating}
+                                <img className={Styles.ratingStar} src={Star} alt='star' />
+                            </p>
+                            <p> | </p>
+                            <p className={Styles.reviewStar}>
+                                {Array(parseInt(values.rating))
+                                .fill()
+                                .map((_, i) => (
+                                <img className={Styles.ratingStar} src={Star} alt='star' />
+                                ))}
+                            </p>
                             <p> | </p>
                             <p className={Styles.reviewValue}>222 Reviews</p>
+
                         </div>
                         
                         <div className={Styles.contactSeller}>

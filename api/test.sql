@@ -42,4 +42,8 @@ VALUES (9, 'AI/ML Textbook 7th Sem', '18 Scheme textbook', 500.0, 1, '2020-12-24
 
 -- DELETE FROM Items WHERE item_id = 5;
 -- UPDATE User_Rating SET rating=0.0, no_of_ratings=0 WHERE user_id = 'abc';
+-- UPDATE Users SET name='John Doe' WHERE user_id = 'test';
+-- UPDATE Users SET name='John Doe' WHERE user_id = 'test';
+-- UPDATE Users SET name='John Doe' WHERE user_id = 'test';
+UPDATE Items SET description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque nostrum, officia voluptas voluptatem deserunt ut vel quae corrupti aperiam cupiditate repudiandae, labore quisquam ullam architecto, sequi reprehenderit iusto beatae quasi ipsa esse explicabo numquam! Consequatur, in quibusdam. Deserunt fugit aliquid odio magni mollitia excepturi recusandae consequatur inventore itaque id! Minima?' WHERE item_id = 1;
 

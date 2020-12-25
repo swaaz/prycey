@@ -200,12 +200,13 @@ def render_product_page(id):
         #                             """, (id,)).fetchall()
 
         product_query = c.execute("""
-                                    SELECT Items.*, rating, no_of_ratings FROM Items, User_Rating
-                                    WHERE Items.seller_id=User_Rating.user_id AND Items.item_id = (?)
+                                    SELECT Items.*, name, rating, no_of_ratings FROM Items, User_Rating, Users
+                                    WHERE Items.seller_id=Users.user_id AND Items.seller_id=User_Rating.user_id AND Items.item_id = (?)
                                     """, (id,)).fetchall()
 
         # print(product_query)
         k = to_dict(product_query)[0]
+        k["seller_name"] = product_query[0][-3]
         k["rating"] = product_query[0][-2]
         k["no_of_rating"] = product_query[0][-1]
         # print(k)
