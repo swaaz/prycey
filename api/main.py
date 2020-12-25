@@ -175,13 +175,13 @@ def render_dashboard():
             print(details)
             print(user_posts)
             user_posts = to_dict(user_posts)
-            req = [{
+            req = {
                 "user_id": details[0],
                 "name": details[1],
                 "email": details[2],
                 "contact": details[3],
                 "posts": user_posts
-            }]
+            }
 
             # req = details + to_dict(user_posts)
             return json.dumps(req)
@@ -302,20 +302,27 @@ def prod_cat(cid):
 #     print(t)
 #     return "done"
 
-@app.route('/rating/<string:uid>/<float:nr>')
-def rate(uid, nr):
+@app.route('/rating/<string:uid>')
+def rate(uid):
+    nr = float(request.args.get('r'))
     if "user_id" in session:
-        with sqlite3.connect(db) as conn:
-            c = conn.cursor()
-            c.execute("PRAGMA FOREIGN_KEYS=ON;")
+        if 1 <= nr <= 5:
+            with sqlite3.connect(db) as conn:
+                c = conn.cursor()
+                c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
-            c.execute("""UPDATE User_Rating 
-                        SET rating=((rating * no_of_rating + ?)/(no_of_rating + 1)),
-                        no_of_ratings=(no_of_ratings + 1)
-                        WHERE user_id=?;
-                        """, (nr, uid, ))
-            conn.commit()
+                try:
+                    c.execute("""INSERT INTO Rated(user_id, rated_id, rating) 
+                                VALUES(?,?,?);
+                                """, (session["user_id"], uid, nr))
+                    conn.commit()
+                except sqlite3.IntegrityError:
+                    c.execute("""UPDATE Rated SET rating=? WHERE user_id=? AND rated_id=?;
+                                """, (nr, session["user_id"], uid, ))
+                    conn.commit()
 
-            return json.dumps([{"response": "RATING_UPDATED"}])
+                return json.dumps({"response": "RATING_UPDATED"})
+        else:
+            return json.dumps({"response": "INPUT_RATING_TOO_HIGH"})
     else:
-        return json.dumps([{"response": "USER_NOT_SIGNED_IN"}])
+        return json.dumps({"response": "USER_NOT_SIGNED_IN"})
