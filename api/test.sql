@@ -41,4 +41,5 @@ INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im
 VALUES (9, 'AI/ML Textbook 7th Sem', '18 Scheme textbook', 500.0, 1, '2020-12-24', 'blank', '', '', '', 2, 'ghi');
 
 -- DELETE FROM Items WHERE item_id = 5;
+-- UPDATE User_Rating SET rating=0.0, no_of_ratings=0 WHERE user_id = 'abc';
 
