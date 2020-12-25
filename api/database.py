@@ -61,14 +61,24 @@ def init_db():
     c.execute(
         """CREATE TABLE IF NOT EXISTS Transact(
                 transaction_id INTEGER PRIMARY KEY,
-                seller_id INTEGER NOT NULL,
-                buyer_id INTEGER NOT NULL,
+                seller_id TEXT NOT NULL,
+                buyer_id TEXT NOT NULL,
                 item_id INTEGER NOT NULL,
                 date TEXT NOT NULL,
                 time TEXT NOT NULL,
                 FOREIGN KEY(seller_id) REFERENCES Users(user_id),
                 FOREIGN KEY(buyer_id) REFERENCES Users(user_id),
                 FOREIGN KEY(item_id) REFERENCES Items(item_id));""")
+    conn.commit()
+
+    c.execute("""
+                CREATE TABLE IF NOT EXISTS Rated(
+                    user_id TEXT,
+                    rated_id TEXT,
+                    rating REAL,
+                    PRIMARY KEY(user_id, rated_id),
+                    FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+                    FOREIGN KEY(rated_id) REFERENCES Users(user_id) ON DELETE CASCADE);""")
     conn.commit()
  
     # Execute this only once
@@ -85,13 +95,50 @@ def init_db():
     conn.commit()
 
     c.execute("""
-            CREATE TRIGGER add_rating AFTER INSERT ON Users
+            CREATE TRIGGER add_user_rating AFTER INSERT ON Users
             BEGIN
                 INSERT INTO User_Rating(user_id) VALUES(new.user_id);
             END;
         """)
     conn.commit()
+
+    c.execute("""
+            CREATE TRIGGER add_new_rated AFTER INSERT ON Rated
+            BEGIN
+                UPDATE User_Rating 
+                SET rating=((rating * no_of_ratings + new.rating)/(no_of_ratings + 1)),
+                no_of_ratings=(no_of_ratings + 1)
+                WHERE user_id=new.rated_id;
+            END;
+        """)
+    conn.commit()
+
+    c.execute("""
+            CREATE TRIGGER update_rating AFTER UPDATE ON Rated
+            WHEN old.rating <> new.rating
+            BEGIN
+                UPDATE User_Rating
+                SET rating=(rating * no_of_ratings - old.rating + new.rating)/(no_of_ratings)
+                WHERE user_id=new.rated_id;
+            END;
+        """)
+    conn.commit()
+
+    # c.execute("""
+    #         CREATE TRIGGER update_rating AFTER UPDATE ON Rated
+    #         WHEN old.rating <> new.rating
+    #         BEGIN
+    #             UPDATE User_Rating
+    #             SET rating=(rating * no_of_ratings - old.rating + new.rating)/(no_of_ratings)
+    #             WHERE user_id=new.rated_id;
+    #         END;
+    #     """)
+    # conn.commit()
+
+    
+
     c.close()
     conn.close()
+
 
 init_db()
