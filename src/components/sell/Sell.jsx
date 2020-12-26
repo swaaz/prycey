@@ -14,12 +14,31 @@ function Sell() {
                </div>
                <div className={Styles.form}>
                     <form>
-                        <h1>Sign Up</h1>
-                        <input type='text' placeholder='username' />
-                        <input type='text' placeholder='full name' />
-                        <input type='text' placeholder='email id' />
-                        <input type='text' placeholder='contact number' />
-                        <input type='password' placeholder='password'/>
+                        <h1>Sell</h1>
+                        <input type='text' placeholder='title' />
+                        <input type='text' placeholder='description' />
+                        <p className={Styles.categoryTitle}>category</p>
+                        <div className={Styles.category}>
+                            <div className={Styles.categorySet}>
+                                <input type='radio' name='category' id='books' value='books' />
+                                <p className={Styles.categoryName}>books</p>
+                            </div>
+                            <div className={Styles.categorySet}>
+                                <input type='radio' name='category' id='electronics' value='electronics' />
+                                <p className={Styles.categoryName}>electronics</p>
+                            </div>
+                            <div className={Styles.categorySet}>
+                                <input type='radio' name='category' id='furniture' value='furniture' />
+                                <p className={Styles.categoryName}>furniture</p>
+                            </div>
+                            <div className={Styles.categorySet}>
+                                <input type='radio' name='category' id='tools' value='tools' />
+                                <p className={Styles.categoryName}>tools</p>
+                            </div>
+                        </div>
+                        <input style={Styles.uploadImage} type="file" />
+                        <input type='text' placeholder='price' />
+                        <input type='text' placeholder='year' />
                         <button type='submit'>submit</button>
                     </form>
                </div>

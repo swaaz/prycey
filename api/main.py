@@ -13,6 +13,8 @@ db = 'prycey.db'
 app = Flask(__name__)
 app.secret_key = "test"
 CORS(app)
+# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
 
 
 @app.route('/signin', methods=['POST'])
@@ -59,8 +61,24 @@ def signup():
     """
         Registers new users into the users collection in db
     """
+    # request_data = request.data
+    # print(request_data)
+    # new_user = json.loads(request_data.decode('utf-8').replace("'", '"'))
+    # print(new_user)
+
     request_data = request.data
-    new_user = json.loads(request_data.decode('utf-8'))[0]
+    new_user = json.loads(request_data.decode('utf8').replace("'", '"'))
+
+    print(request_data)
+
+    # new_user = {
+    #     "user_id": request_data.get('user_id'),
+    #     "name": request_data.get('name'),
+    #     "email": request_data.get('email'),
+    #     "contact_number": request_data.get('contact_number'),
+    #     "password": request_data.get('password')
+    # }
+
     print(new_user)
 
     with sqlite3.connect(db) as conn:
@@ -70,10 +88,13 @@ def signup():
         try:
             c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password) 
                                 VALUES(?,?,?,?,?)""", tuple(new_user.values()))
+            print("success")
         except sqlite3.IntegrityError:
+            print("Already there error")
             return json.dumps([{"response": "ERROR"}])
 
         # return redirect("/signin")
+
         return json.dumps([{"response": "SUCCESS"}])
 
 
