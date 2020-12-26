@@ -6,7 +6,9 @@ function Navbar() {
     return (
         <div className={Styles.navbar}>
             <nav>
-                <p>Prycey</p>
+                <Link to='/'>
+                    <p>Prycey</p>
+                </Link>
                 <div className={Styles.search}>
                     <form>
                     <input type='text' />

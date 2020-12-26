@@ -1,11 +1,28 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss';
 import Card from './Card';
 import Product from '../../assets/products/1.png';
+import axios from 'axios';
+import { Link } from "react-router-dom";
 
 
-function Search() {
+
+function Search({match}) {
+        const [ values, setValues] = useState([]);
+        const [category, setCategory] = useState();
+        useEffect(() => {
+       axios
+       .get(`http://127.0.0.1:5000/product/category/${match.params.category}`)
+       .then((values) => {
+           if(values.data[0] != null) setCategory(values.data[0]['category'])
+           setValues(values.data);
+       })
+       .catch((error) => {
+           console.log(error)
+       })
+    }, [])
+
     return (
         <div className={Styles.search}>
             <Navbar />
@@ -13,16 +30,20 @@ function Search() {
                 <div className={Styles.searchResult}>
                     <p className={Styles.searchValue}>
                         <span>Search Results : </span>
-                        `NCERT TEXT BOOKS`
+                        '{category? category: 'no data'}'
                     </p>
                 </div>
                 <div className={Styles.cards}>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='400.00'/>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='400.00'/>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='400.00'/>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='400.00'/>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='990.00'/>
-                    <Card Photo={Product} Title='Dell XP15 Laptop' Price='400.00'/>
+                    {
+                        values.map( (data) => {
+                            return(
+                                <Link key={data.item_id} to={`/product/${data.item_id}`} >
+                                    <Card key={data.item_id} Photo={Product} Title={data.title} Price={data.price}/>
+                                </Link>
+                            );
+                        })
+                    }
+                    
                 </div>
             </div>
         </div>

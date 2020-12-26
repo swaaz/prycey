@@ -1,0 +1,90 @@
+@import '../../styles/colors';
+
+.sell{
+    .body{
+        background: linear-gradient(90deg, $purple 70%, $bg 30%);
+        // height: 500px;
+        padding: 190px 67px;
+        display: flex;
+        flex-direction: row;
+
+        .content{
+            padding: 220px 0 0 358px;
+            width: 43%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            h1{
+                color: white;
+                font-size: 2.5rem;
+            }
+            p{
+                color: white;
+                padding-right: 30px;
+
+            }
+        }
+        .form{
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding: 100px 80px;
+            background-color: $bg;
+            form{
+                display: flex;
+                flex-direction: column;
+
+                    // .uploadImage{
+                    //     margin-bottom: 10px;
+                    // }
+                h1{
+                    margin-bottom: 25px;
+                    font-size: 2.5rem;
+                }
+                input {
+                    margin: 13px 0;
+                    border: 0;
+                    outline: 0;
+                    border-bottom: 1px solid black;
+                }
+
+                button{
+                    width: 100px;
+                    margin: 15px 0;
+                    padding: 5px 0;
+                    background-color: $purple;
+                    color: white;
+                    font-size: 1.2rem;
+                }
+                .categoryTitle{
+                    color:  black;
+                    opacity: 60%;
+                }
+                .category{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    margin: 5px 0;
+
+                    .categorySet{
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-evenly;
+                        margin: 0 5px;
+
+                        .categoryName{
+                            opacity: 60%;
+                            padding-top: 12px;
+                            margin: 0 4px;
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+    .avatarSection{
+        margin-top: -396px;
+        .avatar{
+            width: 700px;
+        }
+    }
+}

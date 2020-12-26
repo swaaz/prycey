@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h2>My dashboard</h2>
+
+    Username: {{details[0]}} </br>
+    Fullname: {{details[1]}} </br>
+    Email: {{details[2]}} </br>
+    Contact Number: {{details[3]}} </br>
+
+    <h3>My Ad Posts</h3>
+    <table style="border: 1px solid black; text-align: left;border-collapse: collapse;">
+        <tr style="border: 1px solid black;">
+            <th style="border: 1px solid black;">Title</th>
+            <th style="border: 1px solid black;">Category</th>
+            <th style="border: 1px solid black;">Description</th>
+            <th style="border: 1px solid black;">Price</th>
+            <th style="border: 1px solid black;">Year</th>
+            <!-- <th style="border: 1px solid black;">Added Date</th> -->
+        </tr>
+
+        {% for post in user_posts %} 
+            <tr style="border: 1px solid black;">
+                <td style="border: 1px solid black;">{{post[1]}}</td>
+                <td style="border: 1px solid black;">{{post[2]}}</td>
+                <td style="border: 1px solid black;">{{post[3]}}</td>
+                <td style="border: 1px solid black;">{{post[4]}}</td>
+                <td style="border: 1px solid black;">{{post[5]}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
