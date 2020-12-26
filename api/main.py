@@ -22,7 +22,7 @@ def signin():
     # print(request.data)
     request_data = request.data
     # print(request_data)
-    cred = json.loads(request_data.decode('utf-8'))[0]
+    cred = json.loads(request_data.decode('utf8').replace("'", '"'))
     # print(cred)
     # print(request_data['name'], request_data['password'])
 
@@ -42,9 +42,9 @@ def signin():
             if cred_query is not None:
                 session["user_id"] = cred_query[0]
                 # print(session["user_id"])
-                return json.dumps([{"response": "SUCCESS"}])
+                return json.dumps({"response": "SUCCESS"})
             else:
-                return json.dumps([{"response": "NO_CRED_FOUND"}])
+                return json.dumps({"response": "NO_CRED_FOUND"})
 
 
 @app.route('/signout')
@@ -53,7 +53,7 @@ def signout():
         session.pop("user_id", None)
         print("Session closed, Client Signed out")
 
-    return json.dumps([{"response": "SIGN_OUT_SUCCESS"}])
+    return json.dumps({"response": "SIGN_OUT_SUCCESS"})
 
 
 @app.route('/signup', methods=['POST'])
@@ -69,7 +69,7 @@ def signup():
     request_data = request.data
     new_user = json.loads(request_data.decode('utf8').replace("'", '"'))
 
-    print(request_data)
+    # print(request_data)
 
     # new_user = {
     #     "user_id": request_data.get('user_id'),
@@ -79,7 +79,7 @@ def signup():
     #     "password": request_data.get('password')
     # }
 
-    print(new_user)
+    # print(new_user)
 
     with sqlite3.connect(db) as conn:
         c = conn.cursor()
@@ -88,14 +88,14 @@ def signup():
         try:
             c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password) 
                                 VALUES(?,?,?,?,?)""", tuple(new_user.values()))
-            print("success")
+            # print("success")
         except sqlite3.IntegrityError:
-            print("Already there error")
-            return json.dumps([{"response": "ERROR"}])
+            # print("Already there error")
+            return json.dumps({"response": "ERROR"})
 
         # return redirect("/signin")
 
-        return json.dumps([{"response": "SUCCESS"}])
+        return json.dumps({"response": "SUCCESS"})
 
 
 @app.route('/sell', methods=['POST'])
@@ -111,7 +111,7 @@ def sell():
 
         new_prod = (session["user_id"], ) + \
             tuple(new_item.values()) + (str(datetime.date.today()), )
-        print(new_prod)
+        # print(new_prod)
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
             c.execute("PRAGMA FOREIGN_KEYS=ON;")
@@ -122,11 +122,11 @@ def sell():
                             VALUES(?,?,?,?,?,?,?,?,?,?,?);
                             """, new_prod)
             except sqlite3.IntegrityError:
-                return json.dumps([{"response": "CATEGORY_NOT_FOUND"}])
+                return json.dumps({"response": "CATEGORY_NOT_FOUND"})
 
-            return json.dumps([{"response": "SUCCESS"}])
+            return json.dumps({"response": "SUCCESS"})
     else:
-        return json.dumps([{"response": "NOT_SIGNED_IN"}])
+        return json.dumps({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/search', methods=["GET", "POST"])
@@ -149,7 +149,7 @@ def search():
         # query = json.loads(request_data.decode('utf-8'))[0]
         query = request.args.get('q')
 
-        print(query)
+        # print(query)
 
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
@@ -165,7 +165,7 @@ def search():
                 results = c.execute("""
                                     SELECT * FROM Items WHERE title LIKE (?);
                                     """, ('%' + query + '%', )).fetchall()
-        print(results)
+        # print(results)
         return json.dumps(to_dict(results))
 
 
@@ -193,8 +193,8 @@ def render_dashboard():
                                     FROM Items 
                                     WHERE seller_id = (?)
                                 """, (session['user_id'],)).fetchall()
-            print(details)
-            print(user_posts)
+            # print(details)
+            # print(user_posts)
             user_posts = to_dict(user_posts)
             req = {
                 "user_id": details[0],
@@ -207,7 +207,7 @@ def render_dashboard():
             # req = details + to_dict(user_posts)
             return json.dumps(req)
     else:
-        return json.dumps([{"response": "NOT_SIGNED_IN"}])
+        return json.dumps({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/product/<int:id>')
@@ -244,7 +244,7 @@ def edit_product(id):
     if "user_id" in session:
         request_data = request.data
         new_item = json.loads(request_data.decode('utf-8'))[0]
-        print(new_item)
+        # print(new_item)
 
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
@@ -252,7 +252,7 @@ def edit_product(id):
 
             k = c.execute(
                 """SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
-            print(k)
+            # print(k)
             if k[0] == session["user_id"]:
                 c.execute("""UPDATE Items
                             SET 
@@ -270,11 +270,11 @@ def edit_product(id):
                             """, tuple(list(new_item.values()) + [id]))
                 conn.commit()
 
-                return json.dumps([{"response": "SUCCESS_EDIT"}])
+                return json.dumps({"response": "SUCCESS_EDIT"})
             else:
-                return json.dumps([{"response": "NOT_AUTHORIZED"}])
+                return json.dumps({"response": "NOT_AUTHORIZED"})
     else:
-        return json.dumps([{"response": "NOT_SIGNED_IN"}])
+        return json.dumps({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/product/<int:id>/delete')
@@ -290,12 +290,12 @@ def delete_product(id):
             if k[0] == session["user_id"]:
                 c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
                 conn.commit()
-                return json.dumps([{"response": "SUCCESS_DELETE"}])
+                return json.dumps({"response": "SUCCESS_DELETE"})
 
             else:
-                return json.dumps([{"response": "NOT_AUTHORIZED"}])
+                return json.dumps({"response": "NOT_AUTHORIZED"})
     else:
-        return json.dumps([{"response": "NOT_SIGNED_IN"}])
+        return json.dumps({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/product/category/<int:cid>')
