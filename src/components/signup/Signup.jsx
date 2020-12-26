@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss';
 import Avatar from '../../assets/avatar/Sheik.png';

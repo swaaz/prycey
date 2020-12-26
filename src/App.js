@@ -5,11 +5,13 @@ import Signin from "./components/signin/Signin";
 import Sell from "./components/sell/Sell";
 import Search from "./components/search/Search";
 import ProductPage from "./components/productPage/ProductPage";
+import Profile from "./components/profile/Profile";
 function App() {
   return (
     <Router>
       <div className="Styles.App">
         <Switch>
+          <Route path='/profile' component={Profile} />
           <Route path='/sell' component={Sell} />
           <Route path='/product/category/:category' component={Search} />
           <Route path='/product/:productid' component={ProductPage} />

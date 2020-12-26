@@ -73,7 +73,7 @@ function ProductPage({match}) {
                                 ))}
                             </p>
                             <p> | </p>
-                            <p className={Styles.reviewValue}>222 Reviews</p>
+                            <p className={Styles.reviewValue}>{values.review} Reviews</p>
 
                         </div>
                         
