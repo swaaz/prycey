@@ -9,7 +9,6 @@ function Profile() {
             <Navbar/>
             <div className={Styles.body}>
                <div className={Styles.content} >
-
                    <div className={Styles.imageSection}>
                         <img className={Styles.image} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=40' alt='profile image' />
                    </div>
