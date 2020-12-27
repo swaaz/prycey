@@ -7,11 +7,13 @@ import Search from "./components/search/Search";
 import ProductPage from "./components/productPage/ProductPage";
 import Profile from "./components/profile/Profile";
 import Dashboard from "./components/dashboard/Dashboard";
+import sellerInfo from "./components/sellerInfo/sellerInfo";
 function App() {
   return (
     <Router>
       <div className="Styles.App">
         <Switch>
+          <Route path='/seller' component={sellerInfo} />
           <Route path='/dashboard' component={Dashboard} />
           <Route path='/profile' component={Profile} />
           <Route path='/sell' component={Sell} />

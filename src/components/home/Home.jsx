@@ -45,6 +45,9 @@ function Home() {
                     })
                 }
             </div>
+            <footer className={Styles.footer}>
+                <p className={Styles.footerText}> prycey © 2020 </p>
+            </footer>
             
         </div>
     )

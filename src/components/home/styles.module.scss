@@ -86,4 +86,15 @@
             }
         }
     }
+    .footer{
+        background-color: $blue_button;
+        color: white;
+        text-align: center;
+        padding: 13px 0;
+
+        .footerText{
+            font-weight: 700;
+        }
+
+    }
 }
