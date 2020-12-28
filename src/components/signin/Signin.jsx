@@ -12,7 +12,7 @@ function Signin() {
     const onSubmit = (data) =>{
         console.log(data)
         axios.post('http://127.0.0.1:5000/signin', data)
-        .then( response => console.log(response))
+        .then( response => alert(response.data.response))
         .catch( error => console.log(error))
     }
     return (

@@ -8,21 +8,19 @@ import { Link } from "react-router-dom";
 
 
 
-function Search(props) {
+function searchResult(props) {
         const [ values, setValues] = useState([]);
-        const [category, setCategory] = useState();
         useEffect(() => {
         console.log(props);
        axios
-       .get(`http://127.0.0.1:5000/product/category/${props.match.params.category}`)
+       .get(`http://127.0.0.1:5000/search?q=${props.match.params.value}`)
        .then((values) => {
-           if(values.data[0] != null) setCategory(values.data[0]['category'])
            setValues(values.data);
        })
        .catch((error) => {
            console.log(error)
        })
-    }, [])
+    }, [props.match.params.value])
 
     return (
         <div className={Styles.search}>
@@ -31,9 +29,10 @@ function Search(props) {
                 <div className={Styles.searchResult}>
                     <p className={Styles.searchValue}>
                         <span>Search Results : </span>
-                        '{category? category: 'no data'}'
+                        '{props.match.params.value}'
                     </p>
                 </div>
+                <p className={Styles.warning}>{values.length? '' : 'No Result Found'}</p>
                 <div className={Styles.cards}>
                     {
                         values.map( (data) => {
@@ -51,4 +50,4 @@ function Search(props) {
     )
 }
 
-export default Search;
+export default searchResult;
