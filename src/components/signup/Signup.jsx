@@ -10,6 +10,7 @@ function Signup() {
     
     const onSubmit = (data) => {
         // data.preventDefault();
+        alert('signedin');
         console.log(data)
         console.log('request sending')
         axios.post('http://127.0.0.1:5000/signup', data)

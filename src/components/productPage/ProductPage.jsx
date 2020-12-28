@@ -5,6 +5,9 @@ import Product from '../../assets/products/1.jpg';
 import Call  from '../../assets/icons/call.png';
 import axios from 'axios';
 import Star from '../../assets/icons/star.png';
+import Modal from 'react-modal';
+
+
 function ProductPage({match}) {
     const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '' })
      useEffect(() => {
@@ -85,8 +88,10 @@ function ProductPage({match}) {
                 </div>
                 <div className={Styles.right}>
                     <img className={Styles.image} src={Product}/>
+                    <sellerDetails />
                 </div>
             </div>
+            <sellerDetails />
         </div>
     )
 }
