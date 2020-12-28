@@ -16,7 +16,6 @@ CORS(app)
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
-
 @app.route('/signin', methods=['POST'])
 def signin():
     # print(request.data)
@@ -27,7 +26,7 @@ def signin():
     # print(request_data['name'], request_data['password'])
 
     if "user_id" in session:
-        return json.dumps([{"response": "SUCCESS"}])
+        return json.dumps({"response": "Already Signed in :)"})
     else:
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
@@ -42,9 +41,9 @@ def signin():
             if cred_query is not None:
                 session["user_id"] = cred_query[0]
                 # print(session["user_id"])
-                return json.dumps({"response": "SUCCESS"})
+                return json.dumps({"response": "Signin Success"})
             else:
-                return json.dumps({"response": "NO_CRED_FOUND"})
+                return json.dumps({"response": "No Credential found"})
 
 
 @app.route('/signout')
@@ -91,11 +90,11 @@ def signup():
             # print("success")
         except sqlite3.IntegrityError:
             # print("Already there error")
-            return json.dumps({"response": "ERROR"})
+            return json.dumps({"response": "Already Exists!"})
 
         # return redirect("/signin")
 
-        return json.dumps({"response": "SUCCESS"})
+        return json.dumps({"response": "Account created successfully!"})
 
 
 @app.route('/sell', methods=['POST'])
@@ -135,18 +134,8 @@ def search():
         Gets search query '?q=' for name
         Gets search other query options like sort, price range, category
     """
-    # if request.method == 'GET':
-    #     with sqlite3.connect(db) as conn:
-    #         c = conn.cursor()
-    #         c.execute("PRAGMA FOREIGN_KEYS=ON;")
-    #         results = c.execute("""
-    #                                 SELECT * FROM Items;
-    #                                 """).fetchall()
-    #         return json.dumps(to_dict(results))
 
     if request.method == 'GET':
-        # request_data = request.data
-        # query = json.loads(request_data.decode('utf-8'))[0]
         query = request.args.get('q')
 
         # print(query)
@@ -157,7 +146,7 @@ def search():
 
             # print(query)
 
-            if query == "":
+            if query == None:
                 results = c.execute("""
                                     SELECT * FROM Items;
                                     """).fetchall()
@@ -315,14 +304,6 @@ def prod_cat(cid):
 
         return json.dumps(q)
 
-
-# @app.route('/upload', methods=['POST'])
-# def upload():
-#     t = request.files['file']
-#     t.save(t.filename)
-
-#     print(t)
-#     return "done"
 
 @app.route('/rating/<string:uid>')
 def rate(uid):

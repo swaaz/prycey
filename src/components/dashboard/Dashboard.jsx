@@ -44,7 +44,7 @@ function Dashboard() {
                         </div>
                     </div>
                 </div>
-                <h1 className={Styles.sideHeading}>My posts</h1>
+                <h1 className={Styles.sideHeading}>My Posts</h1>
                 <div className={Styles.cards}>
                     <Cards title='project title' description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore sed est, voluptatibus explicabo quo dolorem autem facer' image={Image} price='9999' />
                     <Cards title='project title' description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore sed est, voluptatibus explicabo quo dolorem autem facer' image={Image} price='9999' />

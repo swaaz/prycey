@@ -15,7 +15,7 @@ function Home() {
 
     useEffect(() => {
 		axios
-			.get(`http://127.0.0.1:5000/search?q=`)
+			.get('http://127.0.0.1:5000/search')
 			.then(response => {
                 console.log(response.data)
 				setPosts(response.data)
@@ -45,6 +45,9 @@ function Home() {
                     })
                 }
             </div>
+            <footer className={Styles.footer}>
+                <p className={Styles.footerText}> prycey © 2020 </p>
+            </footer>
             
         </div>
     )

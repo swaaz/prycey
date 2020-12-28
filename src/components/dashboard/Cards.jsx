@@ -1,7 +1,7 @@
 import React from 'react';
 import Styles from './styles.module.scss';
-import Delete from '../../assets/icons/black_bin.png';
-import Edit from '../../assets/icons/black_edit.png';
+import Delete from '../../assets/icons/purple_bin.png';
+import Edit from '../../assets/icons/purple_edit.png';
 
 
 
