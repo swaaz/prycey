@@ -5,7 +5,7 @@ from flask_cors import CORS
 import json
 import datetime
 # from database import init_db
-from helper import to_dict
+from helper import to_dict, rate_to_dict
 
 db = 'prycey.db'
 
@@ -21,8 +21,8 @@ def signin():
     # print(request.data)
     request_data = request.data
     # print(request_data)
-    cred = json.loads(request_data.decode('utf8').replace("'", '"'))
-    # print(cred)
+    cred = json.loads(request_data.decode('utf8').replace("'", '"'))[0]
+    print(cred)
     # print(request_data['name'], request_data['password'])
 
     if "user_id" in session:
@@ -182,15 +182,22 @@ def render_dashboard():
                                     FROM Items 
                                     WHERE seller_id = (?)
                                 """, (session['user_id'],)).fetchall()
+            user_rating = c.execute("""
+                                        SELECT name, rated_id, rating 
+                                        FROM Rated, Users 
+                                        WHERE Rated.rated_id=Users.user_id AND Rated.user_id=?
+                                    """, (session['user_id'],)).fetchall()
             # print(details)
             # print(user_posts)
             user_posts = to_dict(user_posts)
+            user_rating = rate_to_dict(user_rating)
             req = {
                 "user_id": details[0],
                 "name": details[1],
                 "email": details[2],
                 "contact": details[3],
-                "posts": user_posts
+                "posts": user_posts,
+                "ratings": user_rating
             }
 
             # req = details + to_dict(user_posts)
@@ -210,12 +217,14 @@ def render_product_page(id):
         #                             """, (id,)).fetchall()
 
         product_query = c.execute("""
-                                    SELECT Items.*, name, rating, no_of_ratings FROM Items, User_Rating, Users
+                                    SELECT Items.*, email, contact_number, name, rating, no_of_ratings FROM Items, User_Rating, Users
                                     WHERE Items.seller_id=Users.user_id AND Items.seller_id=User_Rating.user_id AND Items.item_id = (?)
                                     """, (id,)).fetchall()
 
         # print(product_query)
         k = to_dict(product_query)[0]
+        k["email"] = product_query[0][-5]
+        k["contact"] = product_query[0][-4]
         k["seller_name"] = product_query[0][-3]
         k["rating"] = product_query[0][-2]
         k["no_of_rating"] = product_query[0][-1]

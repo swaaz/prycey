@@ -21,3 +21,15 @@ def to_dict(k: list):
         })
 
     return d
+
+def rate_to_dict(k: list):
+    d = []
+
+    for i in range(len(k)):
+        d.append({
+            "name": k[i][0],
+            "user_id": k[i][1],
+            "rating": k[i][2],
+        })
+
+    return d
