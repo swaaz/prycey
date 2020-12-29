@@ -3,13 +3,17 @@ import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss';
 import Product from '../../assets/products/1.jpg';
 import Call  from '../../assets/icons/call.png';
+import Close  from '../../assets/icons/close.png';
+import whiteStar from '../../assets/icons/white_star.png';
 import axios from 'axios';
 import Star from '../../assets/icons/star.png';
 import Modal from 'react-modal';
 
+Modal.setAppElement('#root');
 
 function ProductPage({match}) {
-    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '' })
+    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '' });
+    const [modal, setModal] = useState(false);
      useEffect(() => {
         axios
         .get(`http://127.0.0.1:5000/product/${match.params.productid}`)
@@ -80,7 +84,7 @@ function ProductPage({match}) {
 
                         </div>
                         
-                        <div className={Styles.contactSeller}>
+                        <div className={Styles.contactSeller} role='button' tabIndex={0} onClick={ (e)=> setModal(true)}>
                             <img className={Styles.contactIcon} src={Call} alt='call' />
                             <p className={Styles.contactText}>Contact Seller</p>
                         </div>
@@ -88,10 +92,61 @@ function ProductPage({match}) {
                 </div>
                 <div className={Styles.right}>
                     <img className={Styles.image} src={Product}/>
-                    <sellerDetails />
                 </div>
             </div>
-            <sellerDetails />
+
+            <Modal  
+            isOpen={modal} 
+            onRequestClose={() => setModal(false)}
+            style={
+                {
+                    overlay:{
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    },
+                    content:{
+                        color: 'white',
+                        background : '#3D6CB9',
+                        width : '421px',
+                        margin: 'auto auto',
+                        display: 'flex',
+                        borderRadius : '40px',
+                        flexDirection: 'column',
+                        textAlign : 'center',
+                        height : '523px'
+                    },
+
+                }
+            }
+            >
+                
+                    {/* <div className={Styles.modalBox}> */}
+
+                        <img onClick={(e)=> setModal(false)} style={{alignSelf : 'end', width: '30px'}}  src={Close} alt='close' />
+                        <h1 style={{fontSize : '2rem'}}>Seller Details</h1>
+                        <img style={{borderRadius : '50%', width: '200px', border: '5px solid #00FFF0', margin: '30px auto'}} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='profile' />
+                        <p style={{fontSize: '1.7rem', fontWeight: '600'}}>{values.sellerName}</p>
+                        <div style={{display : 'flex', margin: '10px auto', flexDirection: 'row', justifyContent: 'baseline'}}>
+                                <p>
+                                    {values.rating}
+                                    <img style={{width: '17px', marginLeft: '3px'}} src={whiteStar} alt='star' />
+                                </p>
+                                <p style={{margin: '0 5px'}}> | </p>
+                                <p >
+                                    {Array(parseInt(values.rating))
+                                    .fill()
+                                    .map((_, i) => (
+                                    <img style={{width: '17px'}} src={Star} alt='star' />
+                                    ))}
+                                </p>
+                                <p style={{margin: '0 5px'}}> | </p>
+                                <p >{values.review} Reviews</p>
+
+                            </div>
+                        <p style={{fontSize: '1.1rem', margin: '10px 0'}}>E-mail : swaasthik.shetty@gmail.com</p>
+                        <p style={{fontSize: '1.1rem', margin: '10px 0'}}>Contact : +91 81971 31451</p>
+                    {/* </div> */}
+                
+            </Modal>
         </div>
     )
 }
