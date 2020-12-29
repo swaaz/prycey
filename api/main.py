@@ -18,6 +18,8 @@ CORS(app)
 
 @app.route('/signin', methods=['POST'])
 def signin():
+    print(session.get('user_id'))
+
     # print(request.data)
     request_data = request.data
     # print(request_data)
@@ -40,7 +42,7 @@ def signin():
 
             if cred_query is not None:
                 session["user_id"] = cred_query[0]
-                # print(session["user_id"])
+                print(session["user_id"])
                 return json.dumps({"response": "Signin Success"})
             else:
                 return json.dumps({"response": "No Credential found"})
@@ -105,7 +107,7 @@ def sell():
     request_data = request.data
     new_item = json.loads(request_data.decode('utf-8'))[0]
     # print(new_item)
-
+    
     if "user_id" in session:
 
         new_prod = (session["user_id"], ) + \
@@ -166,44 +168,88 @@ def search():
 #         return jsonify(users)
 
 
+# @app.route('/dashboard')
+# def render_dashboard():
+#     print(session.get('user_id'))
+#     # if "user_id" in session:
+#         with sqlite3.connect(db) as conn:
+#             c = conn.cursor()
+#             c.execute("PRAGMA FOREIGN_KEYS=ON;")
+#             details = c.execute("""
+#                                     SELECT user_id, name, email, contact_number
+#                                     FROM Users 
+#                                     WHERE user_id = (?);
+#                                 """, (session['user_id'],)).fetchone()
+#             user_posts = c.execute("""
+#                                     SELECT *
+#                                     FROM Items 
+#                                     WHERE seller_id = (?)
+#                                 """, (session['user_id'],)).fetchall()
+#             user_rating = c.execute("""
+#                                         SELECT name, rated_id, rating 
+#                                         FROM Rated, Users 
+#                                         WHERE Rated.rated_id=Users.user_id AND Rated.user_id=?
+#                                     """, (session['user_id'],)).fetchall()
+#             # print(details)
+#             # print(user_posts)
+#             user_posts = to_dict(user_posts)
+#             user_rating = rate_to_dict(user_rating)
+#             req = {
+#                 "user_id": details[0],
+#                 "name": details[1],
+#                 "email": details[2],
+#                 "contact": details[3],
+#                 "posts": user_posts,
+#                 "ratings": user_rating
+#             }
+
+#             # req = details + to_dict(user_posts)
+#             return json.dumps(req)
+#     else:
+#         return json.dumps({"response": "NOT_SIGNED_IN"})
+
 @app.route('/dashboard')
 def render_dashboard():
-    if "user_id" in session:
-        with sqlite3.connect(db) as conn:
-            c = conn.cursor()
-            c.execute("PRAGMA FOREIGN_KEYS=ON;")
-            details = c.execute("""
-                                    SELECT user_id, name, email, contact_number
-                                    FROM Users 
-                                    WHERE user_id = (?);
-                                """, (session['user_id'],)).fetchone()
-            user_posts = c.execute("""
-                                    SELECT *
-                                    FROM Items 
-                                    WHERE seller_id = (?)
-                                """, (session['user_id'],)).fetchall()
-            user_rating = c.execute("""
-                                        SELECT name, rated_id, rating 
-                                        FROM Rated, Users 
-                                        WHERE Rated.rated_id=Users.user_id AND Rated.user_id=?
-                                    """, (session['user_id'],)).fetchall()
-            # print(details)
-            # print(user_posts)
-            user_posts = to_dict(user_posts)
-            user_rating = rate_to_dict(user_rating)
-            req = {
-                "user_id": details[0],
-                "name": details[1],
-                "email": details[2],
-                "contact": details[3],
-                "posts": user_posts,
-                "ratings": user_rating
-            }
+    j = 'johndoe'
+    print(session.get('user_id'))
+    # if "user_id" in session:
+    with sqlite3.connect(db) as conn:
+        c = conn.cursor()
+        c.execute("PRAGMA FOREIGN_KEYS=ON;")
+        details = c.execute("""
+                                SELECT Users.user_id, name, rating, no_of_ratings
+                                FROM Users, User_Rating
+                                WHERE Users.user_id=User_rating.user_id AND Users.user_id = (?);
+                            """, (j,)).fetchone()
+        user_posts = c.execute("""
+                                SELECT *
+                                FROM Items 
+                                WHERE seller_id = (?)
+                            """, (j,)).fetchall()
+        user_rating = c.execute("""
+                                    SELECT name, rated_id, rating 
+                                    FROM Rated, Users 
+                                    WHERE Rated.rated_id=Users.user_id AND Rated.user_id=?
+                                """, (j,)).fetchall()
+        # print(details)
+        # print(user_posts)
+        user_posts = to_dict(user_posts)
+        user_rating = rate_to_dict(user_rating)
+        fname, lname = details[1].split()
+        req = {
+            "user_id": details[0],
+            "fname": fname,
+            "lname": lname,
+            "rating": details[2],
+            "no_of_ratings": details[3],
+            "posts": user_posts,
+            "ratings": user_rating
+        }
 
-            # req = details + to_dict(user_posts)
-            return json.dumps(req)
-    else:
-        return json.dumps({"response": "NOT_SIGNED_IN"})
+        # req = details + to_dict(user_posts)
+        return json.dumps(req)
+    # else:
+    #     return json.dumps({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/product/<int:id>')
@@ -277,23 +323,23 @@ def edit_product(id):
 
 @app.route('/product/<int:id>/delete')
 def delete_product(id):
-    if "user_id" in session:
-        with sqlite3.connect(db) as conn:
-            c = conn.cursor()
-            c.execute("PRAGMA FOREIGN_KEYS=ON;")
+    # if "user_id" in session:
+    with sqlite3.connect(db) as conn:
+        c = conn.cursor()
+        c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
-            k = c.execute(
-                """SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
+        k = c.execute(
+            """SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
 
-            if k[0] == session["user_id"]:
-                c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
-                conn.commit()
-                return json.dumps({"response": "SUCCESS_DELETE"})
+        if k[0] == session["user_id"]:
+            c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
+            conn.commit()
+            return json.dumps({"response": "SUCCESS_DELETE"})
 
-            else:
-                return json.dumps({"response": "NOT_AUTHORIZED"})
-    else:
-        return json.dumps({"response": "NOT_SIGNED_IN"})
+    #         else:
+    #             return json.dumps({"response": "NOT_AUTHORIZED"})
+    # else:
+    #     return json.dumps({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/product/category/<int:cid>')
@@ -338,3 +384,6 @@ def rate(uid):
             return json.dumps({"response": "INPUT_RATING_TOO_HIGH"})
     else:
         return json.dumps({"response": "USER_NOT_SIGNED_IN"})
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0")

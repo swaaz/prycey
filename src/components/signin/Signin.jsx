@@ -11,7 +11,10 @@ function Signin() {
     const {register, handleSubmit} = useForm();
     const onSubmit = (data) =>{
         console.log(data)
-        axios.post('http://127.0.0.1:5000/signin', data)
+        axios.post('http://127.0.0.1:5000/signin', data, {
+            withCredentials: true,
+            credentials: 'include',
+          })
         .then( response => alert(response.data.response))
         .catch( error => console.log(error))
     }
