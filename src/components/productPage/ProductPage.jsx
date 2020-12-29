@@ -4,7 +4,7 @@ import Styles from './styles.module.scss';
 import Product from '../../assets/products/1.jpg';
 import Call  from '../../assets/icons/call.png';
 import Close  from '../../assets/icons/close.png';
-
+import whiteStar from '../../assets/icons/white_star.png';
 import axios from 'axios';
 import Star from '../../assets/icons/star.png';
 import Modal from 'react-modal';
@@ -95,37 +95,57 @@ function ProductPage({match}) {
                 </div>
             </div>
 
-            <Modal   isOpen={modal} onRequestClose={() => setModal(false)}>
-                <div className={Styles.modalWrapper}>
-                    <div className={Styles.modalBackdrop}>
-                        <div className={Styles.modalBox}>
+            <Modal  
+            isOpen={modal} 
+            onRequestClose={() => setModal(false)}
+            style={
+                {
+                    overlay:{
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    },
+                    content:{
+                        color: 'white',
+                        background : '#3D6CB9',
+                        width : '421px',
+                        margin: 'auto auto',
+                        display: 'flex',
+                        borderRadius : '40px',
+                        flexDirection: 'column',
+                        textAlign : 'center',
+                        height : '523px'
+                    },
 
-                            <img className={Styles.modalClose} src={Close} alt='close' />
-                            <h1 className={Styles.modalHeader}>Seller Details</h1>
-                            <img className={Styles.modalImage} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='profile' />
-                            <p className={Styles.modalName}>{values.sellerName}</p>
-                            <div className={Styles.modalRow}>
-                                    <p className={Styles.modalRating}>
-                                        {values.rating}
-                                        <img className={Styles.modalStar} src={Star} alt='star' />
-                                    </p>
-                                    <p> | </p>
-                                    <p className={Styles.modalReviewStar}>
-                                        {Array(parseInt(values.rating))
-                                        .fill()
-                                        .map((_, i) => (
-                                        <img className={Styles.modalRatingStar} src={Star} alt='star' />
-                                        ))}
-                                    </p>
-                                    <p> | </p>
-                                    <p className={Styles.modalReviewValue}>{values.review} Reviews</p>
+                }
+            }
+            >
+                
+                    {/* <div className={Styles.modalBox}> */}
 
-                                </div>
-                            <p className={Styles.modalEmail}>E-mail id : swaasthik.shetty@gmail.com</p>
-                            <p className={Styles.modalContact}>Contact : +91 81971 31451</p>
-                        </div>
-                    </div>
-                </div>
+                        <img onClick={(e)=> setModal(false)} style={{alignSelf : 'end', width: '30px'}}  src={Close} alt='close' />
+                        <h1 style={{fontSize : '2rem'}}>Seller Details</h1>
+                        <img style={{borderRadius : '50%', width: '200px', border: '5px solid #00FFF0', margin: '30px auto'}} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='profile' />
+                        <p style={{fontSize: '1.7rem', fontWeight: '600'}}>{values.sellerName}</p>
+                        <div style={{display : 'flex', margin: '10px auto', flexDirection: 'row', justifyContent: 'baseline'}}>
+                                <p>
+                                    {values.rating}
+                                    <img style={{width: '17px', marginLeft: '3px'}} src={whiteStar} alt='star' />
+                                </p>
+                                <p style={{margin: '0 5px'}}> | </p>
+                                <p >
+                                    {Array(parseInt(values.rating))
+                                    .fill()
+                                    .map((_, i) => (
+                                    <img style={{width: '17px'}} src={Star} alt='star' />
+                                    ))}
+                                </p>
+                                <p style={{margin: '0 5px'}}> | </p>
+                                <p >{values.review} Reviews</p>
+
+                            </div>
+                        <p style={{fontSize: '1.1rem', margin: '10px 0'}}>E-mail : swaasthik.shetty@gmail.com</p>
+                        <p style={{fontSize: '1.1rem', margin: '10px 0'}}>Contact : +91 81971 31451</p>
+                    {/* </div> */}
+                
             </Modal>
         </div>
     )
