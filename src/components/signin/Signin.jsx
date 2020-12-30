@@ -5,16 +5,14 @@ import Avatar from '../../assets/avatar/Jacob_Blake.png';
 import {useForm} from "react-hook-form";
 import axios from 'axios';
 
+// axios.defaults.withCredentials = true
 
 
 function Signin() {
     const {register, handleSubmit} = useForm();
     const onSubmit = (data) =>{
         console.log(data)
-        axios.post('http://127.0.0.1:5000/signin', data, {
-            withCredentials: true,
-            credentials: 'include',
-          })
+        axios.post('http://127.0.0.1:5000/signin', data)
         .then( response => alert(response.data.response))
         .catch( error => console.log(error))
     }
