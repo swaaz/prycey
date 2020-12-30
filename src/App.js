@@ -7,8 +7,7 @@ import Search from "./components/search/Search";
 import ProductPage from "./components/productPage/ProductPage";
 import Profile from "./components/profile/Profile";
 import Dashboard from "./components/dashboard/Dashboard";
-import sellerInfo from "./components/sellerInfo/sellerInfo";
-import searchResult from "./components/searchResult/searchResult";
+import SearchResult from "./components/searchResult/SearchResult";
 import UpdateProduct from "./components/UpdateProduct/UpdateProduct";
 function App() {
   return (
@@ -16,8 +15,7 @@ function App() {
       <div className="Styles.App">
         <Switch>
           <Route path='/product/edit/:value' component={UpdateProduct} />
-          <Route path='/search/:value' component={searchResult} />
-          <Route path='/seller' component={sellerInfo} />
+          <Route path='/search/:value' component={SearchResult} />
           <Route path='/dashboard' component={Dashboard} />
           <Route path='/profile' component={Profile} />
           <Route path='/sell' component={Sell} />
