@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 
 
-function searchResult(props) {
+function SearchResult(props) {
         const [ values, setValues] = useState([]);
         useEffect(() => {
         console.log(props);
@@ -50,4 +50,4 @@ function searchResult(props) {
     )
 }
 
-export default searchResult;
+export default SearchResult;

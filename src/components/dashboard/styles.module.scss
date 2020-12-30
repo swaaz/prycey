@@ -146,5 +146,53 @@
             }
             
         }
+
+        .profileCards{
+            margin: 20px auto 0 auto;
+            padding-bottom: 30px;
+            display: grid;
+            justify-content: center;
+            grid-template-columns: repeat(5, 15%);
+            row-gap: 30px;
+            column-gap: 50px;
+
+            .cardProfile{
+                background-color: white;
+                text-align: center ;
+                width: max-content;
+                padding: 20px 30px;
+                border-radius: 10px;
+                margin: 0 auto;
+                ;
+                .profileImage{
+                    width: 175px;
+                    border-radius: 50%;
+                    border: 5px solid $purple;
+                }
+                .profileName{
+                    font-size: 1.5rem;
+                    padding: 10px 0;
+                }
+                .reviewRows{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    padding: 10px 0;
+
+                    .ratingNumbers{
+                        color: $purple;
+                         
+                    }
+                    .divider{
+                        color: $purple;
+                        margin: 0 5px;
+                    }
+                    .ratingStars{
+                        width: 17px;
+                        margin: 3px 1px 0 1px;
+                    }
+                }
+            }
+        }
     }
 }
