@@ -45,7 +45,7 @@ def signin():
                 cred_query = c.execute("""
                                         SELECT user_id 
                                         FROM Users
-                                        WHERE email = (?) AND password = (?);
+                                        WHERE user_id = (?) AND password = (?);
                                         """, tuple(cred.values())).fetchone()
 
                 if cred_query is not None:
