@@ -4,6 +4,8 @@ import Styles from './styles.module.scss';
 import Avatar from '../../assets/avatar/Jacob_Blake.png';
 import {useForm} from "react-hook-form";
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 // axios.defaults.withCredentials = true
 
@@ -13,7 +15,7 @@ function Signin() {
     const onSubmit = (data) =>{
         console.log(data)
         axios.post('http://127.0.0.1:5000/signin', data)
-        .then( response => alert(response.data.response))
+        .then( response => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
         .catch( error => console.log(error))
     }
     return (
@@ -27,8 +29,8 @@ function Signin() {
                <div className={Styles.form}>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <h1>Sign In</h1>
-                        <input type='text' placeholder='username' name='username' ref={register} />
-                        <input type='password' placeholder='password' name='password' ref={register} />
+                        <input type='text' placeholder='username' name='username' ref={register} required/>
+                        <input type='password' placeholder='password' name='password' ref={register} required />
                         <button type='submit'>login</button>
                     </form>
                </div>

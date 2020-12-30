@@ -4,6 +4,10 @@ import Styles from './styles.module.scss';
 import Avatar from '../../assets/avatar/Sheik.png';
 import {useForm} from "react-hook-form";
 import axios from 'axios';
+// import {toast} from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+toast.configure();
 function Signup() {
     const {register, handleSubmit} = useForm();
    
@@ -13,7 +17,7 @@ function Signup() {
         console.log(data)
         console.log('request sending')
         axios.post('http://127.0.0.1:5000/signup', data)
-        .then( (response) => alert(response.data.response))
+        .then( (response) => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
         .catch( error => console.log(error))
     };
 
@@ -28,11 +32,11 @@ function Signup() {
                <div className={Styles.form}>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <h1>Sign Up</h1>
-                        <input ref={register} type='text' placeholder='username' name='user_id'  />
-                        <input type='text' placeholder='full name' name='name' ref={register} />
-                        <input type='text' placeholder='email id' name='email' ref={register}/>
-                        <input type='text' placeholder='contact number' name='contact_number' ref={register}/>
-                        <input type='password' placeholder='password' name='password' ref={register}/>
+                        <input ref={register} type='text' placeholder='username' name='user_id' required />
+                        <input type='text' placeholder='full name' name='name' ref={register} required />
+                        <input type='text' placeholder='email id' name='email' ref={register} required />
+                        <input type='text' placeholder='contact number' name='contact_number' ref={register} required />
+                        <input type='password' placeholder='password' name='password' ref={register} required />
                         <button type='submit'>submit</button>
                     </form>
                </div>
