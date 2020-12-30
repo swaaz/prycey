@@ -23,6 +23,33 @@ sess = dict()
 
 @app.route('/signin', methods=['POST'])
 def signin():
+	"""
+		Signin API 
+
+		/signin
+	
+		Usage:
+		
+			Send a POST Request to flask server with JSON data of the form:
+			{
+				"username": "value",
+				"password": "value"
+			}
+
+		Returns:
+			If success:
+				{
+					"response": "Signin Success"
+				}
+			If wrong credentials:
+				{
+					"response": "No Credential found"
+				}
+			If already session exists:
+				{
+					"response": "Already Signed in :)"
+				}
+	"""
 	global sess
 	if request.method == 'POST':
 		print(sess.get('user_id'))
@@ -60,17 +87,62 @@ def signin():
 
 @app.route('/signout')
 def signout():
+	"""
+		Signout API:
+
+		/signout
+
+		Send a simple GET request to current session value
+
+		Returns:
+
+			If success:
+				{
+					"response": "SIGN_OUT_SUCCESS"
+				}
+			If no session exists:
+				{
+					"response": "NOT_SIGNED_IN"
+				}
+
+	"""
+
 	if "user_id" in sess:
 		sess.pop("user_id", None)
 		print("sess closed, Client Signed out")
 
-	return json.dumps({"response": "SIGN_OUT_SUCCESS"})
+		return json.dumps({"response": "SIGN_OUT_SUCCESS"})
+	else:
+		return json.dumps({"response": "NOT_SIGNED_IN"})
 
 
 @app.route('/signup', methods=['POST'])
 def signup():
 	"""
 		Registers new users into the users collection in db
+
+		/signup
+
+		Usage:
+			Send a POST request to the server with the JSON data of the form:
+
+			{
+				"user_id": "value",
+				"name": "value",
+				"email": "value",
+				"contact_number": "value",
+				"password": "value",
+			}
+
+		Returns:
+			If successfully registered:
+				{
+					"response": "Account created successfully!"
+				}
+			If username/email already taken:
+				{
+					"response": "Already Exists!"
+				}
 	"""
 	# request_data = request.data
 	# print(request_data)
