@@ -9,11 +9,13 @@ import Profile from "./components/profile/Profile";
 import Dashboard from "./components/dashboard/Dashboard";
 import sellerInfo from "./components/sellerInfo/sellerInfo";
 import searchResult from "./components/searchResult/searchResult";
+import UpdateProduct from "./components/UpdateProduct/UpdateProduct";
 function App() {
   return (
     <Router>
       <div className="Styles.App">
         <Switch>
+          <Route path='/product/edit/:value' component={UpdateProduct} />
           <Route path='/search/:value' component={searchResult} />
           <Route path='/seller' component={sellerInfo} />
           <Route path='/dashboard' component={Dashboard} />

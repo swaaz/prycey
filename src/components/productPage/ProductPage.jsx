@@ -27,8 +27,10 @@ function ProductPage({match}) {
                     ['price'] : data.data.price,
                     ['rating'] : data.data.rating,
                     ['review'] : data.data.no_of_rating,
-                    ['sellerName'] : data.data.seller_name
-
+                    ['sellerName'] : data.data.seller_name,
+                    ['sellerName'] : data.data.seller_name,
+                    ['email'] : data.data.email,
+                    ['contact'] : data.data.contact
                 
             })
         })
@@ -135,15 +137,15 @@ function ProductPage({match}) {
                                     {Array(parseInt(values.rating))
                                     .fill()
                                     .map((_, i) => (
-                                    <img style={{width: '17px'}} src={Star} alt='star' />
+                                    <img style={{width: '17px'}} src={whiteStar} alt='star' />
                                     ))}
                                 </p>
                                 <p style={{margin: '0 5px'}}> | </p>
                                 <p >{values.review} Reviews</p>
 
                             </div>
-                        <p style={{fontSize: '1.1rem', margin: '10px 0'}}>E-mail : swaasthik.shetty@gmail.com</p>
-                        <p style={{fontSize: '1.1rem', margin: '10px 0'}}>Contact : +91 81971 31451</p>
+                        <p style={{fontSize: '1.1rem', margin: '10px 0'}}>E-mail : {values.email}</p>
+                        <p style={{fontSize: '1.1rem', margin: '10px 0'}}>Contact : +91 {values.contact}</p>
                     {/* </div> */}
                 
             </Modal>
