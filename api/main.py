@@ -13,6 +13,9 @@ db = 'prycey.db'
 app = Flask(__name__)
 app.secret_key = "test"
 CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['CORS_RESOURCES'] = {r"*": {"origins": "*"}}
+
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
@@ -331,7 +334,8 @@ def delete_product(id):
         k = c.execute(
             """SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
 
-        if k[0] == session["user_id"]:
+        # if k[0] == session["user_id"]:
+        if k[0] == 'johndoe':
             c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
             conn.commit()
             return json.dumps({"response": "SUCCESS_DELETE"})
@@ -385,5 +389,5 @@ def rate(uid):
     else:
         return json.dumps({"response": "USER_NOT_SIGNED_IN"})
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+# if __name__ == "__main__":
+#     app.run(debug=True)
