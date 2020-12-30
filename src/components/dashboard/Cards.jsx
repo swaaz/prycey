@@ -10,7 +10,7 @@ import axios from 'axios';
 function Cards(props) {
     const onDelete = (data) => {
         console.log(data);
-        axios.get(`http://0.0.0.0:5000/product/${data}/delete`)
+        axios.get(`http://127.0.0.1:5000/product/${data}/delete`)
         .then( response => console.log(response))
         .catch( error => console.log(error))
     }
