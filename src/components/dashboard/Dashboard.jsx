@@ -5,13 +5,11 @@ import Star from '../../assets/icons/purple_star.png';
 import Cards from './Cards';
 import Image from '../../assets/products/1.jpg';
 import axios from 'axios';
-import profileCard from './profileCard';
-
-
+import ProfileCard from './ProfileCard';
 function Dashboard() {
     const [details, setDetails] = useState({'userId' : '', 'firstName' : '' , 'lastName' : '' , 'rating' : 0, 'review' : '' });
     const [posts, setPosts] = useState([]);
-    // const [ratings, setRatings] = useState({''});
+    const [ratings, setRatings] = useState([]);
 
     useEffect(() => {
        axios.get('http://127.0.0.1:5000/dashboard')
@@ -26,9 +24,10 @@ function Dashboard() {
                
            })
            setPosts(value.data.posts)
+           setRatings(value.data.ratings)
        })
        .catch( error => console.log(error))
-    }, [])
+    }, [posts])
 
     
 
@@ -70,6 +69,8 @@ function Dashboard() {
                     </div>
                 </div>
                 <h1 className={Styles.sideHeading}>My Posts</h1>
+                
+
                 <div className={Styles.cards}>
                     {
                         posts.map( (data) => <Cards key={data.item_id} itemId={data.item_id} title={data.title} description={data.description} image={Image} price={data.price}  />)
@@ -79,13 +80,10 @@ function Dashboard() {
                 </div>
                 <h1 className={Styles.sideHeading}>My Reviews</h1>
                 <div className={Styles.profileCards}>
-                    <profileCard />
-                    <profileCard />
-
-                    <profileCard />
-                    <profileCard />
-                    <profileCard />
-
+                    {
+                        ratings.map ((data) => <ProfileCard key={data.user_id} name={data.name} profile='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=40' rating={data.rating} /> )
+                    }
+                    
                 </div>
             </div>
         </div>
