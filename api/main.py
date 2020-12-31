@@ -399,39 +399,39 @@ def edit_product(id):
 							title = ?,
 							description = ?,
 							price = ?,
-							year = ?
+							year = ?,
+                            c_id = ?
 
 							WHERE item_id = ?
 							""", tuple(list(new_item.values()) + [id]))
                 conn.commit()
 
-                return json.dumps({"response": "SUCCESS_EDIT"})
+                return json.dumps({"response": "Successfuly edited post"})
             else:
-                return json.dumps({"response": "NOT_AUTHORIZED"})
+                return json.dumps({"response": "Cannot edit!"})
     else:
-        return json.dumps({"response": "NOT_SIGNED_IN"})
+        return json.dumps({"response": "Please signin"})
 
 
 @app.route('/product/<int:id>/delete')
 def delete_product(id):
-    # if "user_id" in sess:
-    with sqlite3.connect(db) as conn:
-        c = conn.cursor()
-        c.execute("PRAGMA FOREIGN_KEYS=ON;")
+	if "user_id" in sess:
+		with sqlite3.connect(db) as conn:
+			c = conn.cursor()
+			c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
-        k = c.execute(
-            """SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
+			k = c.execute(
+				"""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
 
-        # if k[0] == sess["user_id"]:
-        if k[0] == 'johndoe':
-            c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
-            conn.commit()
-            return json.dumps({"response": "SUCCESS_DELETE"})
+			if k[0] == sess['user_id']:
+				c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
+				conn.commit()
+				return json.dumps({"response": "Successfully deleted"})
 
-    #         else:
-    #             return json.dumps({"response": "NOT_AUTHORIZED"})
-    # else:
-    #     return json.dumps({"response": "NOT_SIGNED_IN"})
+			else:
+				return json.dumps({"response": "Not Allowed!"})
+	else:
+		return json.dumps({"response": "Please Signin"})
 
 
 @app.route('/product/category/<int:cid>')
