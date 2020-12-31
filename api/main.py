@@ -24,31 +24,31 @@ sess = dict()
 @app.route('/signin', methods=['POST'])
 def signin():
     """
-            Signin API 
+		Signin API 
 
-            /signin
+		/signin
 
-            Usage:
+		Usage:
 
-                    Send a POST Request to flask server with JSON data of the form:
-                    {
-                            "username": "value",
-                            "password": "value"
-                    }
+			Send a POST Request to flask server with JSON data of the form:
+			{
+				"username": "value",
+				"password": "value"
+			}
 
-            Returns:
-                    If success:
-                            {
-                                    "response": "Signin Success"
-                            }
-                    If wrong credentials:
-                            {
-                                    "response": "No Credential found"
-                            }
-                    If already session exists:
-                            {
-                                    "response": "Already Signed in :)"
-                            }
+		Returns:
+			If success:
+				{
+					"response": "Signin Success"
+				}
+			If wrong credentials:
+				{
+					"response": "No Credential found"
+				}
+			If already session exists:
+				{
+					"response": "Already Signed in :)"
+				}
     """
     global sess
     if request.method == 'POST':
@@ -88,22 +88,22 @@ def signin():
 @app.route('/signout')
 def signout():
     """
-            Signout API:
+		Signout API:
 
-            /signout
+		/signout
 
-            Send a simple GET request to current session value
+		Send a simple GET request to current session value
 
-            Returns:
+		Returns:
 
-                    If success:
-                            {
-                                    "response": "SIGN_OUT_SUCCESS"
-                            }
-                    If no session exists:
-                            {
-                                    "response": "NOT_SIGNED_IN"
-                            }
+			If success:
+				{
+					"response": "Successfully signed out"
+				}
+			If no session exists:
+				{
+					"response": "Not signed in"
+				}
 
     """
 
@@ -111,38 +111,38 @@ def signout():
         sess.pop("user_id", None)
         print("sess closed, Client Signed out")
 
-        return json.dumps({"response": "SIGN_OUT_SUCCESS"})
+        return json.dumps({"response": "Successfully signed out"})
     else:
-        return json.dumps({"response": "NOT_SIGNED_IN"})
+        return json.dumps({"response": "Not signed in"})
 
 
 @app.route('/signup', methods=['POST'])
 def signup():
     """
-            Registers new users into the users collection in db
+		Registers new users into the users collection in db
 
-            /signup
+		/signup
 
-            Usage:
-                    Send a POST request to the server with the JSON data of the form:
+		Usage:
+			Send a POST request to the server with the JSON data of the form:
 
-                    {
-                            "user_id": "value",
-                            "name": "value",
-                            "email": "value",
-                            "contact_number": "value",
-                            "password": "value",
-                    }
+			{
+				"user_id": "value",
+				"name": "value",
+				"email": "value",
+				"contact_number": "value",
+				"password": "value",
+			}
 
-            Returns:
-                    If successfully registered:
-                            {
-                                    "response": "Account created successfully!"
-                            }
-                    If username/email already taken:
-                            {
-                                    "response": "Already Exists!"
-                            }
+		Returns:
+			If successfully registered:
+				{
+					"response": "Account created successfully!"
+				}
+			If username/email already taken:
+				{
+					"response": "Already Exists!"
+				}
     """
     # request_data = request.data
     # print(request_data)
@@ -295,51 +295,6 @@ def render_dashboard():
     else:
         return json.dumps({"response": "NOT_SIGNED_IN"})
 
-# @app.route('/dashboard')
-# def render_dashboard():
-#     j = 'jennaf'
-#     global sess
-#     print(sess)
-#     print(sess.get('user_id'))
-#     # if "user_id" in sess:
-#     with sqlite3.connect(db) as conn:
-#         c = conn.cursor()
-#         c.execute("PRAGMA FOREIGN_KEYS=ON;")
-#         details = c.execute("""
-#                                 SELECT Users.user_id, name, rating, no_of_ratings
-#                                 FROM Users, User_Rating
-#                                 WHERE Users.user_id=User_rating.user_id AND Users.user_id = (?);
-#                             """, (j,)).fetchone()
-#         user_posts = c.execute("""
-#                                 SELECT *
-#                                 FROM Items
-#                                 WHERE seller_id = (?)
-#                             """, (j,)).fetchall()
-#         user_rating = c.execute("""
-#                                     SELECT name, rated_id, rating
-#                                     FROM Rated, Users
-#                                     WHERE Rated.rated_id=Users.user_id AND Rated.user_id=?
-#                                 """, (j,)).fetchall()
-#         # print(details)
-#         # print(user_posts)
-#         user_posts = to_dict(user_posts)
-#         user_rating = rate_to_dict(user_rating)
-#         fname, lname = details[1].split()
-#         req = {
-#             "user_id": details[0],
-#             "fname": fname,
-#             "lname": lname,
-#             "rating": details[2],
-#             "no_of_ratings": details[3],
-#             "posts": user_posts,
-#             "ratings": user_rating
-#         }
-
-#         # req = details + to_dict(user_posts)
-#         return json.dumps(req)
-#     # else:
-#     #     return json.dumps({"response": "NOT_SIGNED_IN"})
-
 
 @app.route('/product/<int:id>')
 def render_product_page(id):
@@ -352,7 +307,8 @@ def render_product_page(id):
         #                             """, (id,)).fetchall()
 
         product_query = c.execute("""
-									SELECT Items.*, email, contact_number, name, rating, no_of_ratings, cat_name FROM Items, User_Rating, Users, Category
+									SELECT Items.*, email, contact_number, name, rating, no_of_ratings, cat_name
+									FROM Items, User_Rating, Users, Category
 									WHERE 
                                     Items.seller_id=Users.user_id 
                                     AND 
@@ -471,11 +427,11 @@ def rate(uid):
 								""", (nr, sess["user_id"], uid, ))
                     conn.commit()
 
-                return json.dumps({"response": "RATING_UPDATED"})
+                return json.dumps({"response": "Successfully rated user"})
         else:
-            return json.dumps({"response": "INPUT_RATING_TOO_HIGH"})
+            return json.dumps({"response": "Given rating too high"})
     else:
-        return json.dumps({"response": "USER_NOT_SIGNED_IN"})
+        return json.dumps({"response": "Please signin"})
 
 # if __name__ == "__main__":
 #     app.run(debug=True)
