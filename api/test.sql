@@ -22,23 +22,31 @@ VALUES ('captjack', 'testpass', 'Jack Sparrow', 'jack@test.com', '98724324630', 
 
 -- FILL ITEMS TABLE
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
-VALUES (1, 'iPad Pro', 'No scratches', 60000.0, 1, '2020-12-22', 'blank', '', '', '', 1, 'johndoe');
+VALUES (1, 'iPad Pro', 'No scratches', 60000.0, 1, '2020-12-22', 'ipad_pro.png', '', '', '', 1, 'johndoe');
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
-VALUES (2, 'iPhone X', 'Broken screen', 30000.0, 2, '2020-12-22', 'blank', '', '', '', 1, 'johndoe');
+VALUES (2, 'iPhone X', 'Broken screen', 30000.0, 2, '2020-12-22', 'iphone_x.png', '', '', '', 1, 'johndoe');
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
-VALUES (3, 'DBMS Textbook', '18 Scheme VTU', 300.0, 1, '2020-12-21', 'blank', '', '', '', 2, 'johndoe');
+VALUES (3, 'DBMS Textbook', '18 Scheme VTU', 300.0, 1, '2020-12-21', 'dbms_textbook.png', '', '', '', 2, 'johndoe');
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
-VALUES (4, 'OS Textbook', '18 Scheme VTU', 300.0, 1, '2020-12-23', 'blank', '', '', '', 2, 'adamgil');
+VALUES (4, 'OS Textbook', '18 Scheme VTU', 300.0, 1, '2020-12-23', 'os_textbook.png', '', '', '', 2, 'adamgil');
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
-VALUES (5, '10mm Drill Bit', 'Drill bit only, no machine', 1000.0, 1, '2020-12-24', 'blank', '', '', '', 4, 'adamgil');
+VALUES (5, '10mm Drill Bit', 'Drill bit only, no machine', 1000.0, 1, '2020-12-24', '10mm_bit.png', '', '', '', 4, 'adamgil');
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
-VALUES (6, 'Screw Driver set 16pc', 'All major screws with light', 2500.0, 1, '2020-12-24', 'blank', '', '', '', 4, 'jennaf');
+VALUES (6, 'Screw Driver set 16pc', 'All major screws with light', 2500.0, 1, '2020-12-24', 'screw_set.png', '', '', '', 4, 'jennaf');
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
-VALUES (7, 'Bean Bag', 'Big size bean bag with beans', 3000.0, 1, '2020-12-24', 'blank', '', '', '', 3, 'jennaf');
+VALUES (7, 'Bean Bag', 'Big size bean bag with beans', 3000.0, 1, '2020-12-24', 'bean_bag.png', '', '', '', 3, 'jennaf');
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
-VALUES (8, 'Study Table', 'Wooden Study table with chair', 2500.0, 1, '2020-12-24', 'blank', '', '', '', 3, 'captjack');
+VALUES (8, 'Study Table', 'Wooden Study table with chair', 2500.0, 1, '2020-12-24', 'study_table.png', '', '', '', 3, 'captjack');
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
-VALUES (9, 'AI/ML Textbook 7th Sem', '18 Scheme textbook', 500.0, 1, '2020-12-24', 'blank', '', '', '', 2, 'captjack');
+VALUES (9, 'AI/ML Textbook 7th Sem', '18 Scheme textbook', 500.0, 1, '2020-12-24', 'ai_textbook.png', '', '', '', 2, 'captjack');
+
+INSERT INTO RATED ('user_id', 'rated_id', 'rating') VALUES ('johndoe', 'adamgil', 4.5);
+INSERT INTO RATED ('user_id', 'rated_id', 'rating') VALUES ('adamgil', 'jennaf', 3.5);
+INSERT INTO RATED ('user_id', 'rated_id', 'rating') VALUES ('adamgil', 'captjack', 4.5);
+INSERT INTO RATED ('user_id', 'rated_id', 'rating') VALUES ('johndoe', 'jennaf', 3.0);
+INSERT INTO RATED ('user_id', 'rated_id', 'rating') VALUES ('captjack', 'johndoe', 5.0);
+INSERT INTO RATED ('user_id', 'rated_id', 'rating') VALUES ('captjack', 'jennaf', 4.0);
+INSERT INTO RATED ('user_id', 'rated_id', 'rating') VALUES ('captjack', 'adamgil', 3.0);
 
 -- DELETE FROM Items WHERE item_id = 5;
 -- UPDATE User_Rating SET rating=0.0, no_of_ratings=0 WHERE user_id = 'abc';

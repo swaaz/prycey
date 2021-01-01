@@ -7,7 +7,7 @@ import Filters from './Filters';
 import Item from './Item';
 import Photo from '../../assets/products/1.jpg';
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 
 
 function Home() {
@@ -39,7 +39,7 @@ function Home() {
                     posts.map( (value) => {
                         return(
                             <Link key={value.item_id} to={`/product/${value.item_id}`}>
-                                <Item key={value.item_id}  Photo={Photo} Title={value.title} Price={value.price}/>
+                                <Item key={value.item_id}  Photo={`uploads/product/${value.im1}`} Title={value.title} Price={value.price}/>
                             </Link>
                         )
                     })

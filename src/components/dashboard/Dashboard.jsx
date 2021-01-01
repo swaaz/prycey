@@ -21,14 +21,15 @@ function Dashboard() {
                ['firstName'] : value.data.fname,
                ['lastName'] : value.data.lname,
                ['rating'] : value.data.rating,
-               ['review'] : value.data.no_of_ratings
+               ['review'] : value.data.no_of_ratings,
                
            })
            setPosts(value.data.posts)
            setRatings(value.data.ratings)
+           console.log(value);
        })
        .catch( error => console.log(error))
-    }, [posts])
+    }, [])
 
     
 
@@ -42,7 +43,7 @@ function Dashboard() {
                     <div className={Styles.content} >
 
                         <div className={Styles.imageSection}>
-                                <img className={Styles.image} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=40' alt='profile image' />
+                                <img className={Styles.image} src={'logo512.png'} alt='profile image' />
                         </div>
                         <div className={Styles.profileContent}>
                             <p className={Styles.username}>{details.firstName}</p>
@@ -77,7 +78,7 @@ function Dashboard() {
                         posts.map( (data) =>{
                             return(
                             <Link key={data.item_id} to={`/product/${data.item_id}`}>
-                                 <Cards key={data.item_id} itemId={data.item_id} title={data.title} description={data.description} image={Image} price={data.price}  />
+                                 <Cards key={data.item_id} itemId={data.item_id} title={data.title} description={data.description} image={`uploads/product/${data.im1}`} price={data.price}  />
                             </Link>
                             );
                         })

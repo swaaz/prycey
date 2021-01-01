@@ -18,10 +18,10 @@ def init_db():
 				price REAL NOT NULL,
 				year INTEGER NOT NULL,
 				date_added TEXT NOT NULL,
-				im1 BLOB NOT NULL,
-				im2 BLOB,
-				im3 BLOB,
-				im4 BLOB);"""
+				im1 TEXT NOT NULL,
+				im2 TEXT,
+				im3 TEXT,
+				im4 TEXT);"""
 	)
 	conn.commit()
 

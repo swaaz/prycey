@@ -9,7 +9,7 @@ import os
 from helper import to_dict, rate_to_dict
 
 db = 'prycey.db'
-UPLOAD_FOLDER = '.'
+UPLOAD_FOLDER = '../public/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
@@ -29,6 +29,13 @@ def allowed_file(filename):
 
 
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+@app.route('/checkauth')
+def check_signin():
+	if "user_id" in sess:
+		return {"response": True}
+	else:
+		return {"response": False}
 
 
 @app.route('/signin', methods=['POST'])
@@ -204,7 +211,7 @@ def sell():
     file = request.files['file']
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/product', filename))
 
     print(filename)
 
@@ -234,7 +241,7 @@ def sell():
                 c.execute("""
     						INSERT INTO Items(seller_id, title, description, c_id, price, year, im1, im2, im3, im4, date_added)
     						VALUES(?,?,?,?,?,?,?,?,?,?,?);
-    						""", new_prod.values())
+    						""", tuple(new_prod.values()))
             except sqlite3.IntegrityError:
                 return json.dumps({"response": "Category not found"})
 
