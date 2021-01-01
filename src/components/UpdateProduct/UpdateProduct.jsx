@@ -3,9 +3,15 @@ import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss';
 import Star  from "../../assets//icons/white_star.png";
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { useHistory } from 'react-router-dom';
+
+
 
 function UpdateProduct(props) {
-    const [product, setProduct] = useState({ 'title' : '', 'description': '', 'price' : 0, 'year' : 0, 'category': ''})
+    const [product, setProduct] = useState({ 'title' : '', 'description': '', 'price' : 0, 'year' : 0, 'category': ''});
+    const history = useHistory();
     useEffect(() => {
        axios.get(`http://127.0.0.1:5000/product/${props.match.params.value}`)
        .then( response => {
@@ -25,7 +31,10 @@ function UpdateProduct(props) {
         e.preventDefault();
         console.log(product);
         axios.post(`http://127.0.0.1:5000/product/edit/${props.match.params.value}`, product)
-        .then( response => console.log(response) )
+        .then( response => {
+            toast(response.data.response, {position: toast.POSITION.TOP_CENTER})
+            history.push('/dashboard')
+        })
         .catch( error => console.log(error))
     }
     return (
@@ -67,7 +76,7 @@ function UpdateProduct(props) {
                         <input type='text' value={product.description} name='description' onChange={ e => setProduct({...product, ['description'] : e.target.value})} />
                         <input type='text' value={product.price} name='price' onChange={ e => setProduct({...product, ['price'] : e.target.value})} />
                         <input type='text' value={product.year} name='year' onChange={ e => setProduct({...product, ['year'] : e.target.value})} />
-                        <input type='text' value={product.category} name='category' onChange={ e => setProduct({...product, ['category'] : e.target.value})} />
+                        <input type='text' value={product.category} name='category' readOnly/>
         
                         <button type='submit'>submit</button>   
                     </form>

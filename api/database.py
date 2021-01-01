@@ -89,7 +89,7 @@ def init_db():
 	conn.commit()
 
 	c.execute("""
-				ALTER TABLE Items ADD COLUMN seller_id INTEGER
+				ALTER TABLE Items ADD COLUMN seller_id TEXT
 				REFERENCES Users(user_id)
 				ON DELETE CASCADE;""")
 	conn.commit()

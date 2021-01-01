@@ -6,6 +6,7 @@ import Cards from './Cards';
 import Image from '../../assets/products/1.jpg';
 import axios from 'axios';
 import ProfileCard from './ProfileCard';
+import { Link } from 'react-router-dom';
 function Dashboard() {
     const [details, setDetails] = useState({'userId' : '', 'firstName' : '' , 'lastName' : '' , 'rating' : 0, 'review' : '' });
     const [posts, setPosts] = useState([]);
@@ -73,7 +74,13 @@ function Dashboard() {
 
                 <div className={Styles.cards}>
                     {
-                        posts.map( (data) => <Cards key={data.item_id} itemId={data.item_id} title={data.title} description={data.description} image={Image} price={data.price}  />)
+                        posts.map( (data) =>{
+                            return(
+                            <Link key={data.item_id} to={`/product/${data.item_id}`}>
+                                 <Cards key={data.item_id} itemId={data.item_id} title={data.title} description={data.description} image={Image} price={data.price}  />
+                            </Link>
+                            );
+                        })
                     }
                     
                    

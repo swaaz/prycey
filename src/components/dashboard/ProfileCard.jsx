@@ -15,7 +15,7 @@ function ProfileCard(props) {
                 </p>
                 <p className={Styles.divider}> | </p>
                 <p className={Styles.reviewStar}>
-                {Array(parseInt(3))
+                {Array(parseInt(props.rating))
                 .fill()
                 .map((_, i) => (
                 <img className={Styles.ratingStars} src={Star} alt='star' />
