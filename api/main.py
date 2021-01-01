@@ -4,18 +4,28 @@ import sqlite3
 from flask_cors import CORS
 import json
 import datetime
+import os
 # from database import init_db
 from helper import to_dict, rate_to_dict
 
 db = 'prycey.db'
+UPLOAD_FOLDER = '.'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
 
 # init_db()
 app = Flask(__name__)
 app.secret_key = "test"
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 sess = dict()
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -24,31 +34,31 @@ sess = dict()
 @app.route('/signin', methods=['POST'])
 def signin():
     """
-		Signin API 
+                Signin API 
 
-		/signin
+                /signin
 
-		Usage:
+                Usage:
 
-			Send a POST Request to flask server with JSON data of the form:
-			{
-				"username": "value",
-				"password": "value"
-			}
+                        Send a POST Request to flask server with JSON data of the form:
+                        {
+                                "username": "value",
+                                "password": "value"
+                        }
 
-		Returns:
-			If success:
-				{
-					"response": "Signin Success"
-				}
-			If wrong credentials:
-				{
-					"response": "No Credential found"
-				}
-			If already session exists:
-				{
-					"response": "Already Signed in :)"
-				}
+                Returns:
+                        If success:
+                                {
+                                        "response": "Signin Success"
+                                }
+                        If wrong credentials:
+                                {
+                                        "response": "No Credential found"
+                                }
+                        If already session exists:
+                                {
+                                        "response": "Already Signed in :)"
+                                }
     """
     global sess
     if request.method == 'POST':
@@ -58,6 +68,10 @@ def signin():
         request_data = request.data
         # print(request_data)
         cred = json.loads(request_data.decode('utf8').replace("'", '"'))
+        # cred = {
+        #     "username": request.form.get('username'),
+        #     "password": request.form.get('password')
+        # }
         print(cred)
         # print(request_data['name'], request_data['password'])
 
@@ -88,22 +102,22 @@ def signin():
 @app.route('/signout')
 def signout():
     """
-		Signout API:
+                Signout API:
 
-		/signout
+                /signout
 
-		Send a simple GET request to current session value
+                Send a simple GET request to current session value
 
-		Returns:
+                Returns:
 
-			If success:
-				{
-					"response": "Successfully signed out"
-				}
-			If no session exists:
-				{
-					"response": "Not signed in"
-				}
+                        If success:
+                                {
+                                        "response": "Successfully signed out"
+                                }
+                        If no session exists:
+                                {
+                                        "response": "Not signed in"
+                                }
 
     """
 
@@ -119,30 +133,30 @@ def signout():
 @app.route('/signup', methods=['POST'])
 def signup():
     """
-		Registers new users into the users collection in db
+                Registers new users into the users collection in db
 
-		/signup
+                /signup
 
-		Usage:
-			Send a POST request to the server with the JSON data of the form:
+                Usage:
+                        Send a POST request to the server with the JSON data of the form:
 
-			{
-				"user_id": "value",
-				"name": "value",
-				"email": "value",
-				"contact_number": "value",
-				"password": "value",
-			}
+                        {
+                                "user_id": "value",
+                                "name": "value",
+                                "email": "value",
+                                "contact_number": "value",
+                                "password": "value",
+                        }
 
-		Returns:
-			If successfully registered:
-				{
-					"response": "Account created successfully!"
-				}
-			If username/email already taken:
-				{
-					"response": "Already Exists!"
-				}
+                Returns:
+                        If successfully registered:
+                                {
+                                        "response": "Account created successfully!"
+                                }
+                        If username/email already taken:
+                                {
+                                        "response": "Already Exists!"
+                                }
     """
     # request_data = request.data
     # print(request_data)
@@ -186,30 +200,49 @@ def sell():
     """
             Store form details
     """
-    request_data = request.data
-    new_item = json.loads(request_data.decode('utf-8'))[0]
-    # print(new_item)
+
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    print(filename)
+
+    # print(file)
 
     if "user_id" in sess:
 
-        new_prod = (sess["user_id"], ) + \
-            tuple(new_item.values()) + (str(datetime.date.today()), )
-        # print(new_prod)
+        new_prod = {
+            "seller_id": sess["user_id"],
+            "title": request.form.get("title"),
+            "description": request.form.get("description"),
+            "c_id": int(request.form.get("category")),
+            "price": float(request.form.get("price")),
+            "year": int(request.form.get("year")),
+            "im1": str(filename),
+            "im2": " ",
+            "im3": " ",
+            "im4": " ",
+            "date_added": str(datetime.date.today())
+        }
+        print(new_prod)
         with sqlite3.connect(db) as conn:
             c = conn.cursor()
             c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
             try:
                 c.execute("""
-							INSERT INTO Items(seller_id, title, description, c_id, price, year, im1, im2, im3, im4, date_added)
-							VALUES(?,?,?,?,?,?,?,?,?,?,?);
-							""", new_prod)
+    						INSERT INTO Items(seller_id, title, description, c_id, price, year, im1, im2, im3, im4, date_added)
+    						VALUES(?,?,?,?,?,?,?,?,?,?,?);
+    						""", new_prod.values())
             except sqlite3.IntegrityError:
-                return json.dumps({"response": "CATEGORY_NOT_FOUND"})
+                return json.dumps({"response": "Category not found"})
 
-            return json.dumps({"response": "SUCCESS"})
+            return json.dumps({"response": "Successfully posted"})
     else:
-        return json.dumps({"response": "NOT_SIGNED_IN"})
+        return json.dumps({"response": "Please Signin"})
+
+    return "done"
 
 
 @app.route('/search', methods=["GET", "POST"])
@@ -355,11 +388,10 @@ def edit_product(id):
 							title = ?,
 							description = ?,
 							price = ?,
-							year = ?,
-                            c_id = ?
+							year = ?
 
 							WHERE item_id = ?
-							""", tuple(list(new_item.values()) + [id]))
+							""", tuple(list(new_item.values())[:-1] + [id]))
                 conn.commit()
 
                 return json.dumps({"response": "Successfuly edited post"})
@@ -371,23 +403,23 @@ def edit_product(id):
 
 @app.route('/product/<int:id>/delete')
 def delete_product(id):
-	if "user_id" in sess:
-		with sqlite3.connect(db) as conn:
-			c = conn.cursor()
-			c.execute("PRAGMA FOREIGN_KEYS=ON;")
+    if "user_id" in sess:
+        with sqlite3.connect(db) as conn:
+            c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
-			k = c.execute(
-				"""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
+            k = c.execute(
+                """SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
 
-			if k[0] == sess['user_id']:
-				c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
-				conn.commit()
-				return json.dumps({"response": "Successfully deleted"})
+            if k[0] == sess['user_id']:
+                c.execute("""DELETE FROM Items WHERE item_id = ?""", (id, ))
+                conn.commit()
+                return json.dumps({"response": "Successfully deleted"})
 
-			else:
-				return json.dumps({"response": "Not Allowed!"})
-	else:
-		return json.dumps({"response": "Please Signin"})
+            else:
+                return json.dumps({"response": "Not Allowed!"})
+    else:
+        return json.dumps({"response": "Please Signin"})
 
 
 @app.route('/product/category/<int:cid>')

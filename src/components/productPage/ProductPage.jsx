@@ -12,7 +12,7 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 function ProductPage({match}) {
-    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '' });
+    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '' });
     const [modal, setModal] = useState(false);
      useEffect(() => {
         axios
@@ -30,8 +30,10 @@ function ProductPage({match}) {
                     ['sellerName'] : data.data.seller_name,
                     ['sellerName'] : data.data.seller_name,
                     ['email'] : data.data.email,
-                    ['contact'] : data.data.contact
-                
+                    ['contact'] : data.data.contact,
+                    ['year'] : data.data.year,
+                    ['dateAdded'] : data.data.date_added,
+                    ['category'] : data.data.category
             })
         })
         .catch( error => {
@@ -48,6 +50,10 @@ function ProductPage({match}) {
                     <p className={Styles.productDescription}>
                         {values.description}
                     </p>
+                    <p className={Styles.category}>{values.category}</p>
+                    <p className={Styles.year}>years : {values.year}</p>
+                    <p className={Styles.dateAdded}>{values.dateAdded}</p>
+
                     <div className={Styles.priceRow}>
                         <p className={Styles.priceMrp}>
                             M.R.P :

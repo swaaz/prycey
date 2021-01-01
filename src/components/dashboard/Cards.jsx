@@ -4,13 +4,15 @@ import Delete from '../../assets/icons/purple_bin.png';
 import Edit from '../../assets/icons/purple_edit.png';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 
 function Cards(props) {
     const onDelete = (data) => {
         console.log(data);
         axios.get(`http://127.0.0.1:5000/product/${data}/delete`)
-        .then( response => console.log(response))
+        .then( response => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
         .catch( error => console.log(error))
     }
     return (
