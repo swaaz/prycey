@@ -9,7 +9,7 @@ import os
 from helper import to_dict, rate_to_dict
 
 db = 'prycey.db'
-UPLOAD_FOLDER = './uploads'
+UPLOAD_FOLDER = '../public/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
@@ -29,6 +29,13 @@ def allowed_file(filename):
 
 
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+@app.route('/checkauth')
+def check_signin():
+	if "user_id" in sess:
+		return {"response": True}
+	else:
+		return {"response": False}
 
 
 @app.route('/signin', methods=['POST'])

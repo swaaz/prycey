@@ -13,6 +13,7 @@ Modal.setAppElement('#root');
 
 function ProductPage({match}) {
     const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '' });
+    const [img, setImage] = useState(''); 
     const [modal, setModal] = useState(false);
      useEffect(() => {
         axios
@@ -33,8 +34,11 @@ function ProductPage({match}) {
                     ['contact'] : data.data.contact,
                     ['year'] : data.data.year,
                     ['dateAdded'] : data.data.date_added,
-                    ['category'] : data.data.category
+                    ['category'] : data.data.category,
             })
+
+            console.log(data);
+            setImage(`uploads/product/${data.data.im1}`);
         })
         .catch( error => {
             console.log(error)
@@ -99,7 +103,7 @@ function ProductPage({match}) {
                     </div>
                 </div>
                 <div className={Styles.right}>
-                    <img className={Styles.image} src={Product}/>
+                    <img src={'logo512.png'} alt='product'/>
                 </div>
             </div>
 
