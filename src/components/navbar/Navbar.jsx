@@ -25,7 +25,7 @@ function Navbar(props) {
                 console.log(loggedin)
             })
         .catch( error => console.log(error))
-    }, 100)
+    }, )
 
     const onSubmit = (data) =>{
         // console.log(data.searchValue)
@@ -65,7 +65,7 @@ function Navbar(props) {
                     
                     <li><Link to='/dashboard'>Dashboard</Link></li>
                     <li><Link to='/sell'>Sell</Link></li>  
-                    {loggedin ? <Link onClick={ e => signOut()}>Signout</Link> :<li><Link to='/signin'>Sign in</Link></li>} 
+                    {loggedin ?<li> <Link onClick={ e => signOut()}>Signout</Link></li> :<li><Link to='/signin'>Sign in</Link></li>} 
 
                    
                     <Link className={Styles.navbarButton} to='/signup'><li> Sign Up </li></Link>
