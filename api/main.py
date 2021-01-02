@@ -447,8 +447,51 @@ def prod_cat(cid):
         return json.dumps(q)
 
 
-@app.route('/rating/<string:uid>')
+@app.route('/rating/<string:uid>', methods=['POST'])
 def rate(uid):
+    """
+        /rating
+
+        Send a post request for adding/updating the review
+        {
+            'rating': 5,
+            'review': 'very good'
+        }
+    """
+
+    request_data = request.data
+    rate_review = json.loads(request_data.decode('utf8').replace("'", '"'))
+    print(uid)
+    print(rate_review)
+
+
+    # nr = 0
+    # # nr = float(request.args.get('r'))
+    # if "user_id" in sess:
+    #     if 1 <= nr <= 5:
+    #         with sqlite3.connect(db) as conn:
+    #             c = conn.cursor()
+    #             c.execute("PRAGMA FOREIGN_KEYS=ON;")
+
+    #             try:
+    #                 c.execute("""INSERT INTO Rated(user_id, rated_id, rating) 
+	# 							VALUES(?,?,?);
+	# 							""", (sess["user_id"], uid, nr))
+    #                 conn.commit()
+    #             except sqlite3.IntegrityError:
+    #                 c.execute("""UPDATE Rated SET rating=? WHERE user_id=? AND rated_id=?;
+	# 							""", (nr, sess["user_id"], uid, ))
+    #                 conn.commit()
+
+    #             return json.dumps({"response": "Successfully rated user"})
+    #     else:
+    #         return json.dumps({"response": "Given rating too high"})
+    # else:
+    #     return json.dumps({"response": "Please signin"})
+
+
+@app.route('/rating/delete/<string:uid>')
+def del_rate(uid):
     nr = float(request.args.get('r'))
     if "user_id" in sess:
         if 1 <= nr <= 5:
@@ -471,6 +514,7 @@ def rate(uid):
             return json.dumps({"response": "Given rating too high"})
     else:
         return json.dumps({"response": "Please signin"})
+
 
 # if __name__ == "__main__":
 #     app.run(debug=True)

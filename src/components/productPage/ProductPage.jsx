@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 Modal.setAppElement('#root');
 
 function ProductPage({match}) {
-    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '' });
+    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '', 'sellerId' : '' });
     const [img, setImage] = useState(''); 
     const [modal, setModal] = useState(false);
      useEffect(() => {
@@ -31,12 +31,12 @@ function ProductPage({match}) {
                     ['rating'] : data.data.rating,
                     ['review'] : data.data.no_of_rating,
                     ['sellerName'] : data.data.seller_name,
-                    ['sellerName'] : data.data.seller_name,
                     ['email'] : data.data.email,
                     ['contact'] : data.data.contact,
                     ['year'] : data.data.year,
                     ['dateAdded'] : data.data.date_added,
                     ['category'] : data.data.category,
+                    ['sellerId'] : data.data.seller_id
             })
 
             console.log(data);
@@ -158,7 +158,7 @@ function ProductPage({match}) {
                             </div>
                         <p style={{fontSize: '1.1rem', margin: '10px 0'}}>E-mail : {values.email}</p>
                         <p style={{fontSize: '1.1rem', margin: '10px 0'}}>Contact : +91 {values.contact}</p>
-                        <Link to='/'>
+                        <Link to={`/seller/rating/${values.sellerId}`}>
                             <img style={{width: '40px', margin : '10px auto'}} src={Buy} alt='buy' />
                         </Link>
                             

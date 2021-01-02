@@ -20,16 +20,16 @@ function Navbar(props) {
         axios.get('http://127.0.0.1:5000/checkauth')
         .then(response => 
             {
-                response.data.response? setLoggedin(true): setLoggedin(false);
+                response.data.response? setLoggedin(true) : setLoggedin(false);
 
                 console.log(loggedin)
             })
         .catch( error => console.log(error))
-    }, )
+    } )
 
     const onSubmit = (data) =>{
         // console.log(data.searchValue)
-        data.searchValue? history.push(`/search/${data.searchValue}`) : console.log('null');
+        data.searchValue? history.push(`/search/${data.searchValue}`) : null;
         
     }
     const signOut=(e)=>
