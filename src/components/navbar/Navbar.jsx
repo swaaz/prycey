@@ -29,7 +29,7 @@ function Navbar(props) {
 
     const onSubmit = (data) =>{
         // console.log(data.searchValue)
-        data.searchValue? history.push(`/search/${data.searchValue}`) : null;
+        data.searchValue? history.push(`/search/${data.searchValue}`) : console.log('');
         
     }
     const signOut=(e)=>
