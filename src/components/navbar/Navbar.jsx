@@ -20,16 +20,16 @@ function Navbar(props) {
         axios.get('http://127.0.0.1:5000/checkauth')
         .then(response => 
             {
-                response.data.response? setLoggedin(true): setLoggedin(false);
+                response.data.response? setLoggedin(true) : setLoggedin(false);
 
                 console.log(loggedin)
             })
         .catch( error => console.log(error))
-    }, 100)
+    } )
 
     const onSubmit = (data) =>{
         // console.log(data.searchValue)
-        data.searchValue? history.push(`/search/${data.searchValue}`) : console.log('null');
+        data.searchValue? history.push(`/search/${data.searchValue}`) : console.log('');
         
     }
     const signOut=(e)=>
@@ -65,7 +65,7 @@ function Navbar(props) {
                     
                     <li><Link to='/dashboard'>Dashboard</Link></li>
                     <li><Link to='/sell'>Sell</Link></li>  
-                    {loggedin ? <Link onClick={ e => signOut()}>Signout</Link> :<li><Link to='/signin'>Sign in</Link></li>} 
+                    {loggedin ?<li> <Link onClick={ e => signOut()}>Signout</Link></li> :<li><Link to='/signin'>Sign in</Link></li>} 
 
                    
                     <Link className={Styles.navbarButton} to='/signup'><li> Sign Up </li></Link>

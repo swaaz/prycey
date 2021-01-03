@@ -8,11 +8,13 @@ import whiteStar from '../../assets/icons/white_star.png';
 import axios from 'axios';
 import Star from '../../assets/icons/star.png';
 import Modal from 'react-modal';
+import Buy from '../../assets/icons/white_buy.png';
+import { Link } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
 function ProductPage({match}) {
-    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '' });
+    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '', 'sellerId' : '' });
     const [img, setImage] = useState(''); 
     const [modal, setModal] = useState(false);
      useEffect(() => {
@@ -29,12 +31,12 @@ function ProductPage({match}) {
                     ['rating'] : data.data.rating,
                     ['review'] : data.data.no_of_rating,
                     ['sellerName'] : data.data.seller_name,
-                    ['sellerName'] : data.data.seller_name,
                     ['email'] : data.data.email,
                     ['contact'] : data.data.contact,
                     ['year'] : data.data.year,
                     ['dateAdded'] : data.data.date_added,
                     ['category'] : data.data.category,
+                    ['sellerId'] : data.data.seller_id
             })
 
             console.log(data);
@@ -124,7 +126,7 @@ function ProductPage({match}) {
                         borderRadius : '40px',
                         flexDirection: 'column',
                         textAlign : 'center',
-                        height : '523px'
+                        height : '540px'
                     },
 
                 }
@@ -135,7 +137,7 @@ function ProductPage({match}) {
 
                         <img onClick={(e)=> setModal(false)} style={{alignSelf : 'end', width: '30px'}}  src={Close} alt='close' />
                         <h1 style={{fontSize : '2rem'}}>Seller Details</h1>
-                        <img style={{borderRadius : '50%', width: '200px', border: '5px solid #00FFF0', margin: '30px auto'}} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='profile' />
+                        <img style={{borderRadius : '50%', width: '200px', border: '5px solid white', margin: '30px auto'}} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='profile' />
                         <p style={{fontSize: '1.7rem', fontWeight: '600'}}>{values.sellerName}</p>
                         <div style={{display : 'flex', margin: '10px auto', flexDirection: 'row', justifyContent: 'baseline'}}>
                                 <p>
@@ -156,7 +158,11 @@ function ProductPage({match}) {
                             </div>
                         <p style={{fontSize: '1.1rem', margin: '10px 0'}}>E-mail : {values.email}</p>
                         <p style={{fontSize: '1.1rem', margin: '10px 0'}}>Contact : +91 {values.contact}</p>
-                    {/* </div> */}
+                        <Link to={`/seller/rating/${values.sellerId}`}>
+                            <img style={{width: '40px', margin : '10px auto'}} src={Buy} alt='buy' />
+                        </Link>
+                            
+                       
                 
             </Modal>
         </div>

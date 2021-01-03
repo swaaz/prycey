@@ -72,12 +72,16 @@ function UpdateProduct(props) {
                <div className={Styles.form}>
                     <form onSubmit={onSubmit}>
                         <h1>Profile</h1>
+                        <p className={Styles.label}>Title</p>
                         <input type='text' value={product.title} name='title' onChange={ e => setProduct({...product, ['title'] : e.target.value})} />
+                        <p className={Styles.label}>Description</p>
                         <input type='text' value={product.description} name='description' onChange={ e => setProduct({...product, ['description'] : e.target.value})} />
+                        <p className={Styles.label}>Price</p>
                         <input type='text' value={product.price} name='price' onChange={ e => setProduct({...product, ['price'] : e.target.value})} />
+                        <p className={Styles.label}>Year</p>
                         <input type='text' value={product.year} name='year' onChange={ e => setProduct({...product, ['year'] : e.target.value})} />
-                        <input type='text' value={product.category} name='category' readOnly/>
-        
+                        <p className={Styles.label}>Category</p>
+                        <input type='text' value={product.category} name='category' readOnly/>     
                         <button type='submit'>submit</button>   
                     </form>
                </div>
