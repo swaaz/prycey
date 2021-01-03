@@ -126,7 +126,7 @@ def init_db():
 	conn.commit()
 
 	c.execute("""
-	        CREATE TRIGGER update_rating AFTER DELETE ON Rated
+	        CREATE TRIGGER delete_rating AFTER DELETE ON Rated
 	        BEGIN
 	            UPDATE User_Rating
 	            SET rating=(rating * no_of_ratings - old.rating)/(no_of_ratings-1),
