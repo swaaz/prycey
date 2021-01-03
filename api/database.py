@@ -75,6 +75,7 @@ def init_db():
 				CREATE TABLE IF NOT EXISTS Rated(
 					user_id TEXT,
 					rated_id TEXT,
+					review TEXT,
 					rating REAL,
 					PRIMARY KEY(user_id, rated_id),
 					FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
@@ -124,16 +125,16 @@ def init_db():
 		""")
 	conn.commit()
 
-	# c.execute("""
-	#         CREATE TRIGGER update_rating AFTER UPDATE ON Rated
-	#         WHEN old.rating <> new.rating
-	#         BEGIN
-	#             UPDATE User_Rating
-	#             SET rating=(rating * no_of_ratings - old.rating + new.rating)/(no_of_ratings)
-	#             WHERE user_id=new.rated_id;
-	#         END;
-	#     """)
-	# conn.commit()
+	c.execute("""
+	        CREATE TRIGGER update_rating AFTER DELETE ON Rated
+	        BEGIN
+	            UPDATE User_Rating
+	            SET rating=(rating * no_of_ratings - old.rating)/(no_of_ratings-1),
+				no_of_ratings = (no_of_ratings - 1)
+	            WHERE user_id=old.rated_id;
+	        END;
+	    """)
+	conn.commit()
 
 	
 
