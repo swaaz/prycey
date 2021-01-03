@@ -15,7 +15,7 @@ Modal.setAppElement('#root');
 
 function ProductPage({match}) {
     const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '', 'sellerId' : '', 'img' : '' });
-    const [img, setImage] = useState(''); 
+    // const [img, setImage] = useState(''); 
     const [modal, setModal] = useState(false);
      useEffect(() => {
         axios
@@ -41,7 +41,7 @@ function ProductPage({match}) {
             })
 
             console.log(data);
-            setImage(`uploads/product/${data.data.im1}`);
+            // setImage(`uploads/product/${data.data.im1}`);
         })
         .catch( error => {
             console.log(error)
