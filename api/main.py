@@ -463,36 +463,9 @@ def rate(uid):
     rate_review = json.loads(request_data.decode('utf8').replace("'", '"'))
     print(uid)
     print(rate_review)
+    nr = int(rate_review['star'])
+    review = rate_review['review']
 
-
-    # nr = 0
-    # # nr = float(request.args.get('r'))
-    # if "user_id" in sess:
-    #     if 1 <= nr <= 5:
-    #         with sqlite3.connect(db) as conn:
-    #             c = conn.cursor()
-    #             c.execute("PRAGMA FOREIGN_KEYS=ON;")
-
-    #             try:
-    #                 c.execute("""INSERT INTO Rated(user_id, rated_id, rating) 
-	# 							VALUES(?,?,?);
-	# 							""", (sess["user_id"], uid, nr))
-    #                 conn.commit()
-    #             except sqlite3.IntegrityError:
-    #                 c.execute("""UPDATE Rated SET rating=? WHERE user_id=? AND rated_id=?;
-	# 							""", (nr, sess["user_id"], uid, ))
-    #                 conn.commit()
-
-    #             return json.dumps({"response": "Successfully rated user"})
-    #     else:
-    #         return json.dumps({"response": "Given rating too high"})
-    # else:
-    #     return json.dumps({"response": "Please signin"})
-
-
-@app.route('/rating/delete/<string:uid>')
-def del_rate(uid):
-    nr = float(request.args.get('r'))
     if "user_id" in sess:
         if 1 <= nr <= 5:
             with sqlite3.connect(db) as conn:
@@ -500,18 +473,32 @@ def del_rate(uid):
                 c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
                 try:
-                    c.execute("""INSERT INTO Rated(user_id, rated_id, rating) 
-								VALUES(?,?,?);
-								""", (sess["user_id"], uid, nr))
+                    c.execute("""INSERT INTO Rated(user_id, rated_id, rating, review) 
+								VALUES(?,?,?,?);
+								""", (sess["user_id"], uid, nr, review))
                     conn.commit()
                 except sqlite3.IntegrityError:
-                    c.execute("""UPDATE Rated SET rating=? WHERE user_id=? AND rated_id=?;
-								""", (nr, sess["user_id"], uid, ))
+                    c.execute("""UPDATE Rated SET rating=?, review=? WHERE user_id=? AND rated_id=?;
+								""", (nr, review, sess["user_id"], uid, ))
                     conn.commit()
 
                 return json.dumps({"response": "Successfully rated user"})
         else:
             return json.dumps({"response": "Given rating too high"})
+    else:
+        return json.dumps({"response": "Please signin"})
+
+
+@app.route('/rating/delete/<string:uid>')
+def del_rate(uid):
+    if "user_id" in sess:
+        with sqlite3.connect(db) as conn:
+            c = conn.cursor()
+            c.execute("PRAGMA FOREIGN_KEYS=ON;")
+            c.execute("""DELETE FROM Rated 
+                        WHERE user_id=? AND rated_id=?
+                    """,(sess['user_id'], uid,))
+            return json.dumps({"response": "Successfully deleted the rating"})
     else:
         return json.dumps({"response": "Please signin"})
 
