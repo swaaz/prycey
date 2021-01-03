@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 Modal.setAppElement('#root');
 
 function ProductPage({match}) {
-    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '', 'sellerId' : '' });
+    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '', 'sellerId' : '', 'img' : '' });
     const [img, setImage] = useState(''); 
     const [modal, setModal] = useState(false);
      useEffect(() => {
@@ -36,7 +36,8 @@ function ProductPage({match}) {
                     ['year'] : data.data.year,
                     ['dateAdded'] : data.data.date_added,
                     ['category'] : data.data.category,
-                    ['sellerId'] : data.data.seller_id
+                    ['sellerId'] : data.data.seller_id,
+                    ['img'] : data.data.im1
             })
 
             console.log(data);
@@ -105,7 +106,8 @@ function ProductPage({match}) {
                     </div>
                 </div>
                 <div className={Styles.right}>
-                    <img src={'logo512.png'} alt='product'/>
+                    <img src={`../../uploads/product/${values.img}`} alt='product'/>
+                    {/* {console.log(window.location.pathname)} */}
                 </div>
             </div>
 
