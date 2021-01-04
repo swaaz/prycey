@@ -209,18 +209,15 @@ def sell():
 		Store form details
 	"""
 
-	file = request.files['file']
-	if file and allowed_file(file.filename):
-		filename = secure_filename(file.filename)
-		file.save(os.path.join(
-			app.config['UPLOAD_FOLDER'] + '/product', filename))
-
-	print(filename)
-
 	# print(file)
 
 	if "user_id" in sess:
+		file = request.files['file']
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/product', filename))
 
+		print(filename)
 		new_prod = {
 			"seller_id": sess["user_id"],
 			"title": request.form.get("title"),
