@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss';
 import Card from './Card';
-import Product from '../../assets/products/1.png';
+// import Product from '../../assets/products/1.png';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
@@ -39,7 +39,7 @@ function Search(props) {
                         values.map( (data) => {
                             return(
                                 <Link key={data.item_id} to={`/product/${data.item_id}`} >
-                                    <Card key={data.item_id} Photo={`uploads/product/${data.im1}`} Title={data.title} Price={data.price}/>
+                                    <Card key={data.item_id} Photo={`../../../uploads/product/${data.im1}`} Title={data.title} Price={data.price}/>
                                 </Link>
                             );
                         })

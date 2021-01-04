@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
 
 
 function UpdateProduct(props) {
-    const [product, setProduct] = useState({ 'title' : '', 'description': '', 'price' : 0, 'year' : 0, 'category': ''});
+    const [product, setProduct] = useState({ 'title' : '', 'description': '', 'price' : 0, 'year' : 0, 'category': '', 'img': ''});
     const history = useHistory();
     useEffect(() => {
        axios.get(`http://127.0.0.1:5000/product/${props.match.params.value}`)
@@ -21,7 +21,8 @@ function UpdateProduct(props) {
                ['description'] : response.data.description,
                ['price'] : response.data.price,
                ['year'] : response.data.year,
-               ['category'] : response.data.category
+               ['category'] : response.data.category,
+               ['img'] : response.data.im1
            })
        })
        .catch( error => console.log(error))
@@ -43,30 +44,11 @@ function UpdateProduct(props) {
             <div className={Styles.body}>
                <div className={Styles.content} >
                    <div className={Styles.imageSection}>
-                        <img className={Styles.image} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=40' alt='profile image' />
+                        <img className={Styles.image} src={`../../../uploads/product/${product.img}`} alt='Product Image' />
                    </div>
                    <div className={Styles.profileContent}>
-                       <p className={Styles.username}>Swasthik</p>
-                       <p className={Styles.username}>Shetty</p>
-
-                       <div className={Styles.reviewRow}>
-                            <p className={Styles.ratingNumber}>
-                                {/* {values.rating} */}
-                                10
-                                <img className={Styles.ratingStar} src={Star} alt='star' />
-                            </p>
-                            <p> | </p>
-                            <p className={Styles.reviewStar}>
-                                {Array(parseInt(3))
-                                .fill()
-                                .map((_, i) => (
-                                <img className={Styles.ratingStar} src={Star} alt='star' />
-                                ))}
-                            </p>
-                            <p> | </p>
-                            <p className={Styles.reviewValue}>222 Reviews</p>
-
-                        </div>
+                       <p className={Styles.username}>{product.title}</p>
+                       <p className={Styles.username}>₹ {product.price}</p>
                    </div>
                </div>
                <div className={Styles.form}>
