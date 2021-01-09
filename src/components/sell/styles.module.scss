@@ -4,7 +4,7 @@
     .body{
         background: linear-gradient(90deg, $purple 70%, $bg 30%);
         // height: 500px;
-        padding: 190px 67px;
+        padding: 140px 67px;
         display: flex;
         flex-direction: row;
 
@@ -39,13 +39,22 @@
                     margin-bottom: 25px;
                     font-size: 2.5rem;
                 }
-                input {
+                input[type=text] {
                     margin: 13px 0;
                     border: 0;
                     outline: 0;
                     border-bottom: 1px solid black;
                 }
-
+                input[type=radio] {
+                    margin: 13px 0;
+                    border: 0;
+                    outline: 0;
+                    border-bottom: 1px solid black;
+                }
+                .upload{
+                    opacity: 50%;
+                    margin-bottom: 10px;
+                }
                 button{
                     width: 100px;
                     margin: 15px 0;

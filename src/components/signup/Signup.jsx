@@ -12,11 +12,19 @@ function Signup() {
     const {register, handleSubmit} = useForm();
    
     
-    const onSubmit = (data) => {
+    const onSubmit = (e) => {
         // data.preventDefault();
-        console.log(data)
-        console.log('request sending')
-        axios.post('http://127.0.0.1:5000/signup', data)
+        // console.log(data)
+        // console.log('request sending')
+        let fd = new FormData();
+        fd.append('file', e.file[0]);
+        fd.append('filename', e.file[0].nam);
+        fd.append('user_id' , e.user_id);
+        fd.append('name' , e.name);
+        fd.append('contact_number' , e.contact_number);
+        fd.append('password' , e.password);
+        fd.append('emai_id' , e.email_id);
+        axios.post('http://127.0.0.1:5000/signup', fd)
         .then( (response) => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
         .catch( error => console.log(error))
     };
@@ -37,6 +45,8 @@ function Signup() {
                         <input type='text' placeholder='email id' name='email' ref={register} required />
                         <input type='text' placeholder='contact number' name='contact_number' ref={register} required />
                         <input type='password' placeholder='password' name='password' ref={register} required />
+                        <p className={Styles.upload}>Uplaod profile image</p>
+                        <input name='file' style={Styles.uploadImage} type="file" ref={register} required />
                         <button type='submit'>submit</button>
                     </form>
                </div>

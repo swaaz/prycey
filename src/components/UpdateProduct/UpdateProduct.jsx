@@ -43,13 +43,8 @@ function UpdateProduct(props) {
             <Navbar/>
             <div className={Styles.body}>
                <div className={Styles.content} >
-                   <div className={Styles.imageSection}>
-                        <img className={Styles.image} src={`../../../uploads/product/${product.img}`} alt='Product Image' />
-                   </div>
-                   <div className={Styles.profileContent}>
-                       <p className={Styles.username}>{product.title}</p>
-                       <p className={Styles.username}>₹ {product.price}</p>
-                   </div>
+                    <img className={Styles.image} src={`../../../uploads/product/${product.img}`} alt='Product Image' />
+
                </div>
                <div className={Styles.form}>
                     <form onSubmit={onSubmit}>

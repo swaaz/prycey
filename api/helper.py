@@ -2,7 +2,7 @@ import json
 import smtplib
 import imghdr
 import os
-import pandas as pd
+# import pandas as pd
 from email.message import EmailMessage
 
 def to_dict(k: list):

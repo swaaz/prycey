@@ -64,6 +64,7 @@ function Sell() {
                                 <p className={Styles.categoryName}>tools</p>
                             </div>
                         </div>
+                        <p className={Styles.upload}>Uplaod profile image</p>
                         <input name='file' style={Styles.uploadImage} type="file" ref={register} required />
                         <input name='price' type='text' placeholder='price' ref={register} required />
                         <input name='year' type='text' placeholder='year' ref={register} required />

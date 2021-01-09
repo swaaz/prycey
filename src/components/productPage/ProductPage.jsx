@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 Modal.setAppElement('#root');
 
 function ProductPage({match}) {
-    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '', 'sellerId' : '', 'img' : '' });
+    const [values, setValues] = useState({ 'itemId' : 0, 'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '', 'sellerId' : '', 'img' : '' });
     // const [img, setImage] = useState(''); 
     const [modal, setModal] = useState(false);
      useEffect(() => {
@@ -37,7 +37,8 @@ function ProductPage({match}) {
                     ['dateAdded'] : data.data.date_added,
                     ['category'] : data.data.category,
                     ['sellerId'] : data.data.seller_id,
-                    ['img'] : data.data.im1
+                    ['img'] : data.data.im1,
+                    ['itemId'] : data.data.item_id
             })
 
             console.log(data);
@@ -137,7 +138,7 @@ function ProductPage({match}) {
                 
                     {/* <div className={Styles.modalBox}> */}
 
-                        <img onClick={(e)=> setModal(false)} style={{alignSelf : 'end', width: '30px'}}  src={Close} alt='close' />
+                        <img onClick={(e)=> setModal(false)} style={{alignSelf : 'end', width: '30px', cursor : 'pointer'}}  src={Close} alt='close' />
                         <h1 style={{fontSize : '2rem'}}>Seller Details</h1>
                         <img style={{borderRadius : '50%', width: '200px', border: '5px solid white', margin: '30px auto'}} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='profile' />
                         <p style={{fontSize: '1.7rem', fontWeight: '600'}}>{values.sellerName}</p>
@@ -160,8 +161,8 @@ function ProductPage({match}) {
                             </div>
                         <p style={{fontSize: '1.1rem', margin: '10px 0'}}>E-mail : {values.email}</p>
                         <p style={{fontSize: '1.1rem', margin: '10px 0'}}>Contact : +91 {values.contact}</p>
-                        <Link to={`/seller/rating/${values.sellerId}`}>
-                            <img style={{width: '40px', margin : '10px auto'}} src={Buy} alt='buy' />
+                        <Link to={`/seller/rating?id=${values.itemId}&&seller=${values.sellerId}`}>
+                            <img style={{width: '40px', margin : '10px auto', cursor : 'pointer'}} src={Buy} alt='buy' />
                         </Link>
                             
                        

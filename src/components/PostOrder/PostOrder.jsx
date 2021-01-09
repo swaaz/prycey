@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -14,7 +14,14 @@ function PostOrder(props) {
     const {register, handleSubmit} = useForm();
     const [rating, setRating] = useState(null);
 
-    console.log(props.match.params.value)
+    console.log(props)
+
+    useEffect(() => {
+        const params = new URLSearchParams(props.location.search);
+        const id = params.get('id');
+        const seller = params.get('seller')
+        
+    }, [])
     
     const onSubmit = (value) =>{
         console.log(value, rating)
