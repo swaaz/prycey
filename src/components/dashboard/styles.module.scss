@@ -94,9 +94,9 @@
             row-gap: 30px;
             column-gap: 10px;
 
-            a{
-                text-decoration: none;
-                color: black;
+            // a{
+            //     text-decoration: none;
+            //     color: black;
                 .card{
                     width: 80%;
                     background-color: white;
@@ -111,10 +111,14 @@
                         width: 100%;
                         justify-content: space-between;
     
+                       a{
+                        text-decoration: none;
+                      
                         .title{
                             color: $purple;
                             font-size: 2rem;
                         }
+                       }
                         .icons{
                             display: flex;
                             flex-direction: row;
@@ -124,29 +128,38 @@
                                 width: 25px;
                                 height: 25px;
                                 margin: 0 10px;
+                                cursor: pointer;
                             }
                         }
                     }
-                    .description{
-                        width: 90%;
-                        color: $purple;
-                        opacity: 85%;
-                        padding: 20px 0;
-                    }
-                    .rowTwo{
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: space-between;
-                        
-                        .price{
-                            font-size: 2rem;
-                            padding: 30px 0;
-                        }
-                        .productImage{
-                            width: 300px;
+                    a{
+                        text-decoration: none;
+         
+                        .description{
+                            width: 90%;
+                            color: $purple;
+                            opacity: 85%;
+                            padding: 20px 0;
                         }
                     }
-                }
+                    a{
+                        text-decoration: none;
+                        color: black;
+                        .rowTwo{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            
+                            .price{
+                                font-size: 2rem;
+                                padding: 30px 0;
+                            }
+                            .productImage{
+                                width: 300px;
+                            }
+                        }
+                    }
+                // }
             }
             
         }

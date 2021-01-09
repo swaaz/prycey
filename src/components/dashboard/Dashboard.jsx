@@ -3,33 +3,38 @@ import Navbar from '../navbar/Navbar';
 import Styles from './styles.module.scss';
 import Star from '../../assets/icons/purple_star.png';
 import Cards from './Cards';
-import Image from '../../assets/products/1.jpg';
 import axios from 'axios';
 import ProfileCard from './ProfileCard';
-import { Link } from 'react-router-dom';
+import { Link , useHistory} from 'react-router-dom';
 function Dashboard() {
     const [details, setDetails] = useState({'userId' : '', 'firstName' : '' , 'lastName' : '' , 'rating' : 0, 'review' : '' });
     const [posts, setPosts] = useState([]);
     const [ratings, setRatings] = useState([]);
-
+    const history = useHistory();
     useEffect(() => {
        axios.get('http://127.0.0.1:5000/dashboard')
        .then( value => {
-           setDetails({
-               ...details,
-               ['userId'] : value.data.user_id,
-               ['firstName'] : value.data.fname,
-               ['lastName'] : value.data.lname,
-               ['rating'] : value.data.rating,
-               ['review'] : value.data.no_of_ratings,
-               
-           })
-           setPosts(value.data.posts)
-           setRatings(value.data.ratings)
-           console.log(value);
+        console.log(value);
+           if (value.data.response == 'Please Sign in'){
+            history.push('/signin')
+           }
+           else {
+            setDetails({
+                ...details,
+                ['userId'] : value.data.user_id,
+                ['firstName'] : value.data.fname,
+                ['lastName'] : value.data.lname,
+                ['rating'] : value.data.rating,
+                ['review'] : value.data.no_of_ratings,
+                
+            })
+            setPosts(value.data.posts)
+            setRatings(value.data.ratings)
+            console.log(value);
+           }
        })
        .catch( error => console.log(error))
-    }, [])
+    }, [posts])
 
     
 
@@ -75,13 +80,15 @@ function Dashboard() {
 
                 <div className={Styles.cards}>
                     {
-                        posts.map( (data) =>{
-                            return(
-                            <Link key={data.item_id} to={`/product/${data.item_id}`}>
-                                 <Cards key={data.item_id} itemId={data.item_id} title={data.title} description={data.description} image={`uploads/product/${data.im1}`} price={data.price}  />
-                            </Link>
-                            );
-                        })
+                        posts.map( (data) =>  <Cards to={`/product/${data.item_id}`} key={data.item_id} itemId={data.item_id} title={data.title} description={data.description} image={`uploads/product/${data.im1}`} price={data.price}  />)
+                        // {
+                            // return(
+                            // <Link key={data.item_id} >
+                                //  <Cards to={`/product/${data.item_id}`} key={data.item_id} itemId={data.item_id} title={data.title} description={data.description} image={`uploads/product/${data.im1}`} price={data.price}  />
+                            // </Link>
+                            // );
+                        // }
+                        // )
                     }
                     
                    

@@ -335,7 +335,7 @@ def render_dashboard():
 			# req = details + to_dict(user_posts)
 			return json.dumps(req)
 	else:
-		return json.dumps({"response": "NOT_SIGNED_IN"})
+		return json.dumps({"response": "Please Sign in"})
 
 
 @app.route('/product/<int:id>')
@@ -461,12 +461,15 @@ def rate(uid):
 		}
 	"""
 
-	request_data = request.data
-	rate_review = json.loads(request_data.decode('utf8').replace("'", '"'))
-	print(uid)
-	print(rate_review)
-	nr = int(rate_review['star'])
-	review = rate_review['review']
+	# request_data = request.data
+	# rate_review = json.loads(request_data.decode('utf8').replace("'", '"'))
+
+	# print(uid)
+	# print(rate_review)
+	print(request.form.get('rating'))
+	print(request.form.get('review'))
+	nr = int(request.form.get('rating'))
+	review = request.form.get('review')
 
 	if "user_id" in sess:
 		if 1 <= nr <= 5:
@@ -504,6 +507,30 @@ def del_rate(uid):
 	else:
 		return json.dumps({"response": "Please signin"})
 
+
+@app.route('/transact')
+def transaction():
+
+	request_data = request.data
+	rate_review = json.loads(request_data.decode('utf8').replace("'", '"'))
+	seller_id = rate_review.get('seller_id')
+	item_id = rate_review.get('item_id')
+	now = datetime.now()
+	dt_str = now.strftime("%d/%m/%Y %H:%M:%S").split()
+	date = dt_st[0]
+	time = dt_st[1]
+
+	if "user_id" in sess:
+		with sqlite3.connect(db) as conn:
+			c = conn.cursor()
+			c.execute("PRAGMA FOREIGN_KEYS=ON;")
+			c.execute("""INSERT INTO Transact 
+						(seller_id, buyer_id, item_id, date, time)
+						VALUES(?,?,?,?,?)
+					""", (seller_id, sess['user_id'], item_id, date, time))
+			return json.dumps({"response": "Transaction complete"})
+	else:
+		return json.dumps({"response": "Please signin"})
 
 # if __name__ == "__main__":
 #     app.run(debug=True)
