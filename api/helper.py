@@ -2,8 +2,9 @@ import json
 import smtplib
 import imghdr
 import os
-# import pandas as pd
 from email.message import EmailMessage
+from dotenv import load_dotenv
+from pathlib import Path
 
 def to_dict(k: list):
 	d = []
@@ -38,56 +39,30 @@ def rate_to_dict(k: list):
 
 	return d
 
-def mail(emal_id: str, buyer_id: str):
-	maildid = ""  #enter your email id here
-	password = "" #enter your password here
+def mail(email_id: str, buyer_id: str, buyer_email: str, buyer_name: str,			item_name: str):
+	env_path = Path('.') / '.env'
+	load_dotenv(dotenv_path=env_path)
 
-	files = []
+	maildid = os.environ.get('EMAILID')  #enter your email id here
+	password = os.environ.get('PASSWORD') #enter your password here
+	print(maildid)
+	print(password)
 
-	contacts = [email_id]
+	contact = email_id
 
-	for contact in contacts:
-		message = EmailMessage()
-		message['From'] = maildid
-		message['To'] = contact
-		message['Subject'] = f'New interest! {buyer_id} is interested in purchasing your item' #replace the subject  
+	message = EmailMessage()
+	message['From'] = maildid
+	message['To'] = contact
+	message['Subject'] = f'New interest! {buyer_id} is interested in purchasing your item' #replace the subject  
+
+	message.set_content(f"Your item {item_name} is requested by new buyer {buyer_name}, {buyer_id}.\nTo contact the buyer use buyer's email id: {buyer_email}\n") 
+
+	# Sending mails
+	with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+		smtp.login(maildid, password)
+		smtp.send_message(message)
 		
-		"""
-		Note: if you want to send mail with content then use option 1 and delete the option 2
-			or
-			if you want to send HTML mail then use option 2 and delete option 1
-		"""
-		
-		# option 1
-		message.set_content('Enter the content here ') #this is optional. if you are using web mails then this is not necessary.
-
-		# option 2
-		message.add_alternative("""\    
-			<!DOCTYPPE html>
-				<html>
-					<body>
-					
-						//Insert you html code here
-						
-					</body>
-				</html>            
-								""", subtype='html')
-		
-
-		# attaching files to the mail
-		for file in files:
-			with open(file, 'rb') as f:
-				file_data = f.read()
-				file_type = imghdr.what(f.name)
-				file_name = f.name
-			message.add_attachment(file_data, maintype='application', subtype='octect-stream', filename= file_name)
-			
-		# Sending mails
-		with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-			smtp.login(maildid, password)
-			smtp.send_message(message)
-			
-			# if the mail is Successfully sent then this statement will be printed
-			print("Mail sent Successfully to {}".format(contact))
+		# if the mail is Successfully sent then this statement will be printed
+		print("Mail sent Successfully to {}".format(contact))
 			
 	print("\nSuccessfully sent!!!")
