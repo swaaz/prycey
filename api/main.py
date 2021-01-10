@@ -6,7 +6,7 @@ import json
 import datetime
 import os
 # from database import init_db
-from helper import to_dict, rate_to_dict
+from helper import to_dict, rate_to_dict, mail
 
 db = 'prycey.db'
 UPLOAD_FOLDER = '../public/uploads'
@@ -517,8 +517,8 @@ def transaction():
 	item_id = rate_review.get('item_id')
 	now = datetime.now()
 	dt_str = now.strftime("%d/%m/%Y %H:%M:%S").split()
-	date = dt_st[0]
-	time = dt_st[1]
+	date = dt_str[0]
+	time = dt_str[1]
 
 	if "user_id" in sess:
 		with sqlite3.connect(db) as conn:
@@ -528,6 +528,19 @@ def transaction():
 						(seller_id, buyer_id, item_id, date, time)
 						VALUES(?,?,?,?,?)
 					""", (seller_id, sess['user_id'], item_id, date, time))
+
+			buyer_email, buyer_name = c.execute("""SELECT email, name 
+				FROM USERS 
+				WHERE user_id=?""", (sess['user_id'],)).fetchone()
+
+			seller_email = c.execute("""SELECT email 
+				FROM USERS 
+				WHERE user_id=?""", seller_id).fetchone()
+			item_name = c.execute(
+				"""SELECT title FROM Items WHERE item_id=?""", item_id).fetchone()
+
+			# mail(email_id=seller_email, buyer_id=sess['user_id'], buyer_email=buyer_email, buyer_name=buyer_name, item_name=item_name)
+
 			return json.dumps({"response": "Transaction complete"})
 	else:
 		return json.dumps({"response": "Please signin"})
