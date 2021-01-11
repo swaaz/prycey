@@ -1,0 +1,101 @@
+@import '../../styles/colors';
+.home{
+    width: 100vw;
+    overflow-x: hidden;
+    .hero{
+        width: 100vw;
+        display: flex;
+        justify-content: space-between;
+        background-image: url('../../assets/bg/bg.png');
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover;
+        background-position: 0 42%;
+
+        .title{
+           
+            width: 838px;
+            height: 234px;
+            padding: 128px 0 0 173px;
+          
+        }
+        .avatar{
+            height: 500px;
+        }
+    
+    }
+
+    .filters{
+        background-color: #F8F8F8;
+        padding: 30px 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+       a{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+            img{
+                display: block;
+                margin: auto;
+            }
+            p{
+                color: black;
+                padding-top: 10px;
+            }
+       }
+    }
+
+    .cards{
+        padding: 10px 15px;
+        display: grid;
+        justify-content: center;
+        grid-template-columns: repeat(5,1fr);
+        row-gap: 30px;
+        column-gap: 10px;
+
+        a{
+            text-decoration: none;
+            color: black;
+            
+            .card{
+                background-color: white;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                border-radius: 10px;
+                width: max-content;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 10px auto;
+    
+                .productImage{
+                    margin: 20px 10px;
+                    width: 300px;
+                    height: 275px;
+                }
+                .productTitle{
+                    color: $purple;
+                    font-size: 1.2rem;
+                    font-weight: 500;
+                }
+                .productPrice{
+                    font-weight: 400;
+                    padding: 20px 0;
+                }
+            }
+        }
+    }
+    .footer{
+        background-color: $blue_button;
+        color: white;
+        text-align: center;
+        padding: 13px 0;
+
+        .footerText{
+            font-weight: 700;
+        }
+
+    }
+}

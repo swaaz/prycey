@@ -1,0 +1,5 @@
+node_modules/
+venv
+# api/prycey.db
+api/__pycache__
+api/.env

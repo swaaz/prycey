@@ -1,0 +1,216 @@
+@import '../../styles/colors';
+
+.dashboard{
+    .body{
+        background: linear-gradient(0deg, $purple 80%, $bg 20%);
+        
+        .dashboardPanel{
+            background-color: white;
+            text-align: center;
+            width: 44%;
+            margin: 100px auto;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            
+            .heading{
+                font-size: 2rem;
+                font-weight: 600;
+                padding: 25px 0 25px 30px;
+                text-align: left;
+            }
+            .content{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                padding-bottom: 40px;
+                
+                .imageSection{
+                    .image{
+                        border-radius: 50%;
+                        width: 200px;
+                        border: solid 5px $purple;
+                    
+                    }
+                }
+    
+                .profileContent{
+                    display: flex;
+                    flex-direction: column;
+                    padding: 25px 0 0 20px;
+    
+                    .username{
+                        color: $purple;
+                        font-size: 2.7rem;
+                        font-weight: 900;
+                        text-align: start;
+                    }
+    
+                    .reviewRow{
+                        color: $purple;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        margin-top: 20px;
+    
+                        .ratingNumber{
+                            margin-right: 5px;
+                            .ratingStar{
+                                width: 17px;
+                                margin: 0 1px;
+                            }
+                        }
+                        .reviewStar{
+                            padding: 0 10px;
+                            
+                            .ratingStar{
+                                width: 17px;
+                                margin: 0 1px;
+                            }
+                        }
+                        .reviewValue{
+                            padding: 0 10px;
+                        }
+    
+                    }
+    
+                }
+                
+            }
+        }
+
+        .sideHeading {
+            color: white;
+            font-size: 2rem;
+            margin-left: 30px;
+            margin-bottom: 50px;
+        }
+
+        .cards{
+
+            margin: 20px auto 0 auto;
+            padding-bottom: 30px;
+            display: grid;
+            justify-content: center;
+            grid-template-columns: 30% 30% 30%;
+            row-gap: 30px;
+            column-gap: 10px;
+
+            // a{
+            //     text-decoration: none;
+            //     color: black;
+                .card{
+                    width: 80%;
+                    background-color: white;
+                    padding: 50px 40px;
+                    border-radius: 10px;
+                    margin: 0 auto;
+                    
+    
+                    .rowOne{
+                        display: flex;
+                        flex-direction: row;
+                        width: 100%;
+                        justify-content: space-between;
+    
+                       a{
+                        text-decoration: none;
+                      
+                        .title{
+                            color: $purple;
+                            font-size: 2rem;
+                        }
+                       }
+                        .icons{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-evenly;
+    
+                            .icon{
+                                width: 25px;
+                                height: 25px;
+                                margin: 0 10px;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                    a{
+                        text-decoration: none;
+         
+                        .description{
+                            width: 90%;
+                            color: $purple;
+                            opacity: 85%;
+                            padding: 20px 0;
+                        }
+                    }
+                    a{
+                        text-decoration: none;
+                        color: black;
+                        .rowTwo{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            
+                            .price{
+                                font-size: 2rem;
+                                padding: 30px 0;
+                            }
+                            .productImage{
+                                width: 300px;
+                                height: 300px;
+                            }
+                        }
+                    }
+                // }
+            }
+            
+        }
+
+        .profileCards{
+            margin: 20px auto 0 auto;
+            padding-bottom: 30px;
+            display: grid;
+            justify-content: center;
+            grid-template-columns: repeat(5, 15%);
+            row-gap: 30px;
+            column-gap: 50px;
+
+            .cardProfile{
+                background-color: white;
+                text-align: center ;
+                width: max-content;
+                padding: 20px 30px;
+                border-radius: 10px;
+                margin: 0 auto;
+                ;
+                .profileImage{
+                    width: 175px;
+                    border-radius: 50%;
+                    border: 5px solid $purple;
+                }
+                .profileName{
+                    font-size: 1.5rem;
+                    padding: 10px 0;
+                }
+                .reviewRows{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    padding: 10px 0;
+
+                    .ratingNumbers{
+                        color: $purple;
+                         
+                    }
+                    .divider{
+                        color: $purple;
+                        margin: 0 5px;
+                    }
+                    .ratingStars{
+                        width: 17px;
+                        margin: 3px 1px 0 1px;
+                    }
+                }
+            }
+        }
+    }
+}

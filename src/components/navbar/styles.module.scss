@@ -1,0 +1,75 @@
+@import '../../styles/colors';
+.navbar{
+    width: auto;
+    padding: 10px 10px;
+    // box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 10px 6px -6px rgb(187, 186, 186);
+	-moz-box-shadow: 0 10px 6px -6px rgb(187, 186, 186);
+	box-shadow: 0 10px 6px -6px rgb(187, 186, 186);
+    
+
+    nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        a{
+            text-decoration: none;
+            color: black;
+
+            p{
+                padding-left: 10px ;
+                font-size: 1.5rem;
+            }
+        }
+        .search{
+            display: flex;
+            // justify-content: baseline;
+            margin-left: 110px;
+            padding: 5px 20px;
+            background-color: $faded_white;
+            // margin: 10px 0;
+            height: 25px;
+            
+            button{
+                background: transparent;
+                img{
+                    padding: 5px 0 0px 0;
+                    width: 15px;                   
+                }
+            }
+            input{
+                background: transparent;
+            }
+        }
+        .navbarOptions{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            list-style-type: none;
+            
+            a{
+                text-decoration: none;
+                color: black;
+                font-weight: 500;
+            }
+            li{
+                margin: 7px 10px;
+
+                
+                
+            }
+            .navbarButton{
+                background-color: $blue_button;
+                    
+                    li{
+                        color: white;
+                        padding: 8px 15px;
+                        margin: 0;
+                    }
+                
+            }
+        }
+    }
+
+}

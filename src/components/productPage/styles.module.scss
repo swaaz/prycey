@@ -1,0 +1,195 @@
+@import '../../styles/colors';
+
+.ProductPage{
+    .body{
+        background: linear-gradient(90deg, $bg 50%, $purple 50%);
+        display: flex;
+        flex-direction: row;
+        padding: 100px 0 0 0 ;
+        min-height: 84vh;
+
+        .left{
+            padding: 50px 0 0 100px;
+            width: 50%;
+
+            .productTitle{
+                font-size: 3rem;
+            }
+            .productDescription{
+                margin-top: 10px;
+                font-weight: 500;
+                font-size: 1.5rem;
+                width: 80%;
+                letter-spacing: 2px;
+            }
+            
+          .rowValue{
+              display: flex;
+              margin-top: 10px;
+              
+            .catDiv{
+                margin-top: 5px;
+                background-color: $purple;
+                width: 120px;
+                text-align: center;
+                border-radius: 10px;
+                height: 38px;
+                
+ 
+                .category{
+                 padding: 5px 0;
+                 font-size: 1.2rem;
+                 font-weight: 400;
+                 color: white;
+ 
+             }
+            }
+            .yearDiv{
+           
+                margin-left: 10px;
+                margin-top: 5px;
+                border: 3px solid $purple;
+                border-radius: 10px;
+                width: 130px;
+                display: flex;
+                flex-direction: row;
+                color: black;
+                height: 31px;
+
+                .yearDiv1{
+                 color: white;
+                 background-color: $purple;
+                 padding: 5px 12px;
+                }
+ 
+                .year{
+                 
+                 padding: 5px 7px;
+             }
+            }
+          }
+            .postedRow{
+                margin-top: 10px;
+                display: flex;
+                .dateHeading{
+                    font-size: 1.2rem;
+                }
+                .dateAdded{
+                    font-size: 1.1rem;
+                    color: #a3a1a1;
+                    padding-top: 2px;
+                    padding-left: 5px;
+                }
+            }
+            .priceRow{
+                display: flex;
+                flex-direction: row;
+                margin-top: 100px;
+
+                .priceMrp{
+                    color: $purple;
+                    font-size: 1.5rem;
+                    margin-top: 25px;
+                }
+
+                .priceValue{
+                    font-size: 3.5rem;
+                    font-weight: 300;
+                    margin-left: 10px;
+
+                }
+            }
+
+            .seller{
+                background-color: $purple;
+                padding: 30px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 37%;
+                margin-top: 60px;
+                margin-bottom: 100px;
+
+                .sellerTag{
+                    color: white;
+                    align-self: start;
+                }
+                
+                .sellerProfile{
+                    display: flex;
+                    flex-direction: row;
+                    margin-top: 15px;
+
+                    .sellerName{
+                        color: white;
+                        font-size: 1.2rem;
+                        padding-top: 30px;
+                    }
+                    .sellerImage{
+                        border-radius: 50%;
+                        width: 50px;
+                        border: solid 3px $accent_blue;
+                        margin-left: 10px;
+                    }
+                }
+
+
+                .reviewRow{
+                    color: $accent_blue;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    margin-top: 20px;
+
+                    .ratingNumber{
+                        margin-right: 5px;
+                        .ratingStar{
+                            width: 17px;
+                            margin: 0 1px;
+                        }
+                    }
+                    .reviewStar{
+                        padding: 0 10px;
+                        
+                        .ratingStar{
+                            width: 17px;
+                            margin: 0 1px;
+                        }
+                    }
+                    .reviewValue{
+                        padding: 0 10px;
+                    }
+
+                }
+                .contactSeller{
+                    display: flex;
+                    flex-direction: row;
+                    background-color: white;
+                    width: 50%;
+                    justify-content: baseline;
+                    margin-top: 20px;
+
+                    .contactIcon{
+                        background-color: $accent_blue;
+                        width: 27px;
+                        height: 27px;
+                        padding: 9px 5px 7px 7px;
+                    }
+                    .contactText{
+                        color: $purple;
+                        font-size: 1.1rem;
+                        padding: 10px 5px;
+                    }
+                }
+            }
+        }
+        .right{
+            .rightImage{
+                width: 500px;
+                max-width: 500px;
+                margin: 250px 100px 0 185px;
+            }
+        }
+    }
+   
+}
