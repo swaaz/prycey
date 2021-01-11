@@ -13,24 +13,26 @@ import StarRating from '../StarRating/StarRating';
 function PostOrder(props) {
     const {register, handleSubmit} = useForm();
     const [rating, setRating] = useState(null);
+    const params = new URLSearchParams(props.location.search);
+    const id = params.get('id');
+    const seller = params.get('seller')
 
     console.log(props)
 
     useEffect(() => {
-        const params = new URLSearchParams(props.location.search);
-        const id = params.get('id');
-        const seller = params.get('seller')
+        
+        console.log(seller)
         
     }, [])
     
     const onSubmit = (value) =>{
-        console.log(value, rating)
+        console.log(value)
         let fd = new FormData();
         fd.append('review', value.review);
         fd.append('rating', rating);
-        axios.post(`http://127.0.0.1:5000/rating/${props.match.params.value}`, fd)
-        .then(response => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
-        .catch(error => console.log(error))
+        // axios.post(`http://127.0.0.1:5000/rating/${props.match.params}`, fd)
+        // .then(response => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
+        // .catch(error => console.log(error))
     }
     return (
         <div>

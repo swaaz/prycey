@@ -470,6 +470,7 @@ def rate(uid):
 	print(request.form.get('review'))
 	nr = int(request.form.get('rating'))
 	review = request.form.get('review')
+	print(uid)
 
 	if "user_id" in sess:
 		if 1 <= nr <= 5:

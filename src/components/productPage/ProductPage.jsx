@@ -58,9 +58,22 @@ function ProductPage({match}) {
                     <p className={Styles.productDescription}>
                         {values.description}
                     </p>
-                    <p className={Styles.category}>{values.category}</p>
-                    <p className={Styles.year}>years : {values.year}</p>
-                    <p className={Styles.dateAdded}>{values.dateAdded}</p>
+                    <div className={Styles.rowValue}>
+                        <div className={Styles.catDiv}>
+                            <p className={Styles.category}>{values.category}</p>
+                        </div>
+                        <div className={Styles.yearDiv}>
+                            <div className={Styles.yearDiv1}>
+                                Used
+                            </div>
+                            <p className={Styles.year}>{values.year} yrs</p>
+                        </div>
+                    </div>
+                    
+                    <div className={Styles.postedRow}>
+                        <p className={Styles.dateHeading}>Posted on : </p>
+                        <p className={Styles.dateAdded}> {values.dateAdded}</p>
+                    </div>
 
                     <div className={Styles.priceRow}>
                         <p className={Styles.priceMrp}>
@@ -161,8 +174,11 @@ function ProductPage({match}) {
                             </div>
                         <p style={{fontSize: '1.1rem', margin: '10px 0'}}>E-mail : {values.email}</p>
                         <p style={{fontSize: '1.1rem', margin: '10px 0'}}>Contact : +91 {values.contact}</p>
-                        <Link to={`/seller/rating?id=${values.itemId}&&seller=${values.sellerId}`}>
-                            <img style={{width: '40px', margin : '10px auto', cursor : 'pointer'}} src={Buy} alt='buy' />
+                        <Link style={{textDecoration : 'none'}} to={`/seller/rating?id=${values.itemId}&&seller=${values.sellerId}`}>
+                            <div style={{display : 'flex', margin: '0 auto', flexDirection : 'row', backgroundColor : 'white', width: '50%', justifyContent: 'baseline' , marginTop: '50px'}} role='button' tabIndex={0} >
+                            <img style={{backgroundColor : '#00fff0', width: '27px' , height : '27px', padding: '9px 5px 7px 7px'}} src={Call} alt='call' />
+                            <p style={{color: '#3d6cb9', fontSize: '1.1rem', padding: '10px 35px'}}>Purchase</p>
+                        </div>
                         </Link>
                             
                        
