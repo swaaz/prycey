@@ -26,7 +26,7 @@ function Dashboard() {
                 ['lastName'] : value.data.lname,
                 ['rating'] : value.data.rating,
                 ['review'] : value.data.no_of_ratings,
-                
+                ['profile'] : value.data.profile_image   
             })
             setPosts(value.data.posts)
             setRatings(value.data.ratings)
@@ -48,7 +48,7 @@ function Dashboard() {
                     <div className={Styles.content} >
 
                         <div className={Styles.imageSection}>
-                                <img className={Styles.image} src={'logo512.png'} alt='profile image' />
+                                <img className={Styles.image} src={`../uploads/profile/${details.profile}`} alt='profile image' />
                         </div>
                         <div className={Styles.profileContent}>
                             <p className={Styles.username}>{details.firstName}</p>

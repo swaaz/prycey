@@ -38,7 +38,8 @@ function ProductPage({match}) {
                     ['category'] : data.data.category,
                     ['sellerId'] : data.data.seller_id,
                     ['img'] : data.data.im1,
-                    ['itemId'] : data.data.item_id
+                    ['itemId'] : data.data.item_id,
+                    ['profile'] : data.data.profile_image
             })
 
             console.log(data);
@@ -92,7 +93,7 @@ function ProductPage({match}) {
                             <p className={Styles.sellerName}>
                                 {values.sellerName}
                             </p>
-                            <img className={Styles.sellerImage} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='product' />
+                            <img className={Styles.sellerImage} src={`../../uploads/profile/${values.profile}`} alt='product' />
                         </div>
                         
                         <div className={Styles.reviewRow}>
@@ -153,7 +154,7 @@ function ProductPage({match}) {
 
                         <img onClick={(e)=> setModal(false)} style={{alignSelf : 'end', width: '30px', cursor : 'pointer'}}  src={Close} alt='close' />
                         <h1 style={{fontSize : '2rem'}}>Seller Details</h1>
-                        <img style={{borderRadius : '50%', width: '200px', border: '5px solid white', margin: '30px auto'}} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='profile' />
+                        <img style={{borderRadius : '50%', width: '200px', border: '5px solid white', margin: '30px auto'}} src={`../../uploads/profile/${values.profile}`}alt='profile' />
                         <p style={{fontSize: '1.7rem', fontWeight: '600'}}>{values.sellerName}</p>
                         <div style={{display : 'flex', margin: '10px auto', flexDirection: 'row', justifyContent: 'baseline'}}>
                                 <p>

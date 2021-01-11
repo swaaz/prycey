@@ -171,29 +171,37 @@ def signup():
 	# new_user = json.loads(request_data.decode('utf-8').replace("'", '"'))
 	# print(new_user)
 
-	request_data = request.data
-	new_user = json.loads(request_data.decode('utf8').replace("'", '"'))
+	# request_data = request.data
+	# new_user = json.loads(request_data.decode('utf8').replace("'", '"'))
 
 	# print(request_data)
 
-	# new_user = {
-	#     "user_id": request_data.get('user_id'),
-	#     "name": request_data.get('name'),
-	#     "email": request_data.get('email'),
-	#     "contact_number": request_data.get('contact_number'),
-	#     "password": request_data.get('password')
-	# }
+	new_user = {
+	    "user_id": request.form.get('user_id'),
+	    "name": request.form.get('name'),
+	    "email": request.form.get('email'),
+	    "contact_number": request.form.get('contact_number'),
+	    "password": request.form.get('password')
+	}
 
 	# print(new_user)
 
 	with sqlite3.connect(db) as conn:
+		file = request.files['file']
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/profile', filename))
+
 		c = conn.cursor()
 		c.execute("PRAGMA FOREIGN_KEYS=ON;")
 
+		k = list(new_user.values()) + [filename]
+		print(k)
+
 		try:
-			c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password) 
-								VALUES(?,?,?,?,?)""", tuple(new_user.values()))
-			# print("success")
+			c.execute("""INSERT INTO Users(user_id, name, email, contact_number, password, profile_image) 
+								VALUES(?,?,?,?,?,?)""", tuple(k))
+			print("success")
 		except sqlite3.IntegrityError:
 			# print("Already there error")
 			return json.dumps({"response": "Already Exists!"})
@@ -303,7 +311,7 @@ def render_dashboard():
 			c = conn.cursor()
 			c.execute("PRAGMA FOREIGN_KEYS=ON;")
 			details = c.execute("""
-								SELECT Users.user_id, name, rating, no_of_ratings
+								SELECT Users.user_id, name, rating, no_of_ratings, profile_image
 								FROM Users, User_Rating
 								WHERE Users.user_id=User_rating.user_id AND Users.user_id = (?);
 							""", (sess.get('user_id'),)).fetchone()
@@ -317,7 +325,7 @@ def render_dashboard():
 										FROM Rated, Users 
 										WHERE Rated.rated_id=Users.user_id AND Rated.user_id=?
 									""", (sess.get('user_id'),)).fetchall()
-			# print(details)
+			print(details)
 			# print(user_posts)
 			user_posts = to_dict(user_posts)
 			user_rating = rate_to_dict(user_rating)
@@ -329,7 +337,8 @@ def render_dashboard():
 				"rating": details[2],
 				"no_of_ratings": details[3],
 				"posts": user_posts,
-				"ratings": user_rating
+				"ratings": user_rating,
+				"profile_image": details[4]
 			}
 
 			# req = details + to_dict(user_posts)
@@ -349,7 +358,7 @@ def render_product_page(id):
 		#                             """, (id,)).fetchall()
 
 		product_query = c.execute("""
-									SELECT Items.*, email, contact_number, name, rating, no_of_ratings, cat_name
+									SELECT Items.*, profile_image, email, contact_number, name, rating, no_of_ratings, cat_name
 									FROM Items, User_Rating, Users, Category
 									WHERE 
 									Items.seller_id=Users.user_id 
@@ -362,6 +371,7 @@ def render_product_page(id):
 
 		# print(product_query)
 		k = to_dict(product_query)[0]
+		k["profile_image"] = product_query[0][-7]
 		k["email"] = product_query[0][-6]
 		k["contact"] = product_query[0][-5]
 		k["seller_name"] = product_query[0][-4]

@@ -30,9 +30,9 @@ function PostOrder(props) {
         let fd = new FormData();
         fd.append('review', value.review);
         fd.append('rating', rating);
-        // axios.post(`http://127.0.0.1:5000/rating/${props.match.params}`, fd)
-        // .then(response => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
-        // .catch(error => console.log(error))
+        axios.post(`http://127.0.0.1:5000/rating/${seller}`, fd)
+        .then(response => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
+        .catch(error => console.log(error))
     }
     return (
         <div>

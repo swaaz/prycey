@@ -23,7 +23,7 @@ function Signup() {
         fd.append('name' , e.name);
         fd.append('contact_number' , e.contact_number);
         fd.append('password' , e.password);
-        fd.append('emai_id' , e.email_id);
+        fd.append('email' , e.email);
         axios.post('http://127.0.0.1:5000/signup', fd)
         .then( (response) => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
         .catch( error => console.log(error))
