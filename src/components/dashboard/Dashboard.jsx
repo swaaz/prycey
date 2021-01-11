@@ -6,6 +6,9 @@ import Cards from './Cards';
 import axios from 'axios';
 import ProfileCard from './ProfileCard';
 import { Link , useHistory} from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+
 function Dashboard() {
     const [details, setDetails] = useState({'userId' : '', 'firstName' : '' , 'lastName' : '' , 'rating' : 0, 'review' : '' });
     const [posts, setPosts] = useState([]);
@@ -16,6 +19,7 @@ function Dashboard() {
        .then( value => {
         console.log(value);
            if (value.data.response == 'Please Sign in'){
+            toast('Please SignIn!!', {position: toast.POSITION.TOP_CENTER});
             history.push('/signin')
            }
            else {

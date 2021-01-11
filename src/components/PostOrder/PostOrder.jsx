@@ -4,6 +4,8 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import StarRating from '../StarRating/StarRating';
+import Navbar from '../navbar/Navbar';
+import Styles from './styles.module.scss'; 
 // {
 //     'rated_id': 'johndoe',
 //     'rating': 5,
@@ -12,18 +14,22 @@ import StarRating from '../StarRating/StarRating';
 
 function PostOrder(props) {
     const {register, handleSubmit} = useForm();
-    const [rating, setRating] = useState(null);
+    const [rating, setRating] = useState(0);
     const params = new URLSearchParams(props.location.search);
     const id = params.get('id');
     const seller = params.get('seller')
 
     console.log(props)
 
-    useEffect(() => {
-        
-        console.log(seller)
-        
-    }, [])
+        useEffect(() => {
+            let fd = new FormData();
+            fd.append('seller', seller);
+            fd.append('id', id);
+            axios.post('http://127.0.0.1:5000/transact', fd)
+            .then(response => console.log(response))
+            .catch(error => console.log(error) )
+            
+        }, [])
     
     const onSubmit = (value) =>{
         console.log(value)
@@ -36,13 +42,21 @@ function PostOrder(props) {
     }
     return (
         <div>
-            <StarRating rating={rating} onClick={(value) => setRating(value) } />
+            <Navbar />
             <form onSubmit={handleSubmit(onSubmit)}>
                 
-                <input type='text' name='review' ref={register} />
-                <button type='submit' >submit</button>
+                <div className={Styles.Box}>
+                    <p className={Styles.Rating}>Ratings : </p>
+                    <input className={Styles.Input} type='text' name='review' placeholder='Add Comment' ref={register} />
+                    <p className={Styles.Message}>
+                        Thanks you for showing interest!
+                    </p>
+                </div>
+                <StarRating rating={rating} onClick={(value) => setRating(value) } />
+                <div className={Styles.buttonRow}>
+                    <button className={Styles.Button} type='submit' >submit</button>
+                </div>
             </form>
-       
         </div>
     )
 }

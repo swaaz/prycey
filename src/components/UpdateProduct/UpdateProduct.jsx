@@ -69,4 +69,4 @@ function UpdateProduct(props) {
     )
 }
 
-export default UpdateProduct
+export default UpdateProduct;

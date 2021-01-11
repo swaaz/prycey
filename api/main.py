@@ -519,14 +519,14 @@ def del_rate(uid):
 		return json.dumps({"response": "Please signin"})
 
 
-@app.route('/transact')
+@app.route('/transact', methods=['POST'])
 def transaction():
 
-	request_data = request.data
-	rate_review = json.loads(request_data.decode('utf8').replace("'", '"'))
-	seller_id = rate_review.get('seller_id')
-	item_id = rate_review.get('item_id')
-	now = datetime.now()
+	# request_data = request.data
+	# rate_review = json.loads(request_data.decode('utf8').replace("'", '"'))
+	seller_id = request.form.get('seller')
+	item_id = request.form.get('id')
+	now = datetime.datetime.now()
 	dt_str = now.strftime("%d/%m/%Y %H:%M:%S").split()
 	date = dt_str[0]
 	time = dt_str[1]
@@ -546,9 +546,9 @@ def transaction():
 
 			seller_email = c.execute("""SELECT email 
 				FROM USERS 
-				WHERE user_id=?""", seller_id).fetchone()
+				WHERE user_id=?""", (seller_id,)).fetchone()
 			item_name = c.execute(
-				"""SELECT title FROM Items WHERE item_id=?""", item_id).fetchone()
+				"""SELECT title FROM Items WHERE item_id=?""", (item_id,)).fetchone()
 
 			# mail(email_id=seller_email, buyer_id=sess['user_id'], buyer_email=buyer_email, buyer_name=buyer_name, item_name=item_name)
 
