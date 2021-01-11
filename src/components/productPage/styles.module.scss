@@ -30,9 +30,10 @@
             .catDiv{
                 margin-top: 5px;
                 background-color: $purple;
-                width: 100px;
+                width: 120px;
                 text-align: center;
                 border-radius: 10px;
+                height: 38px;
                 
  
                 .category{
@@ -49,20 +50,21 @@
                 margin-top: 5px;
                 border: 3px solid $purple;
                 border-radius: 10px;
-                width: 100px;
+                width: 130px;
                 display: flex;
                 flex-direction: row;
                 color: black;
-                
+                height: 31px;
+
                 .yearDiv1{
                  color: white;
                  background-color: $purple;
-                 padding: 5px 7px;
+                 padding: 5px 12px;
                 }
  
                 .year{
                  
-                 padding: 5px 5px;
+                 padding: 5px 7px;
              }
             }
           }
@@ -182,10 +184,10 @@
             }
         }
         .right{
-            .image{
-                width: 400px;
+            .rightImage{
+                width: 500px;
                 max-width: 500px;
-                margin: 220px 100px 0 185px;
+                margin: 250px 100px 0 185px;
             }
         }
     }

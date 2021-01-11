@@ -100,7 +100,7 @@ function Dashboard() {
                 <h1 className={Styles.sideHeading}>My Reviews</h1>
                 <div className={Styles.profileCards}>
                     {
-                        ratings.map ((data) => <ProfileCard key={data.user_id} name={data.name} profile='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=40' rating={data.rating} /> )
+                        ratings.map ((data) => <ProfileCard key={data.user_id} name={data.name} profile={`../uploads/profile/${details.profile}`} rating={data.rating} /> )
                     }
                     
                 </div>
