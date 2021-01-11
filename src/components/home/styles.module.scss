@@ -56,29 +56,45 @@
         row-gap: 30px;
         column-gap: 10px;
 
-        .card{
-            background-color: white;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            border-radius: 10px;
-            width: max-content;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 10px auto;
-
-            .productImage{
-                margin: 20px 10px;
-                width: 300px;
-            }
-            .productTitle{
-                color: $purple;
-                font-size: 1.2rem;
-                font-weight: 500;
-            }
-            .productPrice{
-                font-weight: 400;
-                padding: 20px 0;
+        a{
+            text-decoration: none;
+            color: black;
+            
+            .card{
+                background-color: white;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                border-radius: 10px;
+                width: max-content;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 10px auto;
+    
+                .productImage{
+                    margin: 20px 10px;
+                    width: 300px;
+                }
+                .productTitle{
+                    color: $purple;
+                    font-size: 1.2rem;
+                    font-weight: 500;
+                }
+                .productPrice{
+                    font-weight: 400;
+                    padding: 20px 0;
+                }
             }
         }
+    }
+    .footer{
+        background-color: $blue_button;
+        color: white;
+        text-align: center;
+        padding: 13px 0;
+
+        .footerText{
+            font-weight: 700;
+        }
+
     }
 }

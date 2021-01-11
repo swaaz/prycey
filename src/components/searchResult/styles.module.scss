@@ -1,0 +1,63 @@
+@import '../../styles/colors';
+.search{
+    .body{
+        background-color: #f8f8f8;
+        .searchResult{
+            padding: 30px 0;
+            text-align: center;
+            .searchValue{
+                color: black;
+                font-size: 1.5rem;
+                font-weight: 500;
+                span{
+                    color: $purple;
+                    font-weight: 400;
+                }
+            }
+        }
+        .warning{
+            font-size: 1.7rem;
+            text-align: center;
+        }
+        .cards{
+            padding: 10px 30px;
+            display: grid;
+            justify-content: center;
+            grid-template-columns: repeat(5,1fr);
+            row-gap: 30px;
+            column-gap: 10px;
+            min-height: 80vh;
+            
+            a{
+                text-decoration: none;
+                color: black;
+
+                .card{
+                    background-color: white;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                    border-radius: 10px;
+                    width: max-content;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    margin: 0 auto;
+    
+        
+                    .productImage{
+                        margin: 20px 10px;
+                        width: 300px;
+                    }
+                    .productTitle{
+                        color: $purple;
+                        font-size: 1.2rem;
+                        font-weight: 500;
+                    }
+                    .productPrice{
+                        font-weight: 400;
+                        padding: 20px 0;
+                    }
+                }
+            }
+        }
+    }
+}
