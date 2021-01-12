@@ -321,7 +321,7 @@ def render_dashboard():
 									WHERE seller_id = (?)
 								""", (sess.get('user_id'),)).fetchall()
 			user_rating = c.execute("""
-										SELECT name, rated_id, rating 
+										SELECT name, rated_id, rating, profile_image
 										FROM Rated, Users 
 										WHERE Rated.rated_id=Users.user_id AND Rated.user_id=?
 									""", (sess.get('user_id'),)).fetchall()
@@ -369,7 +369,7 @@ def render_product_page(id):
 									AND Items.item_id = (?)
 									""", (id,)).fetchall()
 
-		# print(product_query)
+		print(product_query)
 		k = to_dict(product_query)[0]
 		k["profile_image"] = product_query[0][-7]
 		k["email"] = product_query[0][-6]
