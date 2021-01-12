@@ -401,6 +401,7 @@ def edit_product(id):
 			k = c.execute(
 				"""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
 			# print(k)
+			print(list(new_item.values())[:-2] + [id])
 			if k[0] == sess["user_id"]:
 				c.execute("""UPDATE Items
 							SET 
@@ -410,7 +411,7 @@ def edit_product(id):
 							year = ?
 
 							WHERE item_id = ?
-							""", tuple(list(new_item.values())[:-1] + [id]))
+							""", tuple(list(new_item.values())[:-2] + [id]))
 				conn.commit()
 
 				return json.dumps({"response": "Successfuly edited post"})
