@@ -321,7 +321,7 @@ def render_dashboard():
 									WHERE seller_id = (?)
 								""", (sess.get('user_id'),)).fetchall()
 			user_rating = c.execute("""
-										SELECT name, rated_id, rating 
+										SELECT name, rated_id, rating, profile_image
 										FROM Rated, Users 
 										WHERE Rated.rated_id=Users.user_id AND Rated.user_id=?
 									""", (sess.get('user_id'),)).fetchall()
@@ -369,7 +369,7 @@ def render_product_page(id):
 									AND Items.item_id = (?)
 									""", (id,)).fetchall()
 
-		# print(product_query)
+		print(product_query)
 		k = to_dict(product_query)[0]
 		k["profile_image"] = product_query[0][-7]
 		k["email"] = product_query[0][-6]
@@ -401,6 +401,7 @@ def edit_product(id):
 			k = c.execute(
 				"""SELECT seller_id FROM Items WHERE item_id = ?""", (id, )).fetchone()
 			# print(k)
+			print(list(new_item.values())[:-2] + [id])
 			if k[0] == sess["user_id"]:
 				c.execute("""UPDATE Items
 							SET 
@@ -410,7 +411,7 @@ def edit_product(id):
 							year = ?
 
 							WHERE item_id = ?
-							""", tuple(list(new_item.values())[:-1] + [id]))
+							""", tuple(list(new_item.values())[:-2] + [id]))
 				conn.commit()
 
 				return json.dumps({"response": "Successfuly edited post"})

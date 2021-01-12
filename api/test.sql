@@ -36,3 +36,9 @@ VALUES
 ('captjack', 'johndoe', 5.0, 'Excellente'),
 ('captjack', 'jennaf', 4.0, 'Nice'),
 ('captjack', 'adamgil', 3.0, 'Mehh, fine service');
+
+-- DELETE FROM USERS WHERE user_id='johndoe';
+
+.header on
+.mode column
+pragma table_info('user_rating');
