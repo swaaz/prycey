@@ -45,7 +45,7 @@ function Signup() {
                         <input type='text' placeholder='email id' name='email' ref={register} required />
                         <input type='text' placeholder='contact number' name='contact_number' ref={register} required />
                         <input type='password' placeholder='password' name='password' ref={register} required />
-                        <p className={Styles.upload}>Uplaod profile image</p>
+                        <p className={Styles.upload}>Upload profile image</p>
                         <input name='file' style={Styles.uploadImage} type="file" ref={register} required />
                         <button type='submit'>submit</button>
                     </form>

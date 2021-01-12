@@ -35,6 +35,7 @@ def rate_to_dict(k: list):
 			"name": k[i][0],
 			"user_id": k[i][1],
 			"rating": k[i][2],
+			"profile_img": k[i][3]
 		})
 
 	return d

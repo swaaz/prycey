@@ -19,7 +19,7 @@ function Dashboard() {
        .then( value => {
         console.log(value);
            if (value.data.response == 'Please Sign in'){
-            toast('Please SignIn!!', {position: toast.POSITION.TOP_CENTER});
+            toast('Please Sign-in!', {position: toast.POSITION.TOP_CENTER});
             history.push('/signin')
            }
            else {
@@ -100,7 +100,7 @@ function Dashboard() {
                 <h1 className={Styles.sideHeading}>My Reviews</h1>
                 <div className={Styles.profileCards}>
                     {
-                        ratings.map ((data) => <ProfileCard key={data.user_id} name={data.name} profile={`../uploads/profile/${details.profile}`} rating={data.rating} /> )
+                        ratings.map ((data) => <ProfileCard key={data.user_id} name={data.name} profile={`../uploads/profile/${data.profile_img}`} rating={data.rating} /> )
                     }
                     
                 </div>
