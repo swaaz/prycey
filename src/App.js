@@ -15,7 +15,7 @@ function App() {
     <Router>
       <div className="Styles.App">
         <Switch>
-          <Route path='/seller/rating/:value' component={PostOrder} />
+          <Route path='/seller/rating' component={PostOrder} />
           <Route path='/product/edit/:value' component={UpdateProduct} />
           <Route path='/search/:value' component={SearchResult} />
           <Route path='/dashboard' component={Dashboard} />

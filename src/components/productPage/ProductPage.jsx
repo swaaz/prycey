@@ -14,8 +14,8 @@ import { Link } from 'react-router-dom';
 Modal.setAppElement('#root');
 
 function ProductPage({match}) {
-    const [values, setValues] = useState({'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '', 'sellerId' : '' });
-    const [img, setImage] = useState(''); 
+    const [values, setValues] = useState({ 'itemId' : 0, 'title' : '', 'price' : '', 'description' : '', 'review' : 0, 'rating' : 0, 'sellerName' : '', 'year' : 0, 'category' : '', 'postedDate' : '', 'sellerId' : '', 'img' : '' });
+    // const [img, setImage] = useState(''); 
     const [modal, setModal] = useState(false);
      useEffect(() => {
         axios
@@ -36,11 +36,14 @@ function ProductPage({match}) {
                     ['year'] : data.data.year,
                     ['dateAdded'] : data.data.date_added,
                     ['category'] : data.data.category,
-                    ['sellerId'] : data.data.seller_id
+                    ['sellerId'] : data.data.seller_id,
+                    ['img'] : data.data.im1,
+                    ['itemId'] : data.data.item_id,
+                    ['profile'] : data.data.profile_image
             })
 
             console.log(data);
-            setImage(`uploads/product/${data.data.im1}`);
+            // setImage(`uploads/product/${data.data.im1}`);
         })
         .catch( error => {
             console.log(error)
@@ -56,9 +59,22 @@ function ProductPage({match}) {
                     <p className={Styles.productDescription}>
                         {values.description}
                     </p>
-                    <p className={Styles.category}>{values.category}</p>
-                    <p className={Styles.year}>years : {values.year}</p>
-                    <p className={Styles.dateAdded}>{values.dateAdded}</p>
+                    <div className={Styles.rowValue}>
+                        <div className={Styles.catDiv}>
+                            <p className={Styles.category}>{values.category}</p>
+                        </div>
+                        <div className={Styles.yearDiv}>
+                            <div className={Styles.yearDiv1}>
+                                Used
+                            </div>
+                            <p className={Styles.year}>{values.year} yrs</p>
+                        </div>
+                    </div>
+                    
+                    <div className={Styles.postedRow}>
+                        <p className={Styles.dateHeading}>Posted on : </p>
+                        <p className={Styles.dateAdded}> {values.dateAdded}</p>
+                    </div>
 
                     <div className={Styles.priceRow}>
                         <p className={Styles.priceMrp}>
@@ -77,7 +93,7 @@ function ProductPage({match}) {
                             <p className={Styles.sellerName}>
                                 {values.sellerName}
                             </p>
-                            <img className={Styles.sellerImage} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='product' />
+                            <img className={Styles.sellerImage} src={`../../uploads/profile/${values.profile}`} alt='product' />
                         </div>
                         
                         <div className={Styles.reviewRow}>
@@ -105,7 +121,8 @@ function ProductPage({match}) {
                     </div>
                 </div>
                 <div className={Styles.right}>
-                    <img src={'logo512.png'} alt='product'/>
+                    <img className={Styles.rightImage} src={`../../uploads/product/${values.img}`} alt='product'/>
+                    {/* {console.log(window.location.pathname)} */}
                 </div>
             </div>
 
@@ -126,7 +143,7 @@ function ProductPage({match}) {
                         borderRadius : '40px',
                         flexDirection: 'column',
                         textAlign : 'center',
-                        height : '540px'
+                        height : '600px'
                     },
 
                 }
@@ -135,9 +152,9 @@ function ProductPage({match}) {
                 
                     {/* <div className={Styles.modalBox}> */}
 
-                        <img onClick={(e)=> setModal(false)} style={{alignSelf : 'end', width: '30px'}}  src={Close} alt='close' />
+                        <img onClick={(e)=> setModal(false)} style={{alignSelf : 'end', width: '30px', cursor : 'pointer'}}  src={Close} alt='close' />
                         <h1 style={{fontSize : '2rem'}}>Seller Details</h1>
-                        <img style={{borderRadius : '50%', width: '200px', border: '5px solid white', margin: '30px auto'}} src='https://avatars1.githubusercontent.com/u/42874695?s=400&u=5270b0013aa377093ddd4e4ba44a7723102621b8&v=4' alt='profile' />
+                        <img style={{borderRadius : '50%', width: '200px', border: '5px solid white', margin: '30px auto'}} src={`../../uploads/profile/${values.profile}`}alt='profile' />
                         <p style={{fontSize: '1.7rem', fontWeight: '600'}}>{values.sellerName}</p>
                         <div style={{display : 'flex', margin: '10px auto', flexDirection: 'row', justifyContent: 'baseline'}}>
                                 <p>
@@ -157,9 +174,12 @@ function ProductPage({match}) {
 
                             </div>
                         <p style={{fontSize: '1.1rem', margin: '10px 0'}}>E-mail : {values.email}</p>
-                        <p style={{fontSize: '1.1rem', margin: '10px 0'}}>Contact : +91 {values.contact}</p>
-                        <Link to={`/seller/rating/${values.sellerId}`}>
-                            <img style={{width: '40px', margin : '10px auto'}} src={Buy} alt='buy' />
+                        <p style={{fontSize: '1.1rem', margin: '10px 0 0 0'}}>Contact : +91 {values.contact}</p>
+                        <Link style={{textDecoration : 'none'}} to={`/seller/rating?id=${values.itemId}&&seller=${values.sellerId}`}>
+                            <div style={{display : 'flex', margin: '0 auto', flexDirection : 'row', backgroundColor : 'white', width: '50%', justifyContent: 'baseline' , marginTop: '50px'}} role='button' tabIndex={0} >
+                            <img style={{backgroundColor : '#00fff0', width: '27px' , height : '27px', padding: '9px 5px 7px 7px'}} src={Buy} alt='call' />
+                            <p style={{color: '#3d6cb9', fontSize: '1.1rem', padding: '10px 35px'}}>Purchase</p>
+                        </div>
                         </Link>
                             
                        

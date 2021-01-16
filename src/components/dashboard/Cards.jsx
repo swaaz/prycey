@@ -23,7 +23,7 @@ function Cards(props) {
     return (
         <div className={Styles.card}>
             <div className={Styles.rowOne}>
-                <h1 className={Styles.title}>{props.title}</h1>
+                <Link to={props.to}><h1 className={Styles.title}>{props.title}</h1></Link>
                 <div className={Styles.icons}>
                     <Link to={`/product/edit/${props.itemId}`} >
                         <img className={Styles.icon} src={Edit} alt='edit'/>
@@ -31,11 +31,13 @@ function Cards(props) {
                     <img onClick={ e => onDelete(props.itemId)} className={Styles.icon} src={Delete} alt='delete'/>
                 </div>
             </div>
+            <Link to={props.to} >
             <p className={Styles.description}>{props.description}</p>
             <div className={Styles.rowTwo}>
                 <p className={Styles.price}>₹ {props.price}</p>
                 <img className={Styles.productImage} src={props.image} alt='product' />
             </div>
+            </Link>
         </div>
     )
 }

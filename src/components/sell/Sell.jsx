@@ -3,13 +3,14 @@ import Styles from './styles.module.scss';
 import Avatar from '../../assets/avatar/oldman.png';
 import Navbar from '../navbar/Navbar';
 import {useForm} from "react-hook-form";
+import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 
 function Sell() {
-
+    const history = useHistory();
     const {register, handleSubmit} = useForm();
 
     const onSubmit = (e) =>{
@@ -27,7 +28,12 @@ function Sell() {
         // formData.append('name', 'swaas')
         console.log(fd)
         axios.post('http://127.0.0.1:5000/sell', fd)
-        .then( response => toast(response.data.response, {position: toast.POSITION.TOP_CENTER}))
+        .then( response => {
+            toast(response.data.response, {position: toast.POSITION.TOP_CENTER})
+            if(response.data.response == 'Please Signin'){
+                history.push('/signin')
+            }
+        })
         .catch( error => console.log(error))
         
     }
@@ -64,6 +70,7 @@ function Sell() {
                                 <p className={Styles.categoryName}>tools</p>
                             </div>
                         </div>
+                        <p className={Styles.upload}>Uplaod profile image</p>
                         <input name='file' style={Styles.uploadImage} type="file" ref={register} required />
                         <input name='price' type='text' placeholder='price' ref={register} required />
                         <input name='year' type='text' placeholder='year' ref={register} required />

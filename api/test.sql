@@ -9,10 +9,10 @@ VALUES
 -- FILL USER TABLE
 INSERT INTO Users (user_id, password, name, email, contact_number, profile_image)
 VALUES 
-('johndoe', 'testpass', 'John Doe', 'john@test.com', '98765432110', NULL),
-('adamgil', 'testpass', 'Adam Gilbert', 'adam@test.com', '987654324630', NULL),
-('jennaf', 'testpass', 'Jenna Fischer', 'jenna@test.com', '9341832463', NULL),
-('captjack', 'testpass', 'Jack Sparrow', 'jack@test.com', '98724324630', NULL);
+('johndoe', 'testpass', 'John Doe', 'john@test.com', '98765432110', 'johndoe.jpg'),
+('adamgil', 'testpass', 'Adam Gilbert', 'adam@test.com', '987654324630', 'adamgil.jpg'),
+('jennaf', 'testpass', 'Jenna Fischer', 'jenna@test.com', '9341832463', 'jennaf.jpg'),
+('captjack', 'testpass', 'Jack Sparrow', 'jack@test.com', '98724324630', 'captjack.jpg');
 
 -- FILL ITEMS TABLE
 INSERT INTO Items (item_id, title, description, price, year, date_added, im1, im2, im3, im4, c_id, seller_id)
@@ -36,3 +36,9 @@ VALUES
 ('captjack', 'johndoe', 5.0, 'Excellente'),
 ('captjack', 'jennaf', 4.0, 'Nice'),
 ('captjack', 'adamgil', 3.0, 'Mehh, fine service');
+
+-- DELETE FROM USERS WHERE user_id='johndoe';
+
+.header on
+.mode column
+pragma table_info('user_rating');
