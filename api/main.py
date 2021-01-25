@@ -551,7 +551,7 @@ def transaction():
 			item_name = c.execute(
 				"""SELECT title FROM Items WHERE item_id=?""", (item_id,)).fetchone()
 
-			# mail(email_id=seller_email, buyer_id=sess['user_id'], buyer_email=buyer_email, buyer_name=buyer_name, item_name=item_name)
+			mail(email_id=seller_email, buyer_id=sess['user_id'], buyer_email=buyer_email, buyer_name=buyer_name, item_name=item_name)
 
 			return json.dumps({"response": "Transaction complete"})
 	else:
