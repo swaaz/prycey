@@ -40,7 +40,7 @@ def rate_to_dict(k: list):
 
 	return d
 
-def mail(email_id: str, buyer_id: str, buyer_email: str, buyer_name: str,			item_name: str):
+def mail(email_id: str, buyer_id: str, buyer_email: str, buyer_name: str, item_name: str):
 	env_path = Path('.') / '.env'
 	load_dotenv(dotenv_path=env_path)
 
