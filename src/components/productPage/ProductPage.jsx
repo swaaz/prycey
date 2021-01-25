@@ -98,7 +98,7 @@ function ProductPage({match}) {
                         
                         <div className={Styles.reviewRow}>
                             <p className={Styles.ratingNumber}>
-                                {values.rating}
+                                {Math.round(values.rating * 10) / 10}
                                 <img className={Styles.ratingStar} src={Star} alt='star' />
                             </p>
                             <p> | </p>
@@ -158,7 +158,7 @@ function ProductPage({match}) {
                         <p style={{fontSize: '1.7rem', fontWeight: '600'}}>{values.sellerName}</p>
                         <div style={{display : 'flex', margin: '10px auto', flexDirection: 'row', justifyContent: 'baseline'}}>
                                 <p>
-                                    {values.rating}
+                                    {Math.round(values.rating * 10) / 10}
                                     <img style={{width: '17px', marginLeft: '3px'}} src={whiteStar} alt='star' />
                                 </p>
                                 <p style={{margin: '0 5px'}}> | </p>
