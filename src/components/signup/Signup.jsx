@@ -42,8 +42,8 @@ function Signup() {
                         <h1>Sign Up</h1>
                         <input ref={register} type='text' placeholder='username' name='user_id' required />
                         <input type='text' placeholder='full name' name='name' ref={register} required />
-                        <input type='text' placeholder='email id' name='email' ref={register} required />
-                        <input type='text' placeholder='contact number' name='contact_number' ref={register} required />
+                        <input type='email' placeholder='email id' name='email' ref={register} required />
+                        <input type='text' pattern='[0-9]{10}' placeholder='contact number' name='contact_number' ref={register} required />
                         <input type='password' placeholder='password' name='password' ref={register} required />
                         <p className={Styles.upload}>Upload profile image</p>
                         <input name='file' style={Styles.uploadImage} type="file" ref={register} required />
