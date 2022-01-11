@@ -17,7 +17,7 @@
 
 Run Reactjs
 ```
-npm run
+npm start
 ```
 
 Run flask
